@@ -7,66 +7,60 @@ return [
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
         'cruser_id' => 'cruser_id',
-        'sortby' => 'crdate',
+        'versioningWS' => true,
+        'languageField' => 'sys_language_uid',
+        'transOrigPointerField' => 'l10n_parent',
+        'transOrigDiffSourceField' => 'l10n_diffsource',
         'delete' => 'deleted',
-        'hideTable' => false,
+        'enablecolumns' => [
+            'disabled' => 'hidden',
+        ],
         'iconfile' => 'EXT:equed_lms/Resources/Public/Icons/examattempt.svg',
     ],
-    'interface' => [
-        'showRecordFieldList' => 'record,type,passed,feedback,attempt_date,instructor',
-    ],
     'types' => [
-        '1' => ['showitem' => 'record, type, passed, feedback, attempt_date, instructor'],
+        '0' => ['showitem' => 'type, passed, feedback, user_course_record, lesson, examiner'],
     ],
     'columns' => [
-        'record' => [
-            'label' => 'Kursversuch (UserCourseRecord)',
+        'sys_language_uid' => ['exclude' => true, 'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.language', 'config' => ['type' => 'language']],
+        'l10n_parent' => [
+            'displayCond' => 'FIELD:sys_language_uid:>:0',
+            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.l10n_parent',
             'config' => [
-                'type' => 'select',
-                'foreign_table' => 'tx_equedlms_domain_model_usercourserecord',
-                'renderType' => 'selectSingle',
-            ],
-        ],
-        'type' => [
-            'label' => 'Prüfungstyp',
-            'config' => [
-                'type' => 'select',
-                'renderType' => 'selectSingle',
-                'items' => [
-                    ['Theorieprüfung', 'theory'],
-                    ['Praxisprüfung', 'practical'],
-                    ['Fallbericht', 'case'],
-                ],
-                'required' => true,
-            ],
-        ],
-        'passed' => [
-            'label' => 'Bestanden?',
-            'config' => [
-                'type' => 'check',
+                'type' => 'select', 'renderType' => 'selectSingle',
+                'items' => [['', 0]],
+                'foreign_table' => 'tx_equedlms_domain_model_examattempt',
+                'foreign_table_where' => 'AND {#tx_equedlms_domain_model_examattempt}.{#pid}=###CURRENT_PID###',
                 'default' => 0,
             ],
         ],
-        'feedback' => [
-            'label' => 'Feedback',
+        'l10n_diffsource' => ['config' => ['type' => 'passthrough']],
+        'hidden' => ['label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.hidden', 'config' => ['type' => 'checkbox']],
+
+        'type' => ['label' => 'Type', 'config' => ['type' => 'input', 'required' => true]],
+        'passed' => ['label' => 'Passed', 'config' => ['type' => 'check']],
+        'feedback' => ['label' => 'Feedback', 'config' => ['type' => 'text', 'enableRichtext' => true]],
+        'user_course_record' => [
+            'label' => 'User Course Record',
             'config' => [
-                'type' => 'text',
-                'enableRichtext' => true,
+                'type' => 'group', 'internal_type' => 'db',
+                'allowed' => 'tx_equedlms_domain_model_usercourserecord',
+                'maxitems' => 1,
             ],
         ],
-        'attempt_date' => [
-            'label' => 'Versuchsdatum',
+        'lesson' => [
+            'label' => 'Lesson',
             'config' => [
-                'type' => 'datetime',
-                'required' => true,
+                'type' => 'group', 'internal_type' => 'db',
+                'allowed' => 'tx_equedlms_domain_model_lesson',
+                'maxitems' => 1,
             ],
         ],
-        'instructor' => [
-            'label' => 'Prüfende Person',
+        'examiner' => [
+            'label' => 'Examiner',
             'config' => [
-                'type' => 'select',
-                'foreign_table' => 'fe_users',
-                'renderType' => 'selectSingle',
+                'type' => 'group', 'internal_type' => 'db',
+                'allowed' => 'tx_equedlms_domain_model_instructor',
+                'maxitems' => 1,
             ],
         ],
     ],

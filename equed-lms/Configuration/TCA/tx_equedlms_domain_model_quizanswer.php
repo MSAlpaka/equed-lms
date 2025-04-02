@@ -7,36 +7,38 @@ return [
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
         'cruser_id' => 'cruser_id',
+        'delete' => 'deleted',
+        'hideTable' => true,
         'iconfile' => 'EXT:equed_lms/Resources/Public/Icons/quizanswer.svg'
     ],
     'columns' => [
         'answer_text' => [
             'label' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:tx_equedlms_domain_model_quizanswer.answer_text',
             'config' => [
-                'type' => 'text',
-                'rows' => 3
+                'type' => 'input',
+                'required' => true,
             ]
         ],
         'is_correct' => [
-            'label' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:tx_equedlms_domain_model_quizanswer.is_correct',
+            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.correct',
             'config' => [
                 'type' => 'check',
-                'default' => 0
+                'default' => 0,
             ]
         ],
         'question' => [
-            'label' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:tx_equedlms_domain_model_quizanswer.question',
             'config' => [
                 'type' => 'select',
+                'renderType' => 'selectSingle',
                 'foreign_table' => 'tx_equedlms_domain_model_quizquestion',
-                'minItems' => 0,
-                'maxItems' => 1
+                'maxItems' => 1,
+                'default' => 0,
             ]
-        ]
+        ],
     ],
     'types' => [
         '0' => [
-            'showitem' => 'answer_text, is_correct, question'
-        ]
-    ]
+            'showitem' => 'answer_text, is_correct'
+        ],
+    ],
 ];

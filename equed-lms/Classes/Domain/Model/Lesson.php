@@ -10,33 +10,45 @@ class Lesson extends AbstractEntity
     protected string $slug = '';
     protected int $position = 0;
 
-    /**
-     * @var \Equed\EquedLms\Domain\Model\Course
-     */
-    protected $course;
+    protected ?Course $course = null;
 
-    /**
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Equed\EquedLms\Domain\Model\ContentPage>
-     */
-    protected $contentpages;
-
-    public function __construct()
+    public function getTitle(): string
     {
-        $this->contentpages = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+        return $this->title;
     }
 
-    public function getTitle(): string { return $this->title; }
-    public function setTitle(string $title): void { $this->title = $title; }
+    public function setTitle(string $title): void
+    {
+        $this->title = $title;
+    }
 
-    public function getSlug(): string { return $this->slug; }
-    public function setSlug(string $slug): void { $this->slug = $slug; }
+    public function getSlug(): string
+    {
+        return $this->slug;
+    }
 
-    public function getPosition(): int { return $this->position; }
-    public function setPosition(int $position): void { $this->position = $position; }
+    public function setSlug(string $slug): void
+    {
+        $this->slug = $slug;
+    }
 
-    public function getCourse() { return $this->course; }
-    public function setCourse($course): void { $this->course = $course; }
+    public function getPosition(): int
+    {
+        return $this->position;
+    }
 
-    public function getContentpages() { return $this->contentpages; }
-    public function setContentpages($contentpages): void { $this->contentpages = $contentpages; }
+    public function setPosition(int $position): void
+    {
+        $this->position = $position;
+    }
+
+    public function getCourse(): ?Course
+    {
+        return $this->course;
+    }
+
+    public function setCourse(?Course $course): void
+    {
+        $this->course = $course;
+    }
 }

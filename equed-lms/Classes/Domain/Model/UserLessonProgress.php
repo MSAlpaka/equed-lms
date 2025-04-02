@@ -1,18 +1,18 @@
 <?php
+
 namespace Equed\EquedLms\Domain\Model;
 
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
-use DateTime;
 
 class UserLessonProgress extends AbstractEntity
 {
     protected int $feUser = 0;
-
-    protected ?Lesson $lesson = null;
     protected bool $confirmed = false;
-    protected int $quizScore = 0;
+    protected float $quizScore = 0.0;
     protected bool $completed = false;
-    protected ?DateTime $completedAt = null;
+
+    // NEU
+    protected ?Lesson $lesson = null;
 
     public function getFeUser(): int
     {
@@ -22,16 +22,6 @@ class UserLessonProgress extends AbstractEntity
     public function setFeUser(int $feUser): void
     {
         $this->feUser = $feUser;
-    }
-
-    public function getLesson(): ?Lesson
-    {
-        return $this->lesson;
-    }
-
-    public function setLesson(?Lesson $lesson): void
-    {
-        $this->lesson = $lesson;
     }
 
     public function isConfirmed(): bool
@@ -44,12 +34,12 @@ class UserLessonProgress extends AbstractEntity
         $this->confirmed = $confirmed;
     }
 
-    public function getQuizScore(): int
+    public function getQuizScore(): float
     {
         return $this->quizScore;
     }
 
-    public function setQuizScore(int $quizScore): void
+    public function setQuizScore(float $quizScore): void
     {
         $this->quizScore = $quizScore;
     }
@@ -64,13 +54,13 @@ class UserLessonProgress extends AbstractEntity
         $this->completed = $completed;
     }
 
-    public function getCompletedAt(): ?DateTime
+    public function getLesson(): ?Lesson
     {
-        return $this->completedAt;
+        return $this->lesson;
     }
 
-    public function setCompletedAt(?DateTime $completedAt): void
+    public function setLesson(?Lesson $lesson): void
     {
-        $this->completedAt = $completedAt;
+        $this->lesson = $lesson;
     }
 }

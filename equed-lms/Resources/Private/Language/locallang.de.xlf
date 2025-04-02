@@ -13,6 +13,26 @@
       <trans-unit id="tt_content.CType.equed_lms_course" xml:space="preserve">
         <source>EquEd LMS Kursanzeige</source>
       </trans-unit>
-    <trans-unit id="lesson.completedMessage"><source>lesson.completedMessage</source><target>Du hast diese Lektion abgeschlossen.</target></trans-unit><trans-unit id="certificate.description"><source>certificate.description</source><target>hat den Kurs erfolgreich abgeschlossen</target></trans-unit><trans-unit id="certificate.signature.student"><source>certificate.signature.student</source><target>Teilnehmende*r</target></trans-unit></body>
+    <trans-unit id="lesson.completedMessage"><source>lesson.completedMessage</source><target>Du hast diese Lektion abgeschlossen.</target></trans-unit><trans-unit id="certificate.description"><source>certificate.description</source><target>hat den Kurs erfolgreich abgeschlossen</target></trans-unit><trans-unit id="certificate.signature.student"><source>certificate.signature.student</source><target>Teilnehmende*r</target></trans-unit>
+    <trans-unit id="error.insufficient_prerequisites">
+    <target xml:lang="de">Du erfüllst nicht die Voraussetzungen für diesen Kurs.</target>
+</trans-unit>
+
+<trans-unit id="success.course_booked">
+    <target xml:lang="de">Der Kurs wurde erfolgreich gebucht.</target>
+</trans-unit>
+
+<trans-unit id="evaluation.saved">
+    <target xml:lang="de">Bewertung erfolgreich gespeichert.</target>
+</trans-unit>
+
+<trans-unit id="instructor.noAccess">
+    <target xml:lang="de">Du hast keinen Zugriff auf diesen Bereich.</target>
+</trans-unit>
+
+<trans-unit id="submission.loginRequired">
+    <target xml:lang="de">Du musst eingeloggt sein, um etwas einzureichen.</target>
+</trans-unit>
+</body>
   </file>
 </xliff>

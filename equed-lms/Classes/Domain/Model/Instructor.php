@@ -1,25 +1,27 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Equed\EquedLms\Domain\Model;
 
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 
 class Instructor extends AbstractEntity
 {
+    protected int $feUser = 0;
     protected string $name = '';
     protected string $email = '';
     protected bool $isAvailable = true;
-
-    /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<Course> */
-    protected $canTeachCourses;
-
     protected string $regionPostalCodes = '';
 
-    public function __construct()
+    protected ?Center $center = null;
+
+    public function getFeUser(): int
     {
-        $this->canTeachCourses = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+        return $this->feUser;
+    }
+
+    public function setFeUser(int $feUser): void
+    {
+        $this->feUser = $feUser;
     }
 
     public function getName(): string
@@ -57,18 +59,18 @@ class Instructor extends AbstractEntity
         return $this->regionPostalCodes;
     }
 
-    public function setRegionPostalCodes(string $regionPostalCodes): void
+    public function setRegionPostalCodes(string $codes): void
     {
-        $this->regionPostalCodes = $regionPostalCodes;
+        $this->regionPostalCodes = $codes;
     }
 
-    public function getCanTeachCourses()
+    public function getCenter(): ?Center
     {
-        return $this->canTeachCourses;
+        return $this->center;
     }
 
-    public function addCanTeachCourse(Course $course): void
+    public function setCenter(?Center $center): void
     {
-        $this->canTeachCourses->attach($course);
+        $this->center = $center;
     }
 }

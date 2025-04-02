@@ -79,6 +79,27 @@
         <source>Jukwaa la Mafunzo la EquEd</source>
       </trans-unit>
 
+<trans-unit id="error.insufficient_prerequisites">
+    <target xml:lang="sw">Hukidhi masharti ya msingi kwa kozi hii.</target>
+</trans-unit>
+
+<trans-unit id="success.course_booked">
+    <target xml:lang="sw">Kozi imewekwa kwa mafanikio.</target>
+</trans-unit>
+
+<trans-unit id="evaluation.saved">
+    <target xml:lang="sw">Tathmini imehifadhiwa kwa mafanikio.</target>
+</trans-unit>
+
+<trans-unit id="instructor.noAccess">
+    <target xml:lang="sw">Huna ruhusa ya kufikia eneo hili.</target>
+</trans-unit>
+
+<trans-unit id="submission.loginRequired">
+    <target xml:lang="sw">Lazima uwe umeingia ili kuwasilisha.</target>
+</trans-unit>
+
+
     </body>
   </file>
 </xliff>

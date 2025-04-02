@@ -1,19 +1,18 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Equed\EquedLms\Domain\Model;
 
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 
 class QuizAnswer extends AbstractEntity
 {
-    /**
-     * @var string
-     */
     protected string $answerText = '';
 
-    /**
-     * @var bool
-     */
     protected bool $isCorrect = false;
+
+    protected ?QuizQuestion $question = null;
 
     public function getAnswerText(): string
     {
@@ -33,5 +32,15 @@ class QuizAnswer extends AbstractEntity
     public function setIsCorrect(bool $isCorrect): void
     {
         $this->isCorrect = $isCorrect;
+    }
+
+    public function getQuestion(): ?QuizQuestion
+    {
+        return $this->question;
+    }
+
+    public function setQuestion(?QuizQuestion $question): void
+    {
+        $this->question = $question;
     }
 }

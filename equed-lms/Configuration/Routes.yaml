@@ -82,3 +82,55 @@
   action: 'myCertificates'
   plugin: 'UserDashboardFrontend'
   extension: 'EquedLms'
+
+- route: 'course/book'
+  controller: 'CourseBooking'
+  action: 'bookCourse'
+  plugin: 'CourseBookingFrontend'
+  extension: 'EquedLms'
+
+- route: 'course/{courseId}/feedback'
+  controller: 'Feedback'
+  action: 'submitFeedback'
+  plugin: 'FeedbackFrontend'
+  extension: 'EquedLms'
+  requirements:
+    courseId: '\d+'
+
+- route: 'instructor/onboarding'
+  controller: 'InstructorOnboarding'
+  action: 'index'
+  plugin: 'InstructorFrontend'
+  extension: 'EquedLms'
+
+- route: 'instructor/onboarding/complete'
+  controller: 'InstructorOnboarding'
+  action: 'complete'
+  plugin: 'InstructorFrontend'
+  extension: 'EquedLms'
+
+- route: 'sso/login'
+  controller: 'SsoLogin'
+  action: 'index'
+  plugin: 'LoginFrontend'
+  extension: 'EquedLms'
+
+- route: 'verify'
+  controller: 'Verify'
+  action: 'show'
+  plugin: 'ApiFrontend'
+  extension: 'EquedLms'
+
+- route: 'service-center'
+  controller: 'ServiceCenter'
+  action: 'dashboard'
+  plugin: 'ServiceCenterFrontend'
+  extension: 'EquedLms'
+
+- route: 'service-center/assign/{courseId}'
+  controller: 'ServiceCenter'
+  action: 'assignExternalExaminer'
+  plugin: 'ServiceCenterFrontend'
+  extension: 'EquedLms'
+  requirements:
+    courseId: '\d+'

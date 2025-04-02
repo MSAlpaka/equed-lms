@@ -1,65 +1,88 @@
 <?php
 
-defined('TYPO3_MODE') or die();
-
-call_user_func(
-    function () {
-        // TCA für 'Lesson' hinzufügen
-        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns(
-            'tx_equedlms_domain_model_lesson',
-            [
-                'title' => [
-                    'label' => 'Title',
-                    'config' => [
-                        'type' => 'input',
-                        'required' => true,
-                        'eval' => 'trim',
-                    ],
+return [
+    'ctrl' => [
+        'title' => 'Lesson',
+        'label' => 'title',
+        'tstamp' => 'tstamp',
+        'crdate' => 'crdate',
+        'cruser_id' => 'cruser_id',
+        'versioningWS' => true,
+        'languageField' => 'sys_language_uid',
+        'transOrigPointerField' => 'l10n_parent',
+        'transOrigDiffSourceField' => 'l10n_diffsource',
+        'delete' => 'deleted',
+        'enablecolumns' => [
+            'disabled' => 'hidden',
+        ],
+        'searchFields' => 'title,slug',
+        'iconfile' => 'EXT:equed_lms/Resources/Public/Icons/lesson.svg',
+    ],
+    'types' => [
+        '0' => ['showitem' => 'title, slug, position, course'],
+    ],
+    'columns' => [
+        'sys_language_uid' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.language',
+            'config' => [
+                'type' => 'language',
+            ],
+        ],
+        'l10n_parent' => [
+            'displayCond' => 'FIELD:sys_language_uid:>:0',
+            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.l10n_parent',
+            'config' => [
+                'type' => 'select',
+                'renderType' => 'selectSingle',
+                'items' => [
+                    ['', 0],
                 ],
-                'slug' => [
-                    'label' => 'Slug',
-                    'config' => [
-                        'type' => 'input',
-                        'eval' => 'trim',
-                    ],
-                ],
-                'position' => [
-                    'label' => 'Position',
-                    'config' => [
-                        'type' => 'number',
-                    ],
-                ],
-                'course' => [
-                    'label' => 'Course',
-                    'config' => [
-                        'type' => 'group',
-                        'internal_type' => 'db',
-                        'allowed' => 'tx_equedlms_domain_model_course',
-                        'size' => 1,
-                        'minitems' => 0,
-                        'maxitems' => 1,
-                    ],
-                ],
-                'materials' => [
-                    'label' => 'Materials',
-                    'config' => [
-                        'type' => 'file',
-                        'appearance' => [
-                            'createNewRelationLinkTitle' => 'Add Material'
-                        ],
-                        'maxitems' => 10,
-                        'uploadFolder' => '1:/user_upload/materials/',
-                    ],
-                ],
-            ]
-        );
-
-        // TCA für 'Lesson' Typen hinzufügen
-        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes(
-            'tx_equedlms_domain_model_lesson',
-            'title, slug, position, course, materials',
-            '',
-            'after:title'
-        );
-    }
-);
+                'foreign_table' => 'tx_equedlms_domain_model_lesson',
+                'foreign_table_where' => 'AND {#tx_equedlms_domain_model_lesson}.{#pid}=###CURRENT_PID### AND {#tx_equedlms_domain_model_lesson}.{#sys_language_uid} IN (-1,0)',
+                'default' => 0,
+            ],
+        ],
+        'l10n_diffsource' => [
+            'config' => [
+                'type' => 'passthrough',
+            ],
+        ],
+        'hidden' => [
+            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.hidden',
+            'config' => [
+                'type' => 'checkbox',
+            ],
+        ],
+        'title' => [
+            'label' => 'Title',
+            'config' => [
+                'type' => 'input',
+                'required' => true,
+            ],
+        ],
+        'slug' => [
+            'label' => 'Slug',
+            'config' => [
+                'type' => 'input',
+            ],
+        ],
+        'position' => [
+            'label' => 'Position',
+            'config' => [
+                'type' => 'number',
+            ],
+        ],
+        'course' => [
+            'exclude' => true,
+            'label' => 'Course',
+            'config' => [
+                'type' => 'group',
+                'internal_type' => 'db',
+                'allowed' => 'tx_equedlms_domain_model_course',
+                'maxitems' => 1,
+                'minitems' => 1,
+            ],
+        ],
+    ],
+];

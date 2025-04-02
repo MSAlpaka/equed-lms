@@ -79,6 +79,27 @@
         <source>Plataforma EquEd</source>
       </trans-unit>
 
+<trans-unit id="error.insufficient_prerequisites">
+    <target xml:lang="es">No cumples con los requisitos previos para este curso.</target>
+</trans-unit>
+
+<trans-unit id="success.course_booked">
+    <target xml:lang="es">El curso ha sido reservado con éxito.</target>
+</trans-unit>
+
+<trans-unit id="evaluation.saved">
+    <target xml:lang="es">Evaluación guardada con éxito.</target>
+</trans-unit>
+
+<trans-unit id="instructor.noAccess">
+    <target xml:lang="es">No tienes acceso a esta área.</target>
+</trans-unit>
+
+<trans-unit id="submission.loginRequired">
+    <target xml:lang="es">Debes iniciar sesión para enviar.</target>
+</trans-unit>
+
+
     </body>
   </file>
 </xliff>

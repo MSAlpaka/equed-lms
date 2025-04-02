@@ -104,3 +104,59 @@ ALTER TABLE fe_users
 ADD COLUMN step1_complete TINYINT(1) UNSIGNED DEFAULT '0',
 ADD COLUMN step2_complete TINYINT(1) UNSIGNED DEFAULT '0',
 ADD COLUMN step3_complete TINYINT(1) UNSIGNED DEFAULT '0';
+
+CREATE TABLE tx_equedlms_domain_model_lesson (
+    title varchar(255) DEFAULT '' NOT NULL,
+    slug varchar(255) DEFAULT '' NOT NULL,
+    position int(11) DEFAULT 0 NOT NULL,
+    course int(11) DEFAULT 0 NOT NULL
+);
+
+CREATE TABLE tx_equedlms_domain_model_userlessonprogress (
+    fe_user int(11) DEFAULT 0 NOT NULL,
+    confirmed tinyint(1) DEFAULT 0 NOT NULL,
+    quiz_score double DEFAULT 0,
+    completed tinyint(1) DEFAULT 0 NOT NULL,
+    lesson int(11) DEFAULT 0 NOT NULL
+);
+
+CREATE TABLE tx_equedlms_domain_model_usersubmission (
+    fe_user int(11) DEFAULT 0 NOT NULL,
+    user_course_record int(11) DEFAULT 0 NOT NULL,
+    lesson int(11) DEFAULT 0,
+    type varchar(255) DEFAULT '' NOT NULL,
+    status varchar(255) DEFAULT '',
+    grade varchar(255) DEFAULT '',
+    comment text
+);
+
+CREATE TABLE tx_equedlms_domain_model_usercourserecord (
+    fe_user int(11) DEFAULT 0 NOT NULL,
+    course int(11) DEFAULT 0 NOT NULL,
+    completed tinyint(1) DEFAULT 0 NOT NULL,
+    validated tinyint(1) DEFAULT 0 NOT NULL,
+    certificate_code varchar(255) DEFAULT '',
+    completion_date int(11) DEFAULT 0,
+    participant_postal_code varchar(255) DEFAULT '',
+    matching_status varchar(255) DEFAULT '',
+    instructor int(11) DEFAULT 0,
+    center int(11) DEFAULT 0
+);
+
+CREATE TABLE tx_equedlms_domain_model_examattempt (
+    type varchar(255) DEFAULT '' NOT NULL,
+    passed tinyint(1) DEFAULT 0 NOT NULL,
+    feedback text,
+    user_course_record int(11) DEFAULT 0 NOT NULL,
+    lesson int(11) DEFAULT 0,
+    examiner int(11) DEFAULT 0
+);
+
+CREATE TABLE tx_equedlms_domain_model_instructor (
+    fe_user int(11) DEFAULT 0 NOT NULL,
+    name varchar(255) DEFAULT '' NOT NULL,
+    email varchar(255) DEFAULT '',
+    is_available tinyint(1) DEFAULT 1 NOT NULL,
+    region_postal_codes text,
+    center int(11) DEFAULT 0
+);
