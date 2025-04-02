@@ -1,0 +1,44 @@
+<f:layout name="Default" />
+
+<f:section name="main">
+  <h1><f:translate key="dashboard.welcome" /></h1>
+  <p><f:translate key="dashboard.intro" /></p>
+
+  <f:for each="{courses}" as="course">
+    <f:render partial="Card" arguments="{
+      title: course.title,
+      subtitle: course.description,
+      icon: '📚',
+      class: 'border-success',
+      footer: '{f:format.htmlentitiesDecode(content: f:render(partial: \'Button\', arguments: {link:\'courseShow\', arguments:{courseId: course.uid}, label: \'{f:translate(key: \'dashboard.continue\')}\', style:\'primary\'}))}'
+    }">
+      <f:section name="content">
+        <f:render partial="ProgressBar" arguments="{percent: progressHelper.calculate(course.uid), color: 'success', striped: 1, animated: 1}" />
+
+        <f:if condition="{courseCompletion.{course.uid}}">
+          <f:render partial="Alert" arguments="{type: 'success', icon: '✅', message: '{f:translate(key: \'dashboard.completed\')}' }" />
+          <f:render partial="Button" arguments="{link: 'certificate', arguments: {courseId: course.uid}, label: '{f:translate(key: \'dashboard.certificate\')}', style: 'outline-success'}" />
+        <f:else>
+          <f:render partial="Alert" arguments="{type: 'info', icon: 'ℹ️', message: '{f:translate(key: \'dashboard.incomplete\')}' }" />
+        </f:else>
+        </f:if>
+
+        <ul class="mt-3">
+          <f:for each="{course.lessons}" as="lesson">
+            <li>
+              <f:if condition="{progress.{lesson.uid}.completed}">✅<f:else>⏳</f:else></f:if>
+              {lesson.title} –
+              <f:if condition="{progress.{lesson.uid}.quizScore}">
+                Quiz: {progress.{lesson.uid}.quizScore}%
+              <f:else>
+                <f:translate key="dashboard.noQuiz" />
+              </f:else>
+            </li>
+          </f:for>
+        </ul>
+      </f:section>
+    </f:render>
+  </f:for>
+
+  <p class="mt-5 text-muted"><f:translate key="dashboard.autosave" /></p>
+</f:section>

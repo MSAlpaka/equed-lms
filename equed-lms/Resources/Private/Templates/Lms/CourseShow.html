@@ -1,0 +1,31 @@
+<f:layout name="Default" />
+
+<f:section name="main">
+  <f:render partial="Card" arguments="{
+    title: course.title,
+    subtitle: course.description,
+    icon: '📘'
+  }">
+    <f:section name="content">
+      <p class="text-muted mb-3">
+        <f:translate key="course.intro" />
+      </p>
+
+      <f:if condition="{course.lessons}">
+        <h4><f:translate key="course.lessons" /></h4>
+        <ul>
+          <f:for each="{course.lessons}" as="lesson">
+            <li>
+              <f:if condition="{progress.{lesson.uid}.completed}">✅<f:else>⏳</f:else></f:if>
+              {lesson.title}
+            </li>
+          </f:for>
+        </ul>
+      </f:if>
+
+      <f:render partial="ProgressBar" arguments="{percent: progressHelper.calculate(course.uid), color: 'info'}" />
+
+      <f:render partial="Button" arguments="{link: 'lessonStart', arguments: {courseId: course.uid}, label: '{f:translate(key: "course.start")}', style: 'primary'}" />
+    </f:section>
+  </f:render>
+</f:section

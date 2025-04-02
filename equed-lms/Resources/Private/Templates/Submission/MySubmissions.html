@@ -1,0 +1,45 @@
+<f:layout name="Default" />
+<f:section name="main">
+
+<h2><f:translate key="submission.mySubmissions" /></h2>
+
+<f:if condition="{submissions}">
+  <table class="table">
+    <thead>
+      <tr>
+        <th><f:translate key="submission.course" /></th>
+        <th><f:translate key="submission.type" /></th>
+        <th><f:translate key="submission.status" /></th>
+        <th><f:translate key="submission.file" /></th>
+        <th><f:translate key="submission.comment" /></th>
+        <th><f:translate key="submission.date" /></th>
+      </tr>
+    </thead>
+    <tbody>
+      <f:for each="{submissions}" as="submission">
+        <tr>
+          <td>{submission.course.title}</td>
+          <td>{submission.type}</td>
+          <td>{submission.status}</td>
+          <td>
+            <f:if condition="{submission.document}">
+              <a href="{submission.document.originalResource.publicUrl}" target="_blank">
+                <f:translate key="submission.download" />
+              </a>
+              <small><equed:formatFileSize size="{submission.document.originalResource.properties.size}" /></small>
+            <f:else>
+              -
+            </f:else>
+            </f:if>
+          </td>
+          <td>{submission.comment}</td>
+          <td><f:format.date format="%d.%m.%Y">{submission.submittedAt}</f:format.date></td>
+        </tr>
+      </f:for>
+    </tbody>
+  </table>
+<f:else>
+  <p><f:translate key="submission.noSubmissions" /></p>
+</f:else>
+
+</f:section>

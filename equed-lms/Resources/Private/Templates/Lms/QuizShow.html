@@ -1,0 +1,24 @@
+<f:layout name="Default" />
+
+<f:section name="main">
+  <h1><f:translate key="quiz.title" arguments="{0: lesson.title}" /></h1>
+
+  <f:form action="submitQuiz" method="post" arguments="{lesson: lesson}">
+    <f:for each="{quizQuestions}" as="question">
+      <fieldset class="mb-4">
+        <legend>{question.title}</legend>
+
+        <f:for each="{question.answers}" as="answer">
+          <div class="form-check">
+            <label class="form-check-label">
+              <input class="form-check-input" type="checkbox" name="answers[{answer.uid}]" value="1" />
+              {answer.title}
+            </label>
+          </div>
+        </f:for>
+      </fieldset>
+    </f:for>
+
+    <f:form.submit value="{f:translate(key: 'quiz.submit')}" class="btn btn-primary" />
+  </f:form>
+</f:section>

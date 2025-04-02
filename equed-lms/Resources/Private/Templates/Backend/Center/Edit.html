@@ -1,0 +1,45 @@
+<f:layout name="Default" />
+
+<f:section name="main">
+    <h1>Ausbildungszentrum bearbeiten</h1>
+
+    <!-- Formular zum Bearbeiten des Centers -->
+    <f:form action="update" method="post" object="{center}" enctype="multipart/form-data">
+        <div class="form-group">
+            <f:form.label for="name" label="Name des Ausbildungszentrums" />
+            <f:form.textfield id="name" property="name" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <f:form.label for="street" label="Straße" />
+            <f:form.textfield id="street" property="street" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <f:form.label for="zip" label="Postleitzahl" />
+            <f:form.textfield id="zip" property="zip" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <f:form.label for="city" label="Stadt" />
+            <f:form.textfield id="city" property="city" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <f:form.label for="website" label="Website" />
+            <f:form.textfield id="website" property="website" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <f:form.label for="center_id" label="Center-ID" />
+            <f:form.textfield id="center_id" property="centerId" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <f:form.label for="logo" label="Logo" />
+            <f:form.upload id="logo" property="logo" class="form-control" />
+        </div>
+
+        <button type="submit" class="btn btn-warning">Center aktualisieren</button>
+    </f:form>
+</f:section>

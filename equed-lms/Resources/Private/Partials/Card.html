@@ -1,0 +1,23 @@
+<div class="card mb-4 {class}">
+  <f:if condition="{title}">
+    <div class="card-header">
+      <f:if condition="{icon}"><span class="me-2">{icon}</span></f:if>{title}
+    </div>
+  </f:if>
+
+  <div class="card-body">
+    <f:if condition="{subtitle}">
+      <h5 class="card-title">{subtitle}</h5>
+    </f:if>
+
+    <div class="card-text">
+      <f:render section="content" />
+    </div>
+
+    <f:if condition="{footer}">
+      <div class="mt-4">
+        {footer}
+      </div>
+    </f:if>
+  </div>
+</div>

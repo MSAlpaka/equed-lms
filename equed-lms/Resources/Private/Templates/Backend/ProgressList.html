@@ -1,0 +1,24 @@
+<f:layout name="Default" />
+<f:section name="main">
+    <h1>User Progress</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>Points</th>
+                <th>Level</th>
+                <th>Badges</th>
+            </tr>
+        </thead>
+        <tbody>
+            <f:for each="{userProgress}" as="progress">
+                <tr>
+                    <td>{progress.user.username}</td>
+                    <td>{progress.points}</td>
+                    <td>{progress.level}</td>
+                    <td>{progress.badges}</td>
+                </tr>
+            </f:for>
+        </tbody>
+    </table>
+</f:section>

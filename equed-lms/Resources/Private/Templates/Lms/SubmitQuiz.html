@@ -1,0 +1,39 @@
+<f:layout name="Default" />
+
+<f:section name="main">
+  <h2>Wiederholungsfragen – Auswertung</h2>
+
+  <p>Du hast das Quiz für diese Lektion abgeschlossen.</p>
+
+  <p>
+    <strong>Ergebnis:</strong><br />
+    Du hast <strong>{quizScore}%</strong> richtig beantwortet.
+  </p>
+
+  <f:if condition="{quizScore} >= 80">
+    <p class="alert alert-success">
+      🎉 Glückwunsch! Du kannst die Lektion jetzt abschließen.
+    </p>
+
+    <f:if condition="{showCompletionButton}">
+      <f:link.action
+        action="markLessonAsCompleted"
+        arguments="{lessonId: lessonId}"
+        class="btn btn-success"
+      >
+        ✅ Lektion abschließen
+      </f:link.action>
+    </f:if>
+  </f:if>
+
+  <f:if condition="{quizScore} < 80">
+    <p class="alert alert-warning">
+      😕 Leider hast du noch nicht genügend Fragen richtig beantwortet.
+      <br />
+      Du brauchst mindestens <strong>80 %</strong>, um die Lektion abzuschließen.
+    </p>
+    <f:link.action action="lessonShow" arguments="{lessonId: lessonId}" class="btn btn-outline-primary">
+      🔁 Zur Lektion zurück
+    </f:link.action>
+  </f:if>
+</f:section>

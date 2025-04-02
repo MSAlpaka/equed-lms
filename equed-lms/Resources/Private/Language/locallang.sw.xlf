@@ -1,0 +1,84 @@
+<?xml version='1.0' encoding='utf-8'?>
+<xliff version="1.2">
+  <file source-language="sw" datatype="plaintext" original="messages">
+    <body>
+
+      
+      <trans-unit id="dashboard.welcome">
+        <source>👋 Karibu tena!</source>
+      <target>Karibu tena, {user}!</target></trans-unit>
+      <trans-unit id="dashboard.intro">
+        <source>Hapa kuna maendeleo yako ya kujifunza:</source>
+      </trans-unit>
+      <trans-unit id="dashboard.autosave">
+        <source>Maendeleo yako yanaifadhiwa kiotomatiki.</source>
+      </trans-unit>
+      <trans-unit id="dashboard.completed">
+        <source>🎉 Kozi imekamilika!</source>
+      </trans-unit>
+      <trans-unit id="dashboard.certificate">
+        <source>📄 Tazama Cheti</source>
+      </trans-unit>
+      <trans-unit id="dashboard.incomplete">
+        <source>📘 Kozi bado inaendelea</source>
+      </trans-unit>
+      <trans-unit id="dashboard.noQuiz">
+        <source>Hakuna jaribio lililojibiwa bado</source>
+      </trans-unit>
+      <trans-unit id="dashboard.continue">
+        <source>➕ Endelea na Kozi</source>
+      </trans-unit>
+
+      
+      <trans-unit id="lesson.quiz.title">
+        <source>🔁 Maswali ya kurudia</source>
+      </trans-unit>
+      <trans-unit id="lesson.quiz.submit">
+        <source>Tuma Majibu</source>
+      </trans-unit>
+      <trans-unit id="lesson.completedMessage">
+        <source>✔️ Umefanikiwa kukamilisha somo hili!</source>
+      <target>Umehitimisha somo hili.</target></trans-unit>
+      <trans-unit id="quiz.title">
+        <source>Jaribio: {0}</source>
+      </trans-unit>
+      <trans-unit id="quiz.submit">
+        <source>Tuma Jaribio</source>
+      </trans-unit>
+
+      
+      <trans-unit id="certificate.title">
+        <source>Cheti</source>
+      </trans-unit>
+      <trans-unit id="certificate.description">
+        <source>ameshiriki kikamilifu katika kozi "{0}".</source>
+      <target>amekamilisha kozi kwa mafanikio</target></trans-unit>
+      <trans-unit id="certificate.confirmationText">
+        <source>Cheti hiki kinathibitisha ushiriki kamili na mafanikio kulingana na viwango vya Equine Education Europe.</source>
+      </trans-unit>
+      <trans-unit id="certificate.signature.student">
+        <source>Mshiriki</source>
+      <target>Mshiriki</target></trans-unit>
+      <trans-unit id="certificate.trainingCenter">
+        <source>Kituo cha Mafunzo</source>
+      </trans-unit>
+      <trans-unit id="certificate.centerId">
+        <source>ID ya kituo</source>
+      </trans-unit>
+      <trans-unit id="certificate.date">
+        <source>Tarehe ya Kukamilika</source>
+      </trans-unit>
+
+      
+      <trans-unit id="course.intro">
+        <source>Hapa utapata maelezo yote kuhusu kozi hii.</source>
+      </trans-unit>
+
+      
+      <trans-unit id="site.title">
+        <source>Jukwaa la Mafunzo la EquEd</source>
+      </trans-unit>
+
+    </body>
+  </file>
+</xliff>

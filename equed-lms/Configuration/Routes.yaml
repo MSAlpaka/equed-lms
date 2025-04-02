@@ -1,0 +1,84 @@
+-
+  route: 'dashboard'
+  controller: 'Lms'
+  action: 'dashboard'
+  plugin: 'LmsFrontend'
+  extension: 'EquedLms'
+
+-
+  route: 'course/{courseId}'
+  controller: 'Lms'
+  action: 'courseShow'
+  plugin: 'LmsFrontend'
+  extension: 'EquedLms'
+  requirements:
+    courseId: '\d+'
+
+-
+  route: 'lesson/{lessonId}'
+  controller: 'Lms'
+  action: 'lessonShow'
+  plugin: 'LmsFrontend'
+  extension: 'EquedLms'
+  requirements:
+    lessonId: '\d+'
+
+-
+  route: 'upload'
+  controller: 'Submission'
+  action: 'uploadForm'
+  plugin: 'SubmissionFrontend'
+  extension: 'EquedLms'
+
+-
+  route: 'my-submissions'
+  controller: 'Submission'
+  action: 'mySubmissions'
+  plugin: 'SubmissionFrontend'
+  extension: 'EquedLms'
+
+-
+  route: 'instructor/dashboard'
+  controller: 'Instructor'
+  action: 'dashboard'
+  plugin: 'InstructorFrontend'
+  extension: 'EquedLms'
+
+-
+  route: 'submission/{submissionId}'
+  controller: 'Instructor'
+  action: 'evaluateSubmission'
+  plugin: 'InstructorFrontend'
+  extension: 'EquedLms'
+  requirements:
+    submissionId: '\d+'
+
+-
+  route: 'my-progress'
+  controller: 'UserDashboard'
+  action: 'myProgress'
+  plugin: 'UserDashboardFrontend'
+  extension: 'EquedLms'
+
+-
+  route: 'certifier/dashboard'
+  controller: 'Certifier'
+  action: 'dashboard'
+  plugin: 'CertifierFrontend'
+  extension: 'EquedLms'
+
+-
+  route: 'certificate/{recordId}'
+  controller: 'Certificate'
+  action: 'download'
+  plugin: 'CertificateFrontend'
+  extension: 'EquedLms'
+  requirements:
+    recordId: '\d+'
+
+-
+  route: 'meine-zertifikate'
+  controller: 'UserDashboard'
+  action: 'myCertificates'
+  plugin: 'UserDashboardFrontend'
+  extension: 'EquedLms'

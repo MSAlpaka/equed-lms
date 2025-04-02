@@ -1,0 +1,16 @@
+<f:layout name="Default" />
+
+<f:section name="main">
+    <h1>Ausbildungszentrum löschen</h1>
+
+    <!-- Bestätigungsnachricht und Lösch-Button -->
+    <p>Sind Sie sicher, dass Sie das Ausbildungszentrum <strong>{center.name}</strong> löschen möchten?</p>
+
+    <f:form action="delete" method="post">
+        <input type="hidden" name="center[uid]" value="{center.uid}" />
+        <button type="submit" class="btn btn-danger" onclick="return confirm('Möchten Sie dieses Zentrum wirklich löschen?');">
+            Center löschen
+        </button>
+        <a href="{f:uri.action(action: 'index')}" class="btn btn-secondary">Abbrechen</a>
+    </f:form>
+</f:section>

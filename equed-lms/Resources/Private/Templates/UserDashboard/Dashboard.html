@@ -1,0 +1,32 @@
+<f:layout name="Default" />
+<f:section name="main">
+
+<h2><f:translate key="user.myCourses" /></h2>
+
+<f:if condition="{userCourseRecords}">
+  <ul class="list-group">
+    <f:for each="{userCourseRecords}" as="record">
+      <li class="list-group-item">
+        <strong><f:translate key="user.course" />:</strong> {record.course}<br />
+
+        <f:if condition="{record.completionValidated}">
+          <div class="alert alert-success mt-2">
+            <strong><f:translate key="user.certificateAvailable" /></strong><br />
+            <f:translate key="user.certificateCode" />: <code>{record.certificateCode}</code><br />
+            <f:link.action action="downloadCertificate" arguments="{recordId: record.uid}" class="btn btn-sm btn-primary mt-2">
+              <f:translate key="user.downloadCertificate" />
+            </f:link.action>
+          </div>
+        <f:else>
+          <div class="text-muted mt-2">
+            <f:translate key="user.certificatePending" />
+          </div>
+        </f:if>
+      </li>
+    </f:for>
+  </ul>
+<f:else>
+  <p><f:translate key="user.noCourses" /></p>
+</f:else>
+
+</f:section>

@@ -1,0 +1,37 @@
+<f:layout name="Default" />
+<f:section name="main">
+
+<h2><f:translate key="admin.pendingRecords" /></h2>
+
+<f:if condition="{records}">
+  <table class="table">
+    <thead>
+      <tr>
+        <th><f:translate key="admin.participant" /></th>
+        <th><f:translate key="admin.course" /></th>
+        <th><f:translate key="admin.confirmedBy" /></th>
+        <th><f:translate key="admin.date" /></th>
+        <th><f:translate key="admin.actions" /></th>
+      </tr>
+    </thead>
+    <tbody>
+      <f:for each="{records}" as="record">
+        <tr>
+          <td>{record.feUser}</td>
+          <td>{record.course}</td>
+          <td>{record.confirmedBy}</td>
+          <td><f:format.date format="%d.%m.%Y">{record.confirmationDate}</f:format.date></td>
+          <td>
+            <f:link.action action="validateRecord" arguments="{recordId: record.uid}" class="btn btn-success">
+              <f:translate key="admin.validateNow" />
+            </f:link.action>
+          </td>
+        </tr>
+      </f:for>
+    </tbody>
+  </table>
+<f:else>
+  <p><f:translate key="admin.noPending" /></p>
+</f:else>
+
+</f:section>

@@ -1,0 +1,7 @@
+.dashboard {
+    display: flex;
+    justify-content: space-between;
+}
+.courses, .certificates {
+    width: 48%;
+}

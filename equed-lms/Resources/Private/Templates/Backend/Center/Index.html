@@ -1,0 +1,42 @@
+<f:layout name="Default" />
+
+<f:section name="main">
+    <h1>Verwaltung der Ausbildungszentren</h1>
+
+    <!-- Liste der Centers -->
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Straße</th>
+                <th>PLZ</th>
+                <th>Stadt</th>
+                <th>Website</th>
+                <th>Aktionen</th>
+            </tr>
+        </thead>
+        <tbody>
+            <f:for each="{centers}" as="center">
+                <tr>
+                    <td>{center.name}</td>
+                    <td>{center.street}</td>
+                    <td>{center.zip}</td>
+                    <td>{center.city}</td>
+                    <td>
+                        <f:link.action action="edit" arguments="{center: center}" class="btn btn-warning">
+                            Bearbeiten
+                        </f:link.action>
+                        <f:link.action action="delete" arguments="{center: center}" class="btn btn-danger" onclick="return confirm('Möchten Sie dieses Zentrum wirklich löschen?');">
+                            Löschen
+                        </f:link.action>
+                    </td>
+                </tr>
+            </f:for>
+        </tbody>
+    </table>
+
+    <!-- Button für neues Center -->
+    <f:link.action action="new" class="btn btn-success">
+        Neues Zentrum erstellen
+    </f:link.action>
+</f:section>

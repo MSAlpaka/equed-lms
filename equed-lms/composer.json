@@ -1,0 +1,49 @@
+{
+  "name": "equed/equed-lms",
+  "description": "Equine Education Learning Management System for Equine Education Europe",
+  "type": "typo3-cms-extension",
+  "version": "1.0.0",
+  "license": "GPL-2.0-or-later",
+  "authors": [
+    {
+      "name": "EquEd EU",
+      "email": "info@equed.eu",
+      "role": "Developer"
+    }
+  ],
+  "keywords": [
+    "TYPO3",
+    "extension",
+    "hoofcare",
+    "lms",
+    "education"
+  ],
+  "require": {
+    "php": ">=8.1",
+    "typo3/cms-core": "^13.4",
+    "mpdf/mpdf": "^8.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "Equed\\\\EquedLms\\\\": "Classes/"
+    }
+  },
+  "extra": {
+    "typo3/cms": {
+      "extension-key": "equed_lms"
+    }
+  },
+  "require-dev": {
+    "squizlabs/php_codesniffer": "^3.7",
+    "phpstan/phpstan": "^1.11",
+    "symfony/translation": "^6.0"
+  },
+  "scripts": {
+    "equed-check": [
+      "php vendor/bin/phpcs --standard=PSR12 Classes/",
+      "php vendor/bin/phpstan analyse Classes/ --level=5",
+      "php lint-translations.php Resources/Private/Language/",
+      "echo '✅ equed-lms Check abgeschlossen'"
+    ]
+  }
+}

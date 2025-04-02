@@ -1,0 +1,54 @@
+<f:layout name="Default" />
+
+<f:section name="main">
+  <div class="certificate p-6 border rounded bg-white text-center" style="max-width: 800px; margin: 0 auto;">
+
+    <!-- Logos oben: EquEd + ggf. Ausbildungszentrum -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <img src="fileadmin/Images/logo-equed.svg" alt="EquEd Logo" height="80" />
+      <f:if condition="{centerLogo}">
+        <img src="{centerLogo}" alt="Center Logo" height="80" />
+      </f:if>
+    </div>
+
+    <!-- Zertifikats-Titel -->
+    <h1 class="mb-4">🎓 <f:translate key="certificate.title" /></h1>
+
+    <!-- Teilnehmername -->
+    <h2 class="mb-4">{participantName}</h2>
+
+    <!-- Kursbeschreibung -->
+    <p class="lead mb-4">
+      <f:translate key="certificate.description" arguments="{0: courseTitle}" />
+    </p>
+
+    <!-- Bestätigungstext -->
+    <p class="mb-5">
+      <f:translate key="certificate.confirmationText" />
+    </p>
+
+    <!-- Signatur und Ausbildungszentrum -->
+    <div class="row text-start mt-5 mb-4">
+      <div class="col-6">
+        <strong><f:translate key="certificate.signature.student" /></strong><br />
+        {participantName}<br />
+        EquEd LMS ID: {participantId}
+      </div>
+
+      <div class="col-6 text-end">
+        <f:if condition="{centerId}">
+          <strong><f:translate key="certificate.trainingCenter" /></strong><br />
+          {centerName}<br />
+          {centerStreet}<br />
+          {centerZip} {centerCity}<br />
+          <f:if condition="{centerWebsite}">
+            <a href="{centerWebsite}" target="_blank">{centerWebsite}</a><br />
+          </f:if>
+          <f:translate key="certificate.centerId" />: {centerId}<br />
+        </f:if>
+        <f:translate key="certificate.date" />:
+        <f:format.date format="%d.%m.%Y">{completionDate}</f:format.date>
+      </div>
+    </div>
+  </div>
+</f:section>

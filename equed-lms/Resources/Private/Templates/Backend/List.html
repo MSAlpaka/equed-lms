@@ -1,0 +1,34 @@
+<f:layout name="Default" />
+
+<f:section name="main">
+    <h1><f:translate key="backend.list.title" /></h1>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th><f:translate key="backend.list.header.title" /></th>
+                <th><f:translate key="backend.list.header.description" /></th>
+                <th><f:translate key="backend.list.header.actions" /></th>
+            </tr>
+        </thead>
+        <tbody>
+            <f:for each="{courses}" as="course">
+                <tr>
+                    <td>{course.title}</td>
+                    <td>{course.description}</td>
+                    <td>
+                        <f:link.action action="show" arguments="{course: course}" class="btn btn-outline-primary">
+                            <f:translate key="backend.list.show" />
+                        </f:link.action>
+                        <f:link.action action="edit" arguments="{course: course}" class="btn btn-outline-secondary">
+                            <f:translate key="backend.list.edit" />
+                        </f:link.action>
+                        <f:link.action action="delete" arguments="{course: course}" class="btn btn-outline-danger" additionalAttributes="{onclick: 'return confirm(\'{f:translate(key: \'backend.list.delete.confirm\')}\');'}">
+                            <f:translate key="backend.list.delete" />
+                        </f:link.action>
+                    </td>
+                </tr>
+            </f:for>
+        </tbody>
+    </table>
+</f:section>

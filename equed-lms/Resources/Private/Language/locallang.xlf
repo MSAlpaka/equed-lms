@@ -1,0 +1,117 @@
+<?xml version='1.0' encoding='utf-8'?>
+<xliff version="1.2">
+  <file source-language="de" datatype="plaintext" original="messages" date="2025-03-29T00:00:00Z">
+    <header />
+    <body>
+
+      
+      <trans-unit id="dashboard.welcome">
+        <source>👋 Willkommen zurück!</source>
+      <target>Welcome back, {user}!</target></trans-unit>
+      <trans-unit id="dashboard.intro">
+        <source>Hier ist dein persönlicher Lernfortschritt:</source>
+      </trans-unit>
+      <trans-unit id="dashboard.autosave">
+        <source>Dein Lernstand wird automatisch gespeichert.</source>
+      </trans-unit>
+      <trans-unit id="dashboard.completed">
+        <source>🎉 Kurs abgeschlossen!</source>
+      </trans-unit>
+      <trans-unit id="dashboard.certificate">
+        <source>📄 Zertifikat anzeigen</source>
+      </trans-unit>
+      <trans-unit id="dashboard.incomplete">
+        <source>📘 Kurs noch offen</source>
+      </trans-unit>
+      <trans-unit id="dashboard.noQuiz">
+        <source>Noch kein Quiz bearbeitet</source>
+      </trans-unit>
+      <trans-unit id="dashboard.continue">
+        <source>➕ Kurs fortsetzen</source>
+      </trans-unit>
+
+      
+      <trans-unit id="lesson.quiz.title">
+        <source>🔁 Wiederholungsfragen</source>
+      </trans-unit>
+      <trans-unit id="lesson.quiz.submit">
+        <source>Antworten auswerten</source>
+      </trans-unit>
+      <trans-unit id="lesson.completedMessage">
+        <source>✔️ Du hast diese Lektion erfolgreich abgeschlossen!</source>
+      <target>You have completed this lesson.</target></trans-unit>
+      <trans-unit id="quiz.title">
+        <source>Quiz: {0}</source>
+      </trans-unit>
+      <trans-unit id="quiz.submit">
+        <source>Antworten abschicken</source>
+      </trans-unit>
+
+      
+      <trans-unit id="certificate.title">
+        <source>Zertifikat</source>
+      </trans-unit>
+      <trans-unit id="certificate.description">
+        <source>hat erfolgreich am Kurs „{0}“ teilgenommen.</source>
+      <target>has successfully completed the course</target></trans-unit>
+      <trans-unit id="certificate.confirmationText">
+        <source>Dieses Zertifikat bestätigt die vollständige Teilnahme und den erfolgreichen Abschluss gemäß den Standards von Equine Education Europe.</source>
+      </trans-unit>
+      <trans-unit id="certificate.signature.student">
+        <source>Teilnehmer:in</source>
+      <target>Participant</target></trans-unit>
+      <trans-unit id="certificate.trainingCenter">
+        <source>Ausbildungszentrum</source>
+      </trans-unit>
+      <trans-unit id="certificate.centerId">
+        <source>Center ID</source>
+      </trans-unit>
+      <trans-unit id="certificate.date">
+        <source>Abschlussdatum</source>
+      </trans-unit>
+
+      
+      <trans-unit id="course.intro">
+        <source>Hier findest du alle Informationen zu diesem Kurs.</source>
+      </trans-unit>
+
+      
+      <trans-unit id="site.title">
+        <source>EquEd Lernplattform</source>
+      </trans-unit>
+
+
+      <trans-unit id="certificate.hasCompleted" xml:space="preserve">
+        <source>has successfully completed the</source>
+      </trans-unit>
+      <trans-unit id="certificate.onDate" xml:space="preserve">
+        <source>on</source>
+      </tran s-unit>
+      <trans-unit id="certificate.code" xml:space="preserve">
+        <source>Certificate Code</source>
+      </trans-unit>
+      <trans-unit id="certificate.issuedBy" xml:space="preserve">
+        <source>Issued by</source>
+      </trans-unit>
+      <trans-unit id="certificate.center" xml:space="preserve">
+        <source>Center</source>
+      </trans-unit>
+      <trans-unit id="certificate.scanHint" xml:space="preserve">
+        <source>Scan to verify</source>
+      </trans-unit>
+      <trans-unit id="certificate.userPhoto" xml:space="preserve">
+        <source>User Photo</source>
+      </trans-unit>
+
+      <trans-unit id="verify.title"><source>Certificate Verification</source></trans-unit>
+      <trans-unit id="verify.invalid"><source>This certificate is invalid or not found.</source></trans-unit>
+      <trans-unit id="verify.name"><source>Name</source></trans-unit>
+      <trans-unit id="verify.course"><source>Course</source></trans-unit>
+      <trans-unit id="verify.date"><source>Date of Completion</source></trans-unit>
+      <trans-unit id="verify.center"><source>Training Center</source></trans-unit>
+      <trans-unit id="verify.certifier"><source>Certified By</source></trans-unit>
+      <trans-unit id="verify.code"><source>Certificate Code</source></trans-unit>
+
+    </body>
+  </file>
+</xliff>

@@ -1,0 +1,11 @@
+<f:layout name="Default" />
+
+<f:section name="main">
+    <h1><f:translate key="backend.course.edit" /></h1>
+
+    <f:form action="update" controller="Backend" method="post" object="{course}">
+        <f:form.textfield property="title" label="LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:tx_equedlms_domain_model_course.title" required="true" />
+        <f:form.textarea property="description" label="LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:tx_equedlms_domain_model_course.description" required="true" />
+        <f:form.submit value="Save" />
+    </f:form>
+</f:section>

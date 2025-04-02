@@ -1,0 +1,19 @@
+<f:layout name="Default" />
+
+<f:section name="main">
+    <h1><f:translate key="dashboard.progress.title" /></h1>
+
+    <!-- Benachrichtigung für Punkte -->
+    <f:if condition="{userProgress.points} > 100">
+        <div class="alert alert-success">
+            <f:translate key="dashboard.success" />
+        </div>
+    </f:if>
+
+    <!-- Benachrichtigung für Level -->
+    <f:if condition="{userProgress.level} > 5">
+        <div class="alert alert-info">
+            <f:translate key="dashboard.level5" />
+        </div>
+    </f:if>
+</f:section>

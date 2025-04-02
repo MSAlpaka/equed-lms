@@ -1,0 +1,33 @@
+<f:layout name="Default" />
+
+<f:section name="main">
+  <f:render partial="Card" arguments="{title: lesson.title, icon: '📖'}">
+    <f:section name="content">
+      <f:for each="{pages}" as="page">
+        <article class="mb-4">
+          <h2>{page.title}</h2>
+          <div class="rte">{page.text -> f:format.raw()}</div>
+        </article>
+      </f:for>
+    </f:section>
+  </f:render>
+
+  <f:render partial="Card" arguments="{title: '{f:translate(key: \"lesson.quiz.title\")}', icon: '🧠'}">
+    <f:section name="content">
+      <f:form action="submitQuiz" name="quiz" arguments="{lessonId: lesson.uid}">
+        <f:for each="{lesson.quizQuestions}" as="question">
+          <div class="mb-3">
+            <label for="answer_{question.uid}"><strong>{question.question}</strong></label><br />
+            <f:form.textfield name="answers[{question.uid}]" id="answer_{question.uid}" class="form-control" />
+          </div>
+        </f:for>
+
+        <f:render partial="Button" arguments="{label: '{f:translate(key: \"lesson.quiz.submit\")}', style: 'primary'}" />
+      </f:form>
+    </f:section>
+  </f:render>
+
+  <f:if condition="{progress.completed}">
+    <f:render partial="Alert" arguments="{type: 'success', icon: '🎉', message: '{f:translate(key: \"lesson.completedMessage\")}' }" />
+  </f:if>
+</f:section>

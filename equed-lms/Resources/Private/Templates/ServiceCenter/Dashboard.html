@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<f:layout name="Default" />
+
+<f:section name="main">
+    <h2><f:translate key="servicecenter.dashboard.title" /></h2>
+
+    <f:if condition="{records}">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th><f:translate key="servicecenter.dashboard.course" /></th>
+                    <th><f:translate key="servicecenter.dashboard.participant" /></th>
+                    <th><f:translate key="servicecenter.dashboard.actions" /></th>
+                </tr>
+            </thead>
+            <tbody>
+                <f:for each="{records}" as="record">
+                    <tr>
+                        <td>{record.course.title}</td>
+                        <td>{record.user.fullName}</td>
+                        <td>
+                            <f:link.action action="assignExternalExaminer" controller="ServiceCenter" arguments="{record: record}">
+                                <f:translate key="servicecenter.dashboard.assignExaminer" />
+                            </f:link.action>
+                        </td>
+                    </tr>
+                </f:for>
+            </tbody>
+        </table>
+    </f:if>
+
+    <f:else>
+        <p><f:translate key="servicecenter.dashboard.noAssignments" /></p>
+    </f:else>
+</f:section>

@@ -1,0 +1,22 @@
+<f:form action="submit" controller="Submission" enctype="multipart/form-data" method="post" arguments="{courseId: course.uid}" class="space-y-4">
+  
+  <div>
+    <label for="type">Submission Type</label>
+    <f:form.select name="type" options="{ 'caseStudy': 'Case Study', 'practiceExam': 'Practice Exam', 'theoryExam': 'Theory Exam', 'other': 'Other' }" class="form-select" />
+  </div>
+
+  <div>
+    <label for="file">Upload File</label>
+    <input type="file" name="file" required class="form-control" />
+  </div>
+
+  <div>
+    <label for="comment">Comment (optional)</label>
+    <f:form.textarea name="comment" class="form-textarea" rows="3" />
+  </div>
+
+  <div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </div>
+
+</f:form>

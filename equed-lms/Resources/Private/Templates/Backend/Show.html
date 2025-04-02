@@ -1,0 +1,13 @@
+<f:layout name="Default" />
+
+<f:section name="main">
+    <h1>{course.title}</h1>
+    <p>{course.description}</p>
+
+    <h3><f:translate key="backend.course.progress" /></h3>
+    <p>{progress}%</p>
+
+    <f:link.action action="edit" arguments="{course: course}" class="btn btn-primary">
+        <f:translate key="backend.course.edit" />
+    </f:link.action>
+</f:section>

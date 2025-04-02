@@ -1,0 +1,2 @@
+<?xml version='1.0' encoding='utf-8'?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2"><file source-language="en" datatype="plaintext" original="messages"><body><trans-unit id="backend.description"><source>backend.description</source><target /></trans-unit><trans-unit id="backend.title"><source>backend.title</source><target /></trans-unit><trans-unit id="backend.users"><source>backend.users</source><target /></trans-unit></body></file></xliff>

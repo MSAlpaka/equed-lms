@@ -1,0 +1,12 @@
+.profile-summary {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+  }
+  .profile-info {
+    width: 30%;
+    padding: 10px;
+    background: #f4f4f4;
+    border-radius: 5px;
+    text-align: center;
+  }  

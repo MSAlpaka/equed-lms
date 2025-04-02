@@ -1,0 +1,14 @@
+<f:layout name="Default" />
+<f:section name="main">
+
+  <div class="container my-5">
+    <h2 class="mb-4"><f:translate key="course.plugin.headline" default="Kursbereich starten" /></h2>
+
+    <p><f:translate key="course.plugin.description" default="Hier gelangst du direkt zu deinem persönlichen Kurs-Dashboard mit allen verfügbaren Lektionen und Inhalten." /></p>
+
+    <f:link.action pluginName="LmsFrontend" controller="Lms" action="dashboard" class="btn btn-primary btn-lg mt-3">
+      <f:translate key="course.plugin.button" default="Zum Kurs-Dashboard" />
+    </f:link.action>
+  </div>
+
+</f:section>

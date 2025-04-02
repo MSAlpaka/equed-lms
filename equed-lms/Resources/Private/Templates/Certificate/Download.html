@@ -1,0 +1,30 @@
+<f:layout name="Default" />
+<f:section name="main">
+
+<h1><f:translate key="certificate.title" default="Zertifikat" /></h1>
+
+<p>
+  <f:translate key="certificate.confirm_text" default="Hiermit wird bestätigt, dass" />
+  <strong><equed:userName feUserId="{record.feUser}" /></strong><br />
+  <f:translate key="certificate.completed_course" default="erfolgreich den Kurs" />
+  <strong>
+    <f:if condition="{record.course.title}">
+      <f:then>{record.course.title}</f:then>
+      <f:else>#{record.course}</f:else>
+    </f:if>
+  </strong>
+  <f:translate key="certificate.completed_suffix" default="abgeschlossen hat." />
+</p>
+
+<p>
+  <f:translate key="certificate.code" default="Zertifikatsnummer" />:
+  <strong>{record.certificateCode}</strong><br />
+  <f:translate key="certificate.date" default="Abschlussdatum" />:
+  <f:format.date format="d.m.Y">{record.confirmationDate}</f:format.date>
+</p>
+
+<p>
+  EquEd.eu – <f:translate key="certificate.footer" default="European Equine Education" />
+</p>
+
+</f:section>

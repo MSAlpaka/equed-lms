@@ -1,0 +1,43 @@
+<div class="card shadow p-4 rounded-3" style="max-width: 800px; margin: auto; font-family: sans-serif;">
+    <div class="d-flex flex-wrap align-items-center justify-between mb-4">
+        <div style="flex: 1; min-width: 200px;">
+            <f:if condition="{user.photo}">
+                <img src="{user.photo}" alt="{f:translate(key: 'certificate.userPhoto')}" style="width: 100%; max-width: 180px; border-radius: 1rem;">
+            </f:if>
+        </div>
+        <div style="flex: 2; padding-left: 2rem;">
+            <h2 style="margin-bottom: 0;">{user.fullName}</h2>
+            <p style="font-size: 1.2rem;">
+                <f:translate key="certificate.hasCompleted" />
+            </p>
+            <h3 style="margin-top: 0; color: #004080;">{course.title}</h3>
+            <p class="mt-2">
+                <f:translate key="certificate.onDate" /> {course.date}
+            </p>
+        </div>
+    </div>
+
+    <div class="d-flex justify-between mt-4" style="gap: 2rem;">
+        <div style="flex: 1;">
+            <strong><f:translate key="certificate.code" />:</strong><br>
+            <span style="font-family: monospace;">{certificate.code}</span><br>
+            <strong><f:translate key="certificate.issuedBy" />:</strong> {certifier.name}<br>
+            <strong><f:translate key="certificate.center" />:</strong> {center.name}
+        </div>
+        <div style="flex: 1; text-align: right;">
+            <f:if condition="{certificate.qr}">
+                <img src="{certificate.qr}" alt="QR Code" style="width: 120px;">
+                <p style="font-size: 0.8rem; color: gray;">
+                    <f:translate key="certificate.scanHint" />
+                </p>
+            </f:if>
+        </div>
+    </div>
+
+    <!-- Download Button für das Zertifikat -->
+    <div class="mt-4 text-center">
+        <f:link.action action="download" controller="Certificate" arguments="{certificateCode: certificate.code}" class="btn btn-primary">
+            <f:translate key="certificate.downloadPdf" />
+        </f:link.action>
+    </div>
+</div>

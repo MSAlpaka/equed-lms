@@ -1,0 +1,16 @@
+<f:layout name="Default" />
+<f:section name="main">
+
+<h2>Dokument hochladen</h2>
+
+<f:form action="submit" enctype="multipart/form-data" name="tx_equedlms_user_submission">
+    <label for="description">Beschreibung:</label><br />
+    <f:form.textfield name="description" id="description" /><br /><br />
+
+    <label for="document">Datei (PDF, DOCX, ...):</label><br />
+    <input type="file" name="tx_equedlms_user_submission[document]" id="document" /><br /><br />
+
+    <f:form.submit value="Absenden" />
+</f:form>
+
+</f:section>

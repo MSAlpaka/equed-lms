@@ -1,0 +1,41 @@
+<f:layout name="Default" />
+<f:section name="main">
+
+<h2><f:translate key="instructor.dashboard.title" /></h2>
+
+<table class="table table-striped table-hover">
+  <thead>
+    <tr>
+      <th><f:translate key="instructor.dashboard.name" /></th>
+      <th><f:translate key="instructor.dashboard.course" /></th>
+      <th><f:translate key="instructor.dashboard.status" /></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <f:for each="{submissions}" as="submission">
+      <tr>
+        <td>{submission.user.fullName}</td>
+        <td>{submission.userCourseRecord.course.title}</td>
+        <td>
+          <f:if condition="{submission.passed} == true">
+            <f:then><span class="badge bg-success"><f:translate key="instructor.dashboard.passed" /></span></f:then>
+            <f:else>
+              <f:if condition="{submission.passed} == false">
+                <f:then><span class="badge bg-danger"><f:translate key="instructor.dashboard.failed" /></span></f:then>
+                <f:else><span class="badge bg-secondary"><f:translate key="instructor.dashboard.pending" /></span></f:else>
+              </f:if>
+            </f:else>
+          </f:if>
+        </td>
+        <td class="text-end">
+          <f:link.action action="evaluateSubmission" arguments="{submission: submission}" class="btn btn-sm btn-outline-primary">
+            <f:translate key="instructor.dashboard.evaluate" />
+          </f:link.action>
+        </td>
+      </tr>
+    </f:for>
+  </tbody>
+</table>
+
+</f:section>

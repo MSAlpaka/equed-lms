@@ -1,0 +1,48 @@
+<f:layout name="Default" />
+<f:section name="main">
+
+<h2><f:translate key="my_certificates.title" /></h2>
+
+<f:if condition="{records}">
+  <div class="row">
+    <f:for each="{records}" as="record">
+      <div class="col-md-6 mb-4">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">
+              <f:if condition="{record.course.title}">
+                <f:then>{record.course.title}</f:then>
+                <f:else>
+                  <f:translate key="my_certificates.course_id" arguments="{0: record.course}" />
+                </f:else>
+              </f:if>
+            </h5>
+
+            <p class="card-text">
+              <f:translate key="my_certificates.certificate_number" />:
+              <strong>{record.certificateCode}</strong><br />
+              <f:translate key="my_certificates.issued_on" />:
+              <f:format.date format="d.m.Y">{record.completionDate}</f:format.date><br />
+              <f:translate key="my_certificates.center" />: {record.center.name}
+            </p>
+
+            <f:link.action action="showCard" controller="Certificate" arguments="{record: record}" class="btn btn-sm btn-outline-primary" target="_blank">
+              <f:translate key="my_certificates.view_online" />
+            </f:link.action>
+
+            <f:link.action action="download" controller="Certificate" arguments="{certificateCode: record.certificateCode}" class="btn btn-sm btn-outline-success" target="_blank">
+              <f:translate key="my_certificates.download_pdf" />
+            </f:link.action>
+
+          </div>
+        </div>
+      </div>
+    </f:for>
+  </div>
+<f:else>
+  <p><f:translate key="my_certificates.none_found" /></p>
+</f:else>
+
+</f:if>
+
+</f:section>

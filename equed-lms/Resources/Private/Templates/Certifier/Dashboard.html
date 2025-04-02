@@ -1,0 +1,37 @@
+<f:layout name="Default" />
+
+<f:section name="main">
+    <h1><f:translate key="certifier.dashboard.title" /></h1>
+
+    <f:if condition="{records}">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th><f:translate key="certifier.dashboard.user" /></th>
+                    <th><f:translate key="certifier.dashboard.course" /></th>
+                    <th><f:translate key="certifier.dashboard.completionDate" /></th>
+                    <th><f:translate key="certifier.dashboard.actions" /></th>
+                </tr>
+            </thead>
+            <tbody>
+                <f:for each="{records}" as="record">
+                    <tr>
+                        <td>{record.user.fullName}</td>
+                        <td>{record.course.title}</td>
+                        <td><f:format.date format="d.m.Y">{record.completionDate}</f:format.date></td>
+                        <td>
+                            <f:form action="validateCourse" controller="Certifier" arguments="{record: record}" class="d-inline">
+                                <button type="submit" class="btn btn-success btn-sm">
+                                    <f:translate key="certifier.dashboard.validateButton" />
+                                </button>
+                            </f:form>
+                        </td>
+                    </tr>
+                </f:for>
+            </tbody>
+        </table>
+    </f:if>
+    <f:else>
+        <p><f:translate key="certifier.dashboard.noRecords" /></p>
+    </f:else>
+</f:section>

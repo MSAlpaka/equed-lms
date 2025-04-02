@@ -1,0 +1,45 @@
+<f:layout name="Default" />
+
+<f:section name="main">
+
+<h2><f:translate key="instructor.evaluate.title" /></h2>
+
+<div class="card mb-4">
+  <div class="card-body">
+    <p>
+      <strong><f:translate key="instructor.evaluate.submission" /></strong>:
+      <f:if condition="{submission.file}">
+        <f:then>
+          <a href="{submission.file.originalResource.publicUrl}" target="_blank">
+            <f:translate key="instructor.evaluate.download" />
+          </a>
+        </f:then>
+        <f:else>
+          <f:translate key="instructor.evaluate.no_file" />
+        </f:else>
+      </f:if>
+    </p>
+
+    <f:form action="saveEvaluation" controller="InstructorDashboard" object="{submission}">
+
+      <div class="mb-3">
+        <label for="instructorComment" class="form-label">
+          <f:translate key="instructor.evaluate.comment" />
+        </label>
+        <f:form.textarea property="instructorComment" class="form-control" id="instructorComment" rows="4" />
+      </div>
+
+      <div class="form-check mb-3">
+        <f:form.checkbox property="passed" class="form-check-input" id="passed" />
+        <label for="passed" class="form-check-label">
+          <f:translate key="instructor.evaluate.passed" />
+        </label>
+      </div>
+
+      <f:form.submit class="btn btn-primary" value="{f:translate(key: 'instructor.evaluate.save')}" />
+
+    </f:form>
+  </div>
+</div>
+
+</f:section>

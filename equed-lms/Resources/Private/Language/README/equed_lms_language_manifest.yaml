@@ -1,0 +1,23 @@
+language_files:
+  backend:
+    admin: locallang_admin_backend.*
+    instructor: locallang_instructor_backend.*
+    certifier: locallang_certifier_backend.*
+    user: locallang_user_backend.*
+    general: locallang_general_backend.*
+    modules: locallang_mod_backend.*
+  tca:
+    admin: admin_db.*
+    instructor: instructor_db.*
+    certifier: certifier_db.*
+    user: user_db.*
+    general: general_db.*
+deprecated:
+- locallang_admin.*
+- locallang_backend.*
+- locallang_certificate.*
+- locallang_certifier.*
+- locallang_db.xlf
+- locallang_mod_admin.*
+- locallang_submission.*
+- locallang_user.*

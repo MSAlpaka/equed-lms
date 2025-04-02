@@ -1,0 +1,17 @@
+language_files:
+  frontend:
+    user: locallang_user_frontend.*
+    submission: locallang_submission_frontend.*
+    instructor: locallang_instructor_frontend.*
+    certifier: locallang_certifier_frontend.*
+    certificate: locallang_certificate_frontend.*
+    verify: locallang_verify_frontend.*
+    general: locallang_general_frontend.*
+deprecated:
+- locallang_admin.*
+- locallang_backend.*
+- locallang_certificate.*
+- locallang_certifier.*
+- locallang_mod_admin.*
+- locallang_submission.*
+- locallang_user.*

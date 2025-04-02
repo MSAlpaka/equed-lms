@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<f:layout name="Default" />
+
+<f:section name="main">
+    <h2><f:translate key="feedback.form.title" /></h2>
+
+    <form action="{f:uri.action(action: 'submitFeedback')}">
+        <h3><f:translate key="feedback.form.courseStandards" /></h3>
+
+        <f:for each="{courseStandards}" as="standard">
+            <div>
+                <label>{standard.question}</label>
+                <f:form.radio inline="true" options="[{value: 'yes', label: 'Ja'}, {value: 'no', label: 'Nein'}]" name="standard_{standard.uid}" value="yes" />
+            </div>
+        </f:for>
+
+        <h3><f:translate key="feedback.form.instructorAndLocation" /></h3>
+        <div>
+            <label><f:translate key="feedback.form.instructorRating" /></label>
+            <f:form.select options="[1, 2, 3, 4, 5]" name="instructorRating" />
+        </div>
+        <div>
+            <label><f:translate key="feedback.form.locationRating" /></label>
+            <f:form.select options="[1, 2, 3, 4, 5]" name="locationRating" />
+        </div>
+
+        <h3><f:translate key="feedback.form.futureCourses" /></h3>
+        <f:for each="{availableCourses}" as="course">
+            <div>
+                <label><f:translate key="feedback.form.courseAvailability" /> {course.title}</label>
+                <f:form.checkbox name="futureCourses_{course.uid}" value="{course.uid}" />
+            </div>
+        </f:for>
+
+        <h3><f:translate key="feedback.form.additionalRequests" /></h3>
+        <div>
+            <label><f:translate key="feedback.form.additionalRequestsDescription" /></label>
+            <f:form.textarea name="additionalRequests" />
+        </div>
+
+        <h3><f:translate key="feedback.form.sendToInstructor" /></h3>
+        <div>
+            <label><f:form.checkbox name="sendToInstructor" value="1" /> <f:translate key="feedback.form.sendToInstructorOption" /></label>
+        </div>
+
+        <f:form.submit value="{f:translate(key: 'feedback.form.submit')}">
+    </form>
+</f:section>

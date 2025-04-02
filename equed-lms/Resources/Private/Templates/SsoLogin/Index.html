@@ -1,0 +1,33 @@
+<f:layout name="Default" />
+
+<f:section name="main">
+  <h1><f:translate key="sso.login.message" /></h1>
+  <script>
+    async function runSSO() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const token = urlParams.get('token');
+
+      if (!token) {
+        document.body.innerHTML = "<h1><f:translate key='sso.login.error.no_token' /></h1>";
+        return;
+      }
+
+      try {
+        const response = await fetch('https://auth.equed.eu/verify?token=' + token);
+        const data = await response.json();
+
+        if (data.valid) {
+          sessionStorage.setItem('equed_user', JSON.stringify(data.payload));
+          sessionStorage.setItem('equed_token', token);
+          window.location.href = '/dashboard'; // Ziel ggf. anpassen
+        } else {
+          document.body.innerHTML = "<h1><f:translate key='sso.login.error.invalid_token' /></h1>";
+        }
+      } catch (error) {
+        document.body.innerHTML = "<h1><f:translate key='sso.login.error.general' /></h1>";
+      }
+    }
+
+    window.onload = runSSO;
+  </script>
+</f:section>

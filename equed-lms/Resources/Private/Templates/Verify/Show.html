@@ -1,0 +1,96 @@
+<f:layout name="Default" />
+
+<f:section name="main">
+    <h1><f:translate key="verify.title" /></h1>
+
+    <!-- QR-Code Eingabe -->
+    <div class="mb-4">
+        <label for="certificateCode"><f:translate key="verify.enterCertificateCode" /></label>
+        <input type="text" id="certificateCode" name="certificateCode" class="form-control" placeholder="<f:translate key='verify.enterCode' />">
+        <button type="button" class="btn btn-primary mt-2" onclick="validateCertificateCode()">
+            <f:translate key="verify.checkValidity" />
+        </button>
+    </div>
+
+    <!-- QR-Code Scanner Start-Button -->
+    <button type="button" class="btn btn-success mt-2" onclick="startScanner()">
+        <f:translate key="verify.scanQRCode" />
+    </button>
+
+    <!-- Kamera-Feed -->
+    <div id="scanner-container" style="display:none;">
+        <video id="scanner" width="100%" height="auto" style="border: 1px solid #ccc;"></video>
+    </div>
+
+    <f:if condition="{certificate}">
+        <div class="card shadow p-4 rounded-3" style="max-width: 800px; margin: auto; font-family: sans-serif;">
+            <h2>{user.fullName}</h2>
+            <p><f:translate key="verify.course" />: {course.title}</p>
+            <p><f:translate key="verify.issuedBy" />: {certifier.name}</p>
+            <p><f:translate key="verify.center" />: {center.name}</p>
+            <p><f:translate key="verify.status" />: {certificate.status}</p>
+            <p><f:translate key="verify.completionDate" />: <f:format.date format="d.m.Y">{certificate.completionDate}</f:format.date></p>
+        </div>
+    </f:if>
+
+    <f:else>
+        <p><f:translate key="verify.notFound" /></p>
+    </f:else>
+</f:section>
+
+<script>
+    // Funktion zum Starten des QR-Code Scanners
+    function startScanner() {
+        const video = document.getElementById('scanner');
+        const container = document.getElementById('scanner-container');
+        container.style.display = "block";
+
+        // Zugriff auf die Kamera
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function(stream) {
+                video.srcObject = stream;
+                video.setAttribute("playsinline", true); // Für iOS
+                video.play();
+
+                requestAnimationFrame(scanQRCode); // Startet das Scannen
+            })
+            .catch(function(error) {
+                console.error('Camera access denied or error: ', error);
+            });
+    }
+
+    // Funktion zum Scannen des QR-Codes
+    function scanQRCode() {
+        const video = document.getElementById('scanner');
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        canvas.height = video.videoHeight;
+        canvas.width = video.videoWidth;
+
+        // Bild von der Kamera auf das Canvas übertragen
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+        // QR-Code aus dem Bild extrahieren
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const code = jsQR(imageData.data, canvas.width, canvas.height, {
+            inversionAttempts: "dontInvert",
+        });
+
+        if (code) {
+            // QR-Code erkannt: Stoppe die Kamera und setze den Code ins Eingabefeld
+            video.srcObject.getTracks().forEach(track => track.stop());
+            document.getElementById('certificateCode').value = code.data;
+            validateCertificateCode();  // Überprüfen des Codes
+        } else {
+            // Wenn kein QR-Code erkannt wird, weiter scannen
+            requestAnimationFrame(scanQRCode);
+        }
+    }
+
+    // Funktion zur Validierung des Zertifikatscodes
+    function validateCertificateCode() {
+        var certificateCode = document.getElementById('certificateCode').value;
+        window.location.href = '/verify/' + certificateCode; // Verifikation über die URL
+    }
+</script>

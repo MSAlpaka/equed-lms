@@ -1,0 +1,64 @@
+<f:layout name="Default" />
+
+<f:section name="main">
+
+<h2><f:translate key="certifier.validation.heading" /></h2>
+
+<p>
+  <strong><f:translate key="certifier.validation.course" />:</strong> {record.course.title}<br />
+  <strong><f:translate key="certifier.validation.participant" />:</strong> {record.user.fullName}<br />
+  <strong><f:translate key="certifier.validation.center" />:</strong> {record.center.name}<br />
+  <strong><f:translate key="certifier.validation.status" />:</strong>
+  <f:if condition="{record.validated}">
+    ✅ <f:translate key="certifier.validation.status.confirmed" />
+  </f:if>
+  <f:else>
+    ⏳ <f:translate key="certifier.validation.status.pending" />
+  </f:else>
+</p>
+
+<hr />
+
+<h3><f:translate key="certifier.validation.attempts" /></h3>
+
+<f:if condition="{attempts}">
+  <ul>
+    <f:for each="{attempts}" as="attempt">
+      <li>
+        <strong><f:translate key="exam.type.{attempt.type}" /></strong> –
+        <f:if condition="{attempt.passed}">
+          ✅ <f:translate key="certifier.validation.passed" />
+        </f:if>
+        <f:else>
+          ❌ <f:translate key="certifier.validation.failed" />
+        </f:else>
+        <br />
+        <small>
+          <f:translate key="certifier.validation.date" />:
+          <f:format.date format="d.m.Y">{attempt.attemptDate}</f:format.date>
+          <f:translate key="certifier.validation.by" /> {attempt.instructor.fullName}
+        </small>
+        <br />
+        <f:translate key="certifier.validation.feedback" />: <em>{attempt.feedback}</em>
+      </li>
+    </f:for>
+  </ul>
+<f:else>
+  <p><f:translate key="certifier.validation.noAttempts" /></p>
+</f:if>
+
+<hr />
+
+<h3><f:translate key="certifier.validation.decision" /></h3>
+
+<f:form action="confirmValidation" controller="Certifier">
+  <f:form.hidden name="record" value="{record.uid}" />
+  <f:form.submit value="{f:translate(key: 'certifier.validation.confirm')}" />
+</f:form>
+
+<f:form action="rejectValidation" controller="Certifier">
+  <f:form.hidden name="record" value="{record.uid}" />
+  <f:form.submit value="{f:translate(key: 'certifier.validation.reject')}" />
+</f:form>
+
+</f:section>

@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='utf-8'?>
+<xliff version="1.2">
+  <file source-language="de" datatype="plaintext" original="messages">
+    <body>
+      <trans-unit id="dashboard.welcome"><source>Willkommen in deinem Dashboard, %s!</source><target>Willkommen zurück, {user}!</target></trans-unit>
+      <trans-unit id="dashboard.success"><source>🎉 Glückwunsch! Du hast über 100 Punkte erreicht!</source></trans-unit>
+      <trans-unit id="dashboard.progress.title"><source>Dein Fortschritt</source></trans-unit>
+      <trans-unit id="dashboard.progress.level"><source>Level</source></trans-unit>
+      <trans-unit id="dashboard.courses.title"><source>Deine Kurse</source></trans-unit>
+      <trans-unit id="dashboard.courses.open"><source>Öffnen</source></trans-unit>
+      <trans-unit id="courselist.title"><source>Verfügbare Kurse</source></trans-unit>
+      <trans-unit id="courselist.open"><source>Öffnen</source></trans-unit>
+      <trans-unit id="tt_content.CType.equed_lms_course" xml:space="preserve">
+        <source>EquEd LMS Kursanzeige</source>
+      </trans-unit>
+    <trans-unit id="lesson.completedMessage"><source>lesson.completedMessage</source><target>Du hast diese Lektion abgeschlossen.</target></trans-unit><trans-unit id="certificate.description"><source>certificate.description</source><target>hat den Kurs erfolgreich abgeschlossen</target></trans-unit><trans-unit id="certificate.signature.student"><source>certificate.signature.student</source><target>Teilnehmende*r</target></trans-unit></body>
+  </file>
+</xliff>

@@ -1,0 +1,11 @@
+mod.wizards.newContentElement.wizardItems.plugins {
+    elements.equed_lms_course {
+        iconIdentifier = equed-lms-course
+        title = LMS Course
+        description = Zeigt einen Kurs im EquEd LMS an
+        tt_content_defValues {
+            CType = equed_lms_course
+        }
+    }
+    show = *
+}

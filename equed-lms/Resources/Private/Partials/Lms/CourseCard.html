@@ -1,0 +1,60 @@
+<section class="mb-6 border p-4 rounded bg-light">
+  <h2>{course.title}</h2>
+  <p>{course.description}</p>
+
+  <!-- Fortschrittsbalken -->
+  <div class="progress my-3" style="height: 24px;">
+    <div
+      class="progress-bar bg-success"
+      role="progressbar"
+      style="width: {courseProgress.{course.uid}}%;"
+      aria-valuenow="{courseProgress.{course.uid}}"
+      aria-valuemin="0"
+      aria-valuemax="100">
+      {courseProgress.{course.uid}}%
+    </div>
+  </div>
+
+  <!-- Statusanzeige -->
+  <div class="mb-2 text-end text-xl">
+    <equed:certificateStatus courseId="{course.uid}" />
+  </div>
+
+  <f:if condition="{courseCompletion.{course.uid}}">
+    <div class="alert alert-success">
+      <f:translate key="dashboard.completed" />
+    </div>
+    <f:link.action action="certificate" arguments="{courseId: course.uid}" class="btn btn-outline-success">
+      <f:translate key="dashboard.certificate" />
+    </f:link.action>
+  <f:else>
+    <div class="alert alert-info">
+      <f:translate key="dashboard.incomplete" />
+    </div>
+  </f:else>
+  </f:if>
+
+  <!-- Lektionsliste -->
+  <ul>
+    <f:for each="{course.lessons}" as="lesson">
+      <li>
+        <f:if condition="{progress.{lesson.uid}.completed}">
+          ✅ {lesson.title}
+        <f:else>
+          ⏳ {lesson.title}
+        </f:else>
+        </f:if>
+        –
+        <f:if condition="{progress.{lesson.uid}.quizScore}">
+          Quiz: {progress.{lesson.uid}.quizScore}%
+        <f:else>
+          <f:translate key="dashboard.noQuiz" />
+        </f:else>
+      </li>
+    </f:for>
+  </ul>
+
+  <f:link.action action="courseShow" arguments="{courseId: course.uid}" class="btn btn-primary mt-3">
+    <f:translate key="dashboard.continue" />
+  </f:link.action>
+</section>
