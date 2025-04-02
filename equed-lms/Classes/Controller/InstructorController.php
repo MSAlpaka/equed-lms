@@ -1,76 +1,37 @@
 <?php
 
-namespace Equed\EquedLms\Domain\Model;
+namespace Equed\EquedLms\Controller;
 
-use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
+use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+use Equed\EquedLms\Domain\Repository\InstructorRepository;
 
-class Instructor extends AbstractEntity
+class InstructorController extends ActionController
 {
-    protected int $feUser = 0;
-    protected string $name = '';
-    protected string $email = '';
-    protected bool $isAvailable = true;
-    protected string $regionPostalCodes = '';
+    /**
+     * @var \Equed\EquedLms\Domain\Repository\InstructorRepository
+     */
+    protected InstructorRepository $instructorRepository;
 
-    protected ?Center $center = null;
-
-    public function getFeUser(): int
+    public function __construct(InstructorRepository $instructorRepository)
     {
-        return $this->feUser;
+        $this->instructorRepository = $instructorRepository;
     }
 
-    public function setFeUser(int $feUser): void
+    /**
+     * List all verified instructors
+     */
+    public function indexAction(): void
     {
-        $this->feUser = $feUser;
+        $instructors = $this->instructorRepository->findAllVerified();
+        $this->view->assign('instructors', $instructors);
     }
 
-    public function getName(): string
+    /**
+     * Show instructor details
+     */
+    public function showAction(int $instructorId): void
     {
-        return $this->name;
-    }
-
-    public function setName(string $name): void
-    {
-        $this->name = $name;
-    }
-
-    public function getEmail(): string
-    {
-        return $this->email;
-    }
-
-    public function setEmail(string $email): void
-    {
-        $this->email = $email;
-    }
-
-    public function isAvailable(): bool
-    {
-        return $this->isAvailable;
-    }
-
-    public function setIsAvailable(bool $isAvailable): void
-    {
-        $this->isAvailable = $isAvailable;
-    }
-
-    public function getRegionPostalCodes(): string
-    {
-        return $this->regionPostalCodes;
-    }
-
-    public function setRegionPostalCodes(string $codes): void
-    {
-        $this->regionPostalCodes = $codes;
-    }
-
-    public function getCenter(): ?Center
-    {
-        return $this->center;
-    }
-
-    public function setCenter(?Center $center): void
-    {
-        $this->center = $center;
+        $instructor = $this->instructorRepository->findOneByUserId($instructorId);
+        $this->view->assign('instructor', $instructor);
     }
 }

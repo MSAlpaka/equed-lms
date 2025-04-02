@@ -1,23 +1,36 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Equed\EquedLms\Domain\Model;
 
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 
+/**
+ * Represents a course offered by EquEd.
+ */
 class Course extends AbstractEntity
 {
     protected string $title = '';
+
     protected string $description = '';
-    protected string $category = '';
-    protected bool $isActive = true;
 
-    // 🔄 Abschlussziel für Zertifizierung
-    protected string $finishGoal = '';
+    protected string $category = ''; // z. B. "Basic", "Specialty", "Instructor"
 
-    // 🆕 Voraussetzungen für den Kurs (z. B. Abschlussziele anderer Kurse)
-    protected array $prerequisites = [];
+    protected string $courseCode = ''; // für Zertifikate & Tracking
+
+    protected string $prerequisites = ''; // ggf. künftig als Relation abbilden
+
+    protected int $durationHours = 0;
+
+    protected bool $visible = true;
+
+    protected bool $requiresExternalExaminer = false;
+
+    protected bool $active = true;
+
+    /**
+     * @var \Equed\EquedLms\Domain\Model\Center|null
+     */
+    protected ?Center $center = null;
 
     public function getTitle(): string
     {
@@ -49,33 +62,73 @@ class Course extends AbstractEntity
         $this->category = $category;
     }
 
-    public function isActive(): bool
+    public function getCourseCode(): string
     {
-        return $this->isActive;
+        return $this->courseCode;
     }
 
-    public function setIsActive(bool $isActive): void
+    public function setCourseCode(string $courseCode): void
     {
-        $this->isActive = $isActive;
+        $this->courseCode = $courseCode;
     }
 
-    public function getFinishGoal(): string
-    {
-        return $this->finishGoal;
-    }
-
-    public function setFinishGoal(string $finishGoal): void
-    {
-        $this->finishGoal = $finishGoal;
-    }
-
-    public function getPrerequisites(): array
+    public function getPrerequisites(): string
     {
         return $this->prerequisites;
     }
 
-    public function setPrerequisites(array $prerequisites): void
+    public function setPrerequisites(string $prerequisites): void
     {
         $this->prerequisites = $prerequisites;
+    }
+
+    public function getDurationHours(): int
+    {
+        return $this->durationHours;
+    }
+
+    public function setDurationHours(int $durationHours): void
+    {
+        $this->durationHours = $durationHours;
+    }
+
+    public function isVisible(): bool
+    {
+        return $this->visible;
+    }
+
+    public function setVisible(bool $visible): void
+    {
+        $this->visible = $visible;
+    }
+
+    public function isRequiresExternalExaminer(): bool
+    {
+        return $this->requiresExternalExaminer;
+    }
+
+    public function setRequiresExternalExaminer(bool $requiresExternalExaminer): void
+    {
+        $this->requiresExternalExaminer = $requiresExternalExaminer;
+    }
+
+    public function isActive(): bool
+    {
+        return $this->active;
+    }
+
+    public function setActive(bool $active): void
+    {
+        $this->active = $active;
+    }
+
+    public function getCenter(): ?Center
+    {
+        return $this->center;
+    }
+
+    public function setCenter(?Center $center): void
+    {
+        $this->center = $center;
     }
 }

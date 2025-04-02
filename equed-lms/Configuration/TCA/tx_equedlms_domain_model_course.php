@@ -1,73 +1,99 @@
 <?php
 
-defined('TYPO3_MODE') or die();
-
-call_user_func(
-    function () {
-        // TCA für 'Course' hinzufügen
-        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns(
-            'tx_equedlms_domain_model_course',
-            [
-                'title' => [
-                    'exclude' => true,
-                    'label' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:tx_equedlms_domain_model_course.title',
-                    'config' => [
-                        'type' => 'input',
-                        'size' => 30,
-                        'max' => 255,
-                        'eval' => 'trim',
-                    ],
-                ],
-                'description' => [
-                    'exclude' => true,
-                    'label' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:tx_equedlms_domain_model_course.description',
-                    'config' => [
-                        'type' => 'text',
-                        'cols' => '30',
-                        'rows' => '5',
-                    ],
-                ],
-                'category' => [
-                    'exclude' => true,
-                    'label' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:tx_equedlms_domain_model_course.category',
-                    'config' => [
-                        'type' => 'input',
-                        'size' => 30,
-                        'max' => 255,
-                        'eval' => 'trim',
-                    ],
-                ],
-                'isActive' => [
-                    'exclude' => true,
-                    'label' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:tx_equedlms_domain_model_course.isActive',
-                    'config' => [
-                        'type' => 'check',
-                    ],
-                ],
-                'startDate' => [
-                    'exclude' => true,
-                    'label' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:tx_equedlms_domain_model_course.startDate',
-                    'config' => [
-                        'type' => 'datetime',
-                    ],
-                ],
-                'endDate' => [
-                    'exclude' => true,
-                    'label' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:tx_equedlms_domain_model_course.endDate',
-                    'config' => [
-                        'type' => 'datetime',
-                    ],
+return [
+    'ctrl' => [
+        'title' => 'Course',
+        'label' => 'title',
+        'tstamp' => 'tstamp',
+        'crdate' => 'crdate',
+        'delete' => 'deleted',
+        'iconfile' => 'EXT:equed_lms/Resources/Public/Icons/course.svg',
+    ],
+    'columns' => [
+        'title' => [
+            'label' => 'Title',
+            'config' => [
+                'type' => 'input',
+                'required' => true,
+            ],
+        ],
+        'description' => [
+            'label' => 'Description',
+            'config' => [
+                'type' => 'text',
+                'enableRichtext' => true,
+            ],
+        ],
+        'category' => [
+            'label' => 'Category',
+            'config' => [
+                'type' => 'select',
+                'renderType' => 'selectSingle',
+                'items' => [
+                    ['-- Select Category --', ''],
+                    ['Basic', 'basic'],
+                    ['Specialist', 'specialist'],
+                    ['Instructor', 'instructor'],
+                    ['Techniques', 'techniques'],
+                    ['Try HoofCare', 'try'],
                 ],
             ],
-            1
-        );
-
-        // TCA für 'Course' Typen hinzufügen
-        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes(
-            'tx_equedlms_domain_model_course',
-            'title, description, category, isActive, startDate, endDate',
-            '',
-            'after:description'
-        );
-    }
-);
+        ],
+        'course_code' => [
+            'label' => 'Course Code',
+            'config' => [
+                'type' => 'input',
+                'eval' => 'trim,alphanum',
+            ],
+        ],
+        'prerequisites' => [
+            'label' => 'Prerequisites',
+            'config' => [
+                'type' => 'text',
+                'rows' => 3,
+            ],
+        ],
+        'duration_hours' => [
+            'label' => 'Duration (in hours)',
+            'config' => [
+                'type' => 'input',
+                'eval' => 'int',
+            ],
+        ],
+        'visible' => [
+            'label' => 'Visible',
+            'config' => [
+                'type' => 'check',
+                'default' => 1,
+            ],
+        ],
+        'requires_external_examiner' => [
+            'label' => 'Requires External Examiner',
+            'config' => [
+                'type' => 'check',
+                'default' => 0,
+            ],
+        ],
+        'active' => [
+            'label' => 'Active',
+            'config' => [
+                'type' => 'check',
+                'default' => 1,
+            ],
+        ],
+        'center' => [
+            'label' => 'Offered by Center',
+            'config' => [
+                'type' => 'select',
+                'renderType' => 'selectSingle',
+                'foreign_table' => 'tx_equedlms_domain_model_center',
+                'minitems' => 0,
+                'maxitems' => 1,
+            ],
+        ],
+    ],
+    'types' => [
+        '0' => ['showitem' =>
+            'title, category, course_code, description, prerequisites, duration_hours, center, visible, active, requires_external_examiner'],
+    ],
+];

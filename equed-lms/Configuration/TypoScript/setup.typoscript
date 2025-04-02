@@ -1,57 +1,112 @@
 # ================================
-# TypoScript Setup für equed_lms
+# Aktuelle Konfiguration und Optimierungen
 # ================================
 
-# Course List
+# Zentral definierte Template-Pfade für alle Content-Elemente
+plugin.tx_equedlms.view {
+    templateRootPath = EXT:equed_lms/Resources/Private/Templates/
+    partialRootPath = EXT:equed_lms/Resources/Private/Partials/
+    layoutRootPath = EXT:equed_lms/Resources/Private/Layouts/
+}
+
+# -------------------------
+# Kursübersicht (Course List)
+# -------------------------
 tt_content.equed_course_list =< lib.contentElement
 tt_content.equed_course_list {
-  templateName = CourseList
+    templateName = CourseList
 }
 
-# Lesson Show
+# -------------------------
+# Lektion anzeigen (Lesson Show)
+# -------------------------
 tt_content.equed_lesson_show =< lib.contentElement
 tt_content.equed_lesson_show {
-  templateName = LessonShow
+    templateName = LessonShow
 }
 
-# Submission Form
+# -------------------------
+# Einreichungsformular (Submission Form)
+# -------------------------
 tt_content.equed_submission_form =< lib.contentElement
 tt_content.equed_submission_form {
-  templateName = SubmissionForm
+    templateName = SubmissionForm
 }
 
-# User Submission Review
+# -------------------------
+# Benutzerüberprüfung von Einreichungen (User Submission Review)
+# -------------------------
 tt_content.equed_usersubmission_review =< lib.contentElement
 tt_content.equed_usersubmission_review {
-  templateName = UserSubmissionReview
+    templateName = UserSubmissionReview
 }
 
-# User Course Record
+# -------------------------
+# Benutzer-Kurs-Zusammenfassung (User Course Record Summary)
+# -------------------------
 tt_content.equed_usercourserecord_summary =< lib.contentElement
 tt_content.equed_usercourserecord_summary {
-  templateName = UserCourseRecordSummary
+    templateName = UserCourseRecordSummary
 }
 
-# Certificate Display
+# -------------------------
+# Zertifikatsanzeige (Certificate Display)
+# -------------------------
 tt_content.equed_certificate_display =< lib.contentElement
 tt_content.equed_certificate_display {
-  templateName = CertificateDisplay
+    templateName = CertificateDisplay
 }
 
-# Certifier Dashboard
-tt_content.equed_certifier_dashboard =< lib.contentElement
-tt_content.equed_certifier_dashboard {
-  templateName = CertifierDashboard
+# -------------------------
+# Caching für Kursinhalte und Benutzer-Daten
+# -------------------------
+[globalVar = GP:tx_equedlms_pi1|controller = Course]
+    config.cache_period = 3600
+    config.no_cache = 0
+[global]
+
+# -------------------------
+# Typoscript-Variablen für dynamische Kurs- und Benutzerdaten
+# -------------------------
+plugin.tx_equedlms.settings.courseList = TEXT
+plugin.tx_equedlms.settings.courseList.value = 10
+
+plugin.tx_equedlms.settings.userData = TEXT
+plugin.tx_equedlms.settings.userData.value = {$userData.someField}
+
+# -------------------------
+# Frontend-Spezifische Konfigurationen für die Anzeige von Kursen
+# -------------------------
+page = PAGE
+page.typeNum = 0
+page.10 = FLUIDTEMPLATE
+page.10 {
+    file = EXT:equed_lms/Resources/Private/Templates/Main.html
+    layoutRootPath = EXT:equed_lms/Resources/Private/Layouts/
+    partialRootPath = EXT:equed_lms/Resources/Private/Partials/
+    templateRootPath = EXT:equed_lms/Resources/Private/Templates/
 }
 
-# SSO Login
-tt_content.equed_sso_login =< lib.contentElement
-tt_content.equed_sso_login {
-  templateName = SsoLogin
+# -------------------------
+# Frontend-Integration von CSS und JavaScript
+# -------------------------
+page.includeCSS {
+    file1 = EXT:equed_lms/Resources/Public/Css/styles.css
 }
 
-# Instructor Onboarding
-tt_content.equed_instructor_onboarding =< lib.contentElement
-tt_content.equed_instructor_onboarding {
-  templateName = InstructorOnboarding
+page.includeJSFooter {
+    file1 = EXT:equed_lms/Resources/Public/JavaScript/scripts.js
 }
+
+# -------------------------
+# Cache-Konfiguration für spezifische Frontend-Elemente
+# -------------------------
+[globalVar = GP:tx_equedlms_pi1|controller = Course]
+    config.cache_period = 3600
+    config.no_cache = 0
+[global]
+
+# -------------------------
+# Mehrsprachige Unterstützung (optional)
+# -------------------------
+plugin.tx_equedlms.view.languageFile = EXT:equed_lms/Resources/Private/Language/locallang.xlf

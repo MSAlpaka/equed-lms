@@ -2,57 +2,101 @@
 
 return [
     'ctrl' => [
-        'title' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:tx_equedlms_domain_model_center.title',
+        'title' => 'Center',
         'label' => 'name',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
-        'cruser_id' => 'cruser_id',
-        'iconfile' => 'EXT:equed_lms/Resources/Public/Icons/center.svg'
+        'delete' => 'deleted',
+        'iconfile' => 'EXT:equed_lms/Resources/Public/Icons/center.svg',
     ],
     'columns' => [
         'name' => [
-            'label' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:tx_equedlms_domain_model_center.name',
+            'label' => 'Name',
             'config' => [
                 'type' => 'input',
-                'required' => true
-            ]
+                'required' => true,
+            ],
         ],
-        'location' => [
-            'label' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:tx_equedlms_domain_model_center.location',
-            'config' => [
-                'type' => 'input'
-            ]
-        ],
-        'contact_email' => [
-            'label' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:tx_equedlms_domain_model_center.contact_email',
+        'street' => [
+            'label' => 'Street',
             'config' => [
                 'type' => 'input',
-                'eval' => 'email'
-            ]
+            ],
         ],
-        'active' => [
-            'label' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:tx_equedlms_domain_model_center.active',
+        'zip' => [
+            'label' => 'ZIP',
             'config' => [
-                'type' => 'check',
-                'default' => 1
-            ]
-        ]
+                'type' => 'input',
+            ],
+        ],
+        'city' => [
+            'label' => 'City',
+            'config' => [
+                'type' => 'input',
+            ],
+        ],
+        'country' => [
+            'label' => 'Country',
+            'config' => [
+                'type' => 'input',
+            ],
+        ],
+        'phone' => [
+            'label' => 'Phone',
+            'config' => [
+                'type' => 'input',
+                'eval' => 'trim',
+            ],
+        ],
+        'website' => [
+            'label' => 'Website',
+            'config' => [
+                'type' => 'input',
+                'eval' => 'trim',
+                'renderType' => 'inputLink',
+            ],
+        ],
+        'center_id' => [
+            'label' => 'Center ID',
+            'config' => [
+                'type' => 'input',
+                'eval' => 'trim,alphanum',
+            ],
+        ],
+        'logo' => [
+            'label' => 'Logo',
+            'config' => [
+                'type' => 'inline',
+                'foreign_table' => 'sys_file_reference',
+                'foreign_field' => 'uid_foreign',
+                'foreign_sortby' => 'sorting_foreign',
+                'foreign_table_field' => 'tablenames',
+                'foreign_match_fields' => [
+                    'fieldname' => 'logo',
+                ],
+                'appearance' => [
+                    'createNewRelationLinkTitle' => 'Add Logo',
+                    'showPossibleLocalizationRecords' => true,
+                    'showRemovedLocalizationRecords' => false,
+                    'showAllLocalizationLink' => true,
+                    'showSynchronizationLink' => true,
+                ],
+            ],
+        ],
+        'certifier' => [
+            'label' => 'Responsible Certifier',
+            'config' => [
+                'type' => 'group',
+                'internal_type' => 'db',
+                'allowed' => 'fe_users',
+                'foreign_table' => 'fe_users',
+                'minitems' => 0,
+                'maxitems' => 1,
+            ],
+        ],
     ],
     'types' => [
-        '0' => [
-            'showitem' => 'name, location, contact_email, active'
-        ]
+        '0' => ['showitem' =>
+            'name, street, zip, city, country, phone, website, center_id, logo, certifier'],
     ],
-    'certifier' => [
-    'exclude' => 0,
-    'label' => 'Zuständiger Certifier (FE User)',
-    'config' => [
-        'type' => 'group',
-        'internal_type' => 'db',
-        'allowed' => 'fe_users',
-        'foreign_table' => 'fe_users',
-        'minitems' => 0,
-        'maxitems' => 1,
-    ],
-],
 ];

@@ -1,19 +1,25 @@
 <?php
+defined('TYPO3_MODE') or die();
 
-defined('TYPO3') or die();
-
-return [
-    'columns' => [
+// Add a field to mark a FE user as a certifier
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns(
+    'fe_users',
+    [
         'is_certifier' => [
+            'exclude' => 0,
             'label' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:fe_users.is_certifier',
             'config' => [
                 'type' => 'check',
-                'default' => 0,
+                'eval' => '',
             ],
         ],
-    ],
-    'types' => [
-        '0' => [
-            'showitem' => '--palette--;;general, --palette--;;headers, is_certifier, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access']
-    ],
-];
+    ]
+);
+
+// Add the new field to the backend form
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes(
+    'fe_users',
+    'is_certifier',
+    '',
+    'after:admin'
+);

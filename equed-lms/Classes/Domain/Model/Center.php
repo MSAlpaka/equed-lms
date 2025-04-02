@@ -1,23 +1,41 @@
 <?php
+
 namespace Equed\EquedLms\Domain\Model;
 
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
+use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
+use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 
 /**
- * Center Model für die Verwaltung der Ausbildungszentren
+ * Represents a training center within the EquEd LMS.
  */
 class Center extends AbstractEntity
 {
     protected string $name = '';
-    protected string $street = '';
-    protected string $zip = '';
-    protected string $city = '';
-    protected string $website = '';
-    protected string $centerId = '';
-    protected string $logo = '';
-    protected int $certifier = 0; // NEU: Zuständiger FE-User
 
-    // Getter und Setter
+    protected string $street = '';
+
+    protected string $zip = '';
+
+    protected string $city = '';
+
+    protected string $country = '';
+
+    protected string $phone = '';
+
+    protected string $website = '';
+
+    protected string $centerId = ''; // für eindeutige Zuordnung
+
+    /**
+     * @var \TYPO3\CMS\Extbase\Domain\Model\FileReference|null
+     */
+    protected ?FileReference $logo = null;
+
+    /**
+     * @var \TYPO3\CMS\Extbase\Domain\Model\FrontendUser|null
+     */
+    protected ?FrontendUser $certifier = null;
 
     public function getName(): string
     {
@@ -59,6 +77,26 @@ class Center extends AbstractEntity
         $this->city = $city;
     }
 
+    public function getCountry(): string
+    {
+        return $this->country;
+    }
+
+    public function setCountry(string $country): void
+    {
+        $this->country = $country;
+    }
+
+    public function getPhone(): string
+    {
+        return $this->phone;
+    }
+
+    public function setPhone(string $phone): void
+    {
+        $this->phone = $phone;
+    }
+
     public function getWebsite(): string
     {
         return $this->website;
@@ -79,22 +117,22 @@ class Center extends AbstractEntity
         $this->centerId = $centerId;
     }
 
-    public function getLogo(): string
+    public function getLogo(): ?FileReference
     {
         return $this->logo;
     }
 
-    public function setLogo(string $logo): void
+    public function setLogo(?FileReference $logo): void
     {
         $this->logo = $logo;
     }
 
-    public function getCertifier(): int
+    public function getCertifier(): ?FrontendUser
     {
         return $this->certifier;
     }
 
-    public function setCertifier(int $certifier): void
+    public function setCertifier(?FrontendUser $certifier): void
     {
         $this->certifier = $certifier;
     }

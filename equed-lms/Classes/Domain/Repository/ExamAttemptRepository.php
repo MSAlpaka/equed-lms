@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Equed\EquedLms\Domain\Repository;
 
 use TYPO3\CMS\Extbase\Persistence\Repository;
@@ -9,32 +7,50 @@ use TYPO3\CMS\Extbase\Persistence\Repository;
 class ExamAttemptRepository extends Repository
 {
     /**
-     * @param int $recordId
-     * @return array
+     * Find all attempts by a user
      */
-    public function findByUserCourseRecord(int $recordId): array
+    public function findByUser(int $userId): array
     {
-        return $this->createQuery()
+        $query = $this->createQuery();
+
+        return $query
             ->matching(
-                $this->createQuery()->equals('record', $recordId)
+                $query->equals('user', $userId)
             )
             ->execute()
             ->toArray();
     }
 
     /**
-     * @param int $recordId
-     * @param string $type 'theory', 'practical', 'case'
-     * @return array
+     * Find attempts by user and question
      */
-    public function findAttemptsByType(int $recordId, string $type): array
+    public function findByUserAndQuestion(int $userId, int $questionId): array
     {
         $query = $this->createQuery();
+
         return $query
             ->matching(
                 $query->logicalAnd([
-                    $query->equals('record', $recordId),
-                    $query->equals('type', $type),
+                    $query->equals('user', $userId),
+                    $query->equals('quizQuestion', $questionId),
+                ])
+            )
+            ->execute()
+            ->toArray();
+    }
+
+    /**
+     * Find correct attempts by user
+     */
+    public function findCorrectByUser(int $userId): array
+    {
+        $query = $this->createQuery();
+
+        return $query
+            ->matching(
+                $query->logicalAnd([
+                    $query->equals('user', $userId),
+                    $query->equals('correct', true),
                 ])
             )
             ->execute()

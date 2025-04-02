@@ -1,52 +1,55 @@
 <?php
+
 namespace Equed\EquedLms\Domain\Repository;
 
 use TYPO3\CMS\Extbase\Persistence\Repository;
-use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 
 class CourseRepository extends Repository
 {
     /**
-     * Alle aktiven Kurse abrufen
-     *
-     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
+     * Find all active and visible courses
      */
-    public function findActiveCourses()
+    public function findAllVisible(): array
     {
         $query = $this->createQuery();
-        $query->matching(
-            $query->equals('isActive', 1)
-        );
-        return $query->execute();
+        return $query
+            ->matching(
+                $query->logicalAnd([
+                    $query->equals('active', true),
+                    $query->equals('visible', true),
+                ])
+            )
+            ->execute()
+            ->toArray();
     }
 
     /**
-     * Kurse nach Kategorie suchen
-     *
-     * @param string $category
-     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
+     * Find all courses for a specific center
      */
-    public function findCoursesByCategory($category)
+    public function findByCenter(int $centerId): array
     {
         $query = $this->createQuery();
-        $query->matching(
-            $query->equals('category', $category)
-        );
-        return $query->execute();
+        return $query
+            ->matching(
+                $query->equals('center', $centerId)
+            )
+            ->execute()
+            ->toArray();
     }
 
     /**
-     * Kurse mit Abschlussziel filtern
-     *
-     * @param string $finishGoal
-     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
+     * Find one course by code
      */
-    public function findCoursesByFinishGoal($finishGoal)
+    public function findOneByCourseCode(string $courseCode): ?object
     {
         $query = $this->createQuery();
-        $query->matching(
-            $query->equals('finishGoal', $finishGoal)
-        );
-        return $query->execute();
+        $result = $query
+            ->matching(
+                $query->equals('courseCode', $courseCode)
+            )
+            ->setLimit(1)
+            ->execute();
+
+        return $result->getFirst();
     }
 }

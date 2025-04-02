@@ -1,53 +1,42 @@
 <?php
+
 namespace Equed\EquedLms\Domain\Repository;
 
 use TYPO3\CMS\Extbase\Persistence\Repository;
-use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 
 class LessonRepository extends Repository
 {
     /**
-     * Alle Lektionen zu einem Kurs abrufen
-     *
-     * @param \Equed\EquedLms\Domain\Model\Course $course
-     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
+     * Find all lessons for a specific course, ordered by sortOrder
      */
-    public function findLessonsByCourse(\Equed\EquedLms\Domain\Model\Course $course)
+    public function findByCourse(int $courseId): array
     {
         $query = $this->createQuery();
-        $query->matching(
-            $query->equals('course', $course)
-        );
-        $query->setOrderings(['position' => QueryInterface::ORDER_ASCENDING]);  // Sortierung nach Position
-        return $query->execute();
+        return $query
+            ->matching(
+                $query->equals('course', $courseId)
+            )
+            ->setOrderings([
+                'sortOrder' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING
+            ])
+            ->execute()
+            ->toArray();
     }
 
     /**
-     * Alle Lektionen anzeigen, die nicht versteckt sind
-     *
-     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
+     * Find required lessons of a course
      */
-    public function findVisibleLessons()
+    public function findRequiredLessonsByCourse(int $courseId): array
     {
         $query = $this->createQuery();
-        $query->matching(
-            $query->equals('hidden', 0)
-        );
-        return $query->execute();
-    }
-
-    /**
-     * Eine Lektion nach ihrem Slug finden (SEO-Zwecke)
-     *
-     * @param string $slug
-     * @return \Equed\EquedLms\Domain\Model\Lesson|null
-     */
-    public function findLessonBySlug($slug)
-    {
-        $query = $this->createQuery();
-        $query->matching(
-            $query->equals('slug', $slug)
-        );
-        return $query->execute()->getFirst();
+        return $query
+            ->matching(
+                $query->logicalAnd([
+                    $query->equals('course', $courseId),
+                    $query->equals('required', true),
+                ])
+            )
+            ->execute()
+            ->toArray();
     }
 }

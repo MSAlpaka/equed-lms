@@ -3,50 +3,53 @@
 namespace Equed\EquedLms\Domain\Repository;
 
 use TYPO3\CMS\Extbase\Persistence\Repository;
-use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
-use TYPO3\CMS\Extbase\Persistence\QueryInterface;
-use Equed\EquedLms\Domain\Model\AuditLog;
 
 class AuditLogRepository extends Repository
 {
-    public function __construct(
-        protected PersistenceManager $persistenceManager
-    ) {}
-
-    public function log(
-        int $feUserId,
-        string $action,
-        string $relatedType = '',
-        int $relatedId = 0,
-        string $comment = ''
-    ): void {
-        $log = new AuditLog();
-        $log->setFeUser($feUserId);
-        $log->setAction($action);
-        $log->setRelatedType($relatedType);
-        $log->setRelatedId($relatedId);
-        $log->setComment($comment);
-        $log->setTimestamp(new \DateTime());
-
-        $this->add($log);
-        $this->persistenceManager->persistAll();
-    }
-
-    public function findByUser(int $feUserId): array
+    /**
+     * Find all audit logs for a specific user
+     */
+    public function findByUser(int $userId): array
     {
-        return $this->createQuery()
+        $query = $this->createQuery();
+
+        return $query
             ->matching(
-                $this->createQuery()->equals('feUser', $feUserId)
+                $query->equals('feUser', $userId)
             )
             ->execute()
             ->toArray();
     }
 
-    public function findRecent(int $limit = 50): array
+    /**
+     * Find audit logs by action type
+     */
+    public function findByAction(string $action): array
     {
-        return $this->createQuery()
-            ->setOrderings(['timestamp' => QueryInterface::ORDER_DESCENDING])
-            ->setLimit($limit)
+        $query = $this->createQuery();
+
+        return $query
+            ->matching(
+                $query->equals('action', $action)
+            )
+            ->execute()
+            ->toArray();
+    }
+
+    /**
+     * Find all audit logs for a specific related entity (ID and type)
+     */
+    public function findByRelatedEntity(int $relatedId, string $relatedType): array
+    {
+        $query = $this->createQuery();
+
+        return $query
+            ->matching(
+                $query->logicalAnd([
+                    $query->equals('relatedId', $relatedId),
+                    $query->equals('relatedType', $relatedType),
+                ])
+            )
             ->execute()
             ->toArray();
     }

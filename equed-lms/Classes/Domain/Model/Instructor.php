@@ -3,74 +3,70 @@
 namespace Equed\EquedLms\Domain\Model;
 
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
+use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
 
+/**
+ * Represents an instructor in the LMS.
+ */
 class Instructor extends AbstractEntity
 {
-    protected int $feUser = 0;
-    protected string $name = '';
-    protected string $email = '';
-    protected bool $isAvailable = true;
-    protected string $regionPostalCodes = '';
+    /**
+     * @var \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
+     */
+    protected FrontendUser $user;
 
-    protected ?Center $center = null;
+    /**
+     * @var string Freitext-Biografie oder Vorstellung
+     */
+    protected string $bio = '';
 
-    public function getFeUser(): int
+    /**
+     * @var string Komma-separierte Specialties (z. B. "donkey,transition")
+     */
+    protected string $specialties = '';
+
+    /**
+     * @var bool Ist der Instructor offiziell verifiziert?
+     */
+    protected bool $verified = false;
+
+    public function getUser(): FrontendUser
     {
-        return $this->feUser;
+        return $this->user;
     }
 
-    public function setFeUser(int $feUser): void
+    public function setUser(FrontendUser $user): void
     {
-        $this->feUser = $feUser;
+        $this->user = $user;
     }
 
-    public function getName(): string
+    public function getBio(): string
     {
-        return $this->name;
+        return $this->bio;
     }
 
-    public function setName(string $name): void
+    public function setBio(string $bio): void
     {
-        $this->name = $name;
+        $this->bio = $bio;
     }
 
-    public function getEmail(): string
+    public function getSpecialties(): string
     {
-        return $this->email;
+        return $this->specialties;
     }
 
-    public function setEmail(string $email): void
+    public function setSpecialties(string $specialties): void
     {
-        $this->email = $email;
+        $this->specialties = $specialties;
     }
 
-    public function isAvailable(): bool
+    public function isVerified(): bool
     {
-        return $this->isAvailable;
+        return $this->verified;
     }
 
-    public function setIsAvailable(bool $isAvailable): void
+    public function setVerified(bool $verified): void
     {
-        $this->isAvailable = $isAvailable;
-    }
-
-    public function getRegionPostalCodes(): string
-    {
-        return $this->regionPostalCodes;
-    }
-
-    public function setRegionPostalCodes(string $codes): void
-    {
-        $this->regionPostalCodes = $codes;
-    }
-
-    public function getCenter(): ?Center
-    {
-        return $this->center;
-    }
-
-    public function setCenter(?Center $center): void
-    {
-        $this->center = $center;
+        $this->verified = $verified;
     }
 }

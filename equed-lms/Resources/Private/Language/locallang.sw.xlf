@@ -1,105 +1,25 @@
-<?xml version='1.0' encoding='utf-8'?>
-<xliff version="1.2">
-  <file source-language="sw" datatype="plaintext" original="messages">
-    <body>
-
-      
-      <trans-unit id="dashboard.welcome">
-        <source>👋 Karibu tena!</source>
-      <target>Karibu tena, {user}!</target></trans-unit>
-      <trans-unit id="dashboard.intro">
-        <source>Hapa kuna maendeleo yako ya kujifunza:</source>
-      </trans-unit>
-      <trans-unit id="dashboard.autosave">
-        <source>Maendeleo yako yanaifadhiwa kiotomatiki.</source>
-      </trans-unit>
-      <trans-unit id="dashboard.completed">
-        <source>🎉 Kozi imekamilika!</source>
-      </trans-unit>
-      <trans-unit id="dashboard.certificate">
-        <source>📄 Tazama Cheti</source>
-      </trans-unit>
-      <trans-unit id="dashboard.incomplete">
-        <source>📘 Kozi bado inaendelea</source>
-      </trans-unit>
-      <trans-unit id="dashboard.noQuiz">
-        <source>Hakuna jaribio lililojibiwa bado</source>
-      </trans-unit>
-      <trans-unit id="dashboard.continue">
-        <source>➕ Endelea na Kozi</source>
-      </trans-unit>
-
-      
-      <trans-unit id="lesson.quiz.title">
-        <source>🔁 Maswali ya kurudia</source>
-      </trans-unit>
-      <trans-unit id="lesson.quiz.submit">
-        <source>Tuma Majibu</source>
-      </trans-unit>
-      <trans-unit id="lesson.completedMessage">
-        <source>✔️ Umefanikiwa kukamilisha somo hili!</source>
-      <target>Umehitimisha somo hili.</target></trans-unit>
-      <trans-unit id="quiz.title">
-        <source>Jaribio: {0}</source>
-      </trans-unit>
-      <trans-unit id="quiz.submit">
-        <source>Tuma Jaribio</source>
-      </trans-unit>
-
-      
-      <trans-unit id="certificate.title">
-        <source>Cheti</source>
-      </trans-unit>
-      <trans-unit id="certificate.description">
-        <source>ameshiriki kikamilifu katika kozi "{0}".</source>
-      <target>amekamilisha kozi kwa mafanikio</target></trans-unit>
-      <trans-unit id="certificate.confirmationText">
-        <source>Cheti hiki kinathibitisha ushiriki kamili na mafanikio kulingana na viwango vya Equine Education Europe.</source>
-      </trans-unit>
-      <trans-unit id="certificate.signature.student">
-        <source>Mshiriki</source>
-      <target>Mshiriki</target></trans-unit>
-      <trans-unit id="certificate.trainingCenter">
-        <source>Kituo cha Mafunzo</source>
-      </trans-unit>
-      <trans-unit id="certificate.centerId">
-        <source>ID ya kituo</source>
-      </trans-unit>
-      <trans-unit id="certificate.date">
-        <source>Tarehe ya Kukamilika</source>
-      </trans-unit>
-
-      
-      <trans-unit id="course.intro">
-        <source>Hapa utapata maelezo yote kuhusu kozi hii.</source>
-      </trans-unit>
-
-      
-      <trans-unit id="site.title">
-        <source>Jukwaa la Mafunzo la EquEd</source>
-      </trans-unit>
-
-<trans-unit id="error.insufficient_prerequisites">
-    <target xml:lang="sw">Hukidhi masharti ya msingi kwa kozi hii.</target>
+<!-- Optimized locallang.xlf (Swahili) -->
+<trans-unit id="course_label" resname="course_label">
+    <source>Course</source>
+    <target>Kozi</target>
 </trans-unit>
 
-<trans-unit id="success.course_booked">
-    <target xml:lang="sw">Kozi imewekwa kwa mafanikio.</target>
+<trans-unit id="submit_button" resname="submit_button">
+    <source>Submit</source>
+    <target>Wasilisha</target>
 </trans-unit>
 
-<trans-unit id="evaluation.saved">
-    <target xml:lang="sw">Tathmini imehifadhiwa kwa mafanikio.</target>
+<trans-unit id="feedback_label" resname="feedback_label">
+    <source>Feedback</source>
+    <target>Maoni</target>
 </trans-unit>
 
-<trans-unit id="instructor.noAccess">
-    <target xml:lang="sw">Huna ruhusa ya kufikia eneo hili.</target>
+<trans-unit id="profile_header" resname="profile_header">
+    <source>User Profile</source>
+    <target>Profaili ya Mtumiaji</target>
 </trans-unit>
 
-<trans-unit id="submission.loginRequired">
-    <target xml:lang="sw">Lazima uwe umeingia ili kuwasilisha.</target>
+<trans-unit id="certificate_header" resname="certificate_header">
+    <source>Certificate</source>
+    <target>Cheti</target>
 </trans-unit>
-
-
-    </body>
-  </file>
-</xliff>

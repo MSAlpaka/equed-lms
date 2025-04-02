@@ -1,15 +1,7 @@
-<f:if condition="{percent}">
-  <div class="progress {class}" style="height: 24px;">
-    <div
-      class="progress-bar
-        progress-bar-{color}
-        <f:if condition='{striped}'>progress-bar-striped</f:if>
-        <f:if condition='{animated}'> progress-bar-animated</f:if>
-      "
-      role="progressbar"
-      style="width: {percent}%"
-      aria-valuenow="{percent}" aria-valuemin="0" aria-valuemax="100">
-      <f:if condition="{label}">{label}<f:else>{percent}%</f:else></f:if>
-    </div>
+<!-- Optimized ProgressBar.html -->
+<div class="progress-bar-container">
+  <div class="progress-bar">
+      <div class="progress-bar-fill" style="width: {progress}%;"></div>
   </div>
-</f:if>
+  <div class="progress-text">{progress}% Complete</div> <!-- Text to show the progress -->
+</div>

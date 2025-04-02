@@ -3,46 +3,73 @@
 namespace Equed\EquedLms\Domain\Model;
 
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
+use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
+use Equed\EquedLms\Domain\Model\Course;
+use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 
+/**
+ * Represents a user submission (e.g. for exams, reports, documents).
+ */
 class UserSubmission extends AbstractEntity
 {
-    protected int $feUser = 0;
-    protected string $type = '';
-    protected string $status = '';
+    /**
+     * @var \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
+     */
+    protected FrontendUser $user;
+
+    /**
+     * @var \Equed\EquedLms\Domain\Model\Course
+     */
+    protected Course $course;
+
+    /**
+     * @var \TYPO3\CMS\Extbase\Domain\Model\FileReference|null
+     */
+    protected ?FileReference $file = null;
+
+    /**
+     * @var string
+     */
     protected string $comment = '';
-    protected string $grade = '';
 
-    protected ?UserCourseRecord $userCourseRecord = null;
-    protected ?Lesson $lesson = null;
+    /**
+     * @var string Status of submission: 'submitted', 'reviewed', 'rejected', 'approved'
+     */
+    protected string $status = 'submitted';
 
-    public function getFeUser(): int
+    /**
+     * @var \DateTime|null
+     */
+    protected ?\DateTime $submittedAt = null;
+
+    public function getUser(): FrontendUser
     {
-        return $this->feUser;
+        return $this->user;
     }
 
-    public function setFeUser(int $feUser): void
+    public function setUser(FrontendUser $user): void
     {
-        $this->feUser = $feUser;
+        $this->user = $user;
     }
 
-    public function getType(): string
+    public function getCourse(): Course
     {
-        return $this->type;
+        return $this->course;
     }
 
-    public function setType(string $type): void
+    public function setCourse(Course $course): void
     {
-        $this->type = $type;
+        $this->course = $course;
     }
 
-    public function getStatus(): string
+    public function getFile(): ?FileReference
     {
-        return $this->status;
+        return $this->file;
     }
 
-    public function setStatus(string $status): void
+    public function setFile(?FileReference $file): void
     {
-        $this->status = $status;
+        $this->file = $file;
     }
 
     public function getComment(): string
@@ -55,33 +82,23 @@ class UserSubmission extends AbstractEntity
         $this->comment = $comment;
     }
 
-    public function getGrade(): string
+    public function getStatus(): string
     {
-        return $this->grade;
+        return $this->status;
     }
 
-    public function setGrade(string $grade): void
+    public function setStatus(string $status): void
     {
-        $this->grade = $grade;
+        $this->status = $status;
     }
 
-    public function getUserCourseRecord(): ?UserCourseRecord
+    public function getSubmittedAt(): ?\DateTime
     {
-        return $this->userCourseRecord;
+        return $this->submittedAt;
     }
 
-    public function setUserCourseRecord(?UserCourseRecord $record): void
+    public function setSubmittedAt(?\DateTime $submittedAt): void
     {
-        $this->userCourseRecord = $record;
-    }
-
-    public function getLesson(): ?Lesson
-    {
-        return $this->lesson;
-    }
-
-    public function setLesson(?Lesson $lesson): void
-    {
-        $this->lesson = $lesson;
+        $this->submittedAt = $submittedAt;
     }
 }

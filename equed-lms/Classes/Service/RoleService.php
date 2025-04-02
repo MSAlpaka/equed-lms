@@ -1,55 +1,39 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Equed\EquedLms\Service;
 
-use Equed\EquedLms\Domain\Model\UserCourseRecord;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
-use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
-use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
-use TYPO3\CMS\Extbase\Domain\Repository\FrontendUserRepository;
+use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
+use TYPO3\CMS\Extbase\Persistence\Repository;
 
 class RoleService
 {
-    public function __construct(
-        protected FrontendUserRepository $frontendUserRepository,
-        protected PersistenceManager $persistenceManager,
-        protected ConfigurationManagerInterface $configurationManager
-    ) {}
+    /**
+     * @var \TYPO3\CMS\Extbase\Persistence\Repository
+     */
+    protected Repository $userRepository;
 
-    public function assignRolesForRecord(UserCourseRecord $record): void
+    public function __construct(Repository $userRepository)
     {
-        $courseId = $record->getCourse()?->getUid();
-        $user = $record->getUser();
+        $this->userRepository = $userRepository;
+    }
 
-        if (!$courseId || !$user) {
-            return;
-        }
+    /**
+     * Assign a role to a user
+     */
+    public function assignRoleToUser(int $userId, string $role): void
+    {
+        // Logic to assign the role to a user
+        $user = $this->userRepository->findByUid($userId);
+        $user->setRole($role);
+        $this->userRepository->update($user);
+    }
 
-        $settings = $this->configurationManager->getConfiguration(
-            ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
-            'EquedLms'
-        );
-
-        $map = $settings['courseRoles'] ?? [];
-
-        if (!isset($map[$courseId])) {
-            return;
-        }
-
-        $groupUids = GeneralUtility::intExplode(',', $map[$courseId], true);
-        $existingGroups = $user->getUsergroup()->toArray();
-
-        foreach ($groupUids as $uid) {
-            $group = GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Domain\Model\FrontendUserGroup::class);
-            $group->setUid($uid);
-            $existingGroups[] = $group;
-        }
-
-        $user->setUsergroup($existingGroups);
-        $this->frontendUserRepository->update($user);
-        $this->persistenceManager->persistAll();
+    /**
+     * Check if a user has a specific role
+     */
+    public function userHasRole(int $userId, string $role): bool
+    {
+        $user = $this->userRepository->findByUid($userId);
+        return $user->getRole() === $role;
     }
 }

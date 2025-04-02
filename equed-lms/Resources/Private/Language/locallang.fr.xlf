@@ -1,105 +1,14 @@
-<?xml version='1.0' encoding='utf-8'?>
-<xliff version="1.2">
-  <file source-language="fr" datatype="plaintext" original="messages">
-    <body>
-
-      
-      <trans-unit id="dashboard.welcome">
-        <source>👋 Bon retour parmi nous !</source>
-      <target>Bon retour, {user} !</target></trans-unit>
-      <trans-unit id="dashboard.intro">
-        <source>Voici ton avancement personnel :</source>
-      </trans-unit>
-      <trans-unit id="dashboard.autosave">
-        <source>Ton avancement est enregistré automatiquement.</source>
-      </trans-unit>
-      <trans-unit id="dashboard.completed">
-        <source>🎉 Cours terminé !</source>
-      </trans-unit>
-      <trans-unit id="dashboard.certificate">
-        <source>📄 Voir le certificat</source>
-      </trans-unit>
-      <trans-unit id="dashboard.incomplete">
-        <source>📘 Cours en cours</source>
-      </trans-unit>
-      <trans-unit id="dashboard.noQuiz">
-        <source>Aucun quiz encore répondu</source>
-      </trans-unit>
-      <trans-unit id="dashboard.continue">
-        <source>➕ Continuer le cours</source>
-      </trans-unit>
-
-      
-      <trans-unit id="lesson.quiz.title">
-        <source>🔁 Questions de révision</source>
-      </trans-unit>
-      <trans-unit id="lesson.quiz.submit">
-        <source>Soumettre les réponses</source>
-      </trans-unit>
-      <trans-unit id="lesson.completedMessage">
-        <source>✔️ Tu as terminé cette leçon avec succès !</source>
-      <target>Vous avez terminé cette leçon.</target></trans-unit>
-      <trans-unit id="quiz.title">
-        <source>Quiz : {0}</source>
-      </trans-unit>
-      <trans-unit id="quiz.submit">
-        <source>Soumettre le quiz</source>
-      </trans-unit>
-
-      
-      <trans-unit id="certificate.title">
-        <source>Certificat</source>
-      </trans-unit>
-      <trans-unit id="certificate.description">
-        <source>a participé avec succès au cours « {0} ».</source>
-      <target>a terminé avec succès le cours</target></trans-unit>
-      <trans-unit id="certificate.confirmationText">
-        <source>Ce certificat atteste la participation complète et la réussite conformément aux standards de Equine Education Europe.</source>
-      </trans-unit>
-      <trans-unit id="certificate.signature.student">
-        <source>Participant·e</source>
-      <target>Participant(e)</target></trans-unit>
-      <trans-unit id="certificate.trainingCenter">
-        <source>Centre de formation</source>
-      </trans-unit>
-      <trans-unit id="certificate.centerId">
-        <source>ID du centre</source>
-      </trans-unit>
-      <trans-unit id="certificate.date">
-        <source>Date de fin</source>
-      </trans-unit>
-
-      
-      <trans-unit id="course.intro">
-        <source>Tu trouveras ici toutes les informations sur ce cours.</source>
-      </trans-unit>
-
-      
-      <trans-unit id="site.title">
-        <source>Plateforme EquEd</source>
-      </trans-unit>
-
-<trans-unit id="error.insufficient_prerequisites">
-    <target xml:lang="fr">Tu ne remplis pas les conditions préalables pour ce cours.</target>
+<trans-unit id="course_label" resname="course_label">
+    <source>Course</source>
+    <target>Cours</target>
 </trans-unit>
 
-<trans-unit id="success.course_booked">
-    <target xml:lang="fr">Le cours a été réservé avec succès.</target>
+<trans-unit id="submit_button" resname="submit_button">
+    <source>Submit</source>
+    <target>Soumettre</target>
 </trans-unit>
 
-<trans-unit id="evaluation.saved">
-    <target xml:lang="fr">Évaluation enregistrée avec succès.</target>
+<trans-unit id="feedback_label" resname="feedback_label">
+    <source>Feedback</source>
+    <target>Retour</target>
 </trans-unit>
-
-<trans-unit id="instructor.noAccess">
-    <target xml:lang="fr">Tu n'as pas accès à cette zone.</target>
-</trans-unit>
-
-<trans-unit id="submission.loginRequired">
-    <target xml:lang="fr">Tu dois être connecté pour soumettre.</target>
-</trans-unit>
-
-
-    </body>
-  </file>
-</xliff>

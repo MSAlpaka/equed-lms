@@ -1,34 +1,53 @@
 <?php
+
 namespace Equed\EquedLms\Domain\Repository;
 
 use TYPO3\CMS\Extbase\Persistence\Repository;
-use Equed\EquedLms\Domain\Model\Center;
 
-/**
- * Repository für das Center-Modell
- */
 class CenterRepository extends Repository
 {
     /**
-     * Findet ein Center basierend auf der Center-ID
-     *
-     * @param string $centerId
-     * @return Center|null
+     * Find all centers by country
      */
-    public function findByCenterId(string $centerId): ?Center
+    public function findByCountry(string $country): array
     {
         $query = $this->createQuery();
-        $query->matching($query->equals('centerId', $centerId));
-        return $query->execute()->getFirst();
+
+        return $query
+            ->matching(
+                $query->equals('country', $country)
+            )
+            ->execute()
+            ->toArray();
     }
 
     /**
-     * Findet alle verfügbaren Center
-     *
-     * @return Center[]
+     * Find all centers with a specific certifier
      */
-    public function findAllCenters(): array
+    public function findByCertifier(int $certifierId): array
     {
-        return $this->findAll()->toArray();
+        $query = $this->createQuery();
+
+        return $query
+            ->matching(
+                $query->equals('certifier', $certifierId)
+            )
+            ->execute()
+            ->toArray();
+    }
+
+    /**
+     * Find all active centers
+     */
+    public function findAllActive(): array
+    {
+        $query = $this->createQuery();
+
+        return $query
+            ->matching(
+                $query->equals('active', true)
+            )
+            ->execute()
+            ->toArray();
     }
 }

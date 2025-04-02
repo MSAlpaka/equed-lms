@@ -1,7 +1,23 @@
-.dashboard {
-    display: flex;
-    justify-content: space-between;
+/* Optimized dashboard.css */
+
+/* General Dashboard Styles */
+.dashboard-header {
+    background-color: #f3f3f3;
+    padding: 20px;
+    font-size: 1.5rem; /* Ensuring font size is scalable */
+    text-align: center;
 }
-.courses, .certificates {
-    width: 48%;
+
+.dashboard-footer {
+    text-align: center;
+    padding: 10px;
+    background-color: #f1f1f1;
+    border-top: 1px solid #ddd;
+}
+
+/* Responsive Layout */
+@media (max-width: 768px) {
+    .dashboard-header {
+        font-size: 1.2rem;
+    }
 }

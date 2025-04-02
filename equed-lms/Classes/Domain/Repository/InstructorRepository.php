@@ -1,27 +1,54 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Equed\EquedLms\Domain\Repository;
 
 use TYPO3\CMS\Extbase\Persistence\Repository;
-use Equed\EquedLms\Domain\Model\Instructor;
 
 class InstructorRepository extends Repository
 {
     /**
-     * Finde alle Instructoren basierend auf dem Abschlussziel
-     *
-     * @param string $finishGoal
-     * @return Instructor[]
+     * Find all verified instructors
      */
-    public function findByFinishGoal(string $finishGoal): array
+    public function findAllVerified(): array
     {
         $query = $this->createQuery();
-        $query->matching(
-            $query->like('finishGoal', '%' . $finishGoal . '%')
-        );
+        return $query
+            ->matching(
+                $query->equals('verified', true)
+            )
+            ->execute()
+            ->toArray();
+    }
 
-        return $query->execute()->toArray();
+    /**
+     * Find instructors with a specific specialty (substring match)
+     */
+    public function findBySpecialty(string $specialty): array
+    {
+        $query = $this->createQuery();
+
+        return $query
+            ->matching(
+                $query->like('specialties', '%' . $specialty . '%')
+            )
+            ->execute()
+            ->toArray();
+    }
+
+    /**
+     * Find instructor by frontend user ID
+     */
+    public function findOneByUserId(int $feUserId): ?object
+    {
+        $query = $this->createQuery();
+
+        $result = $query
+            ->matching(
+                $query->equals('user', $feUserId)
+            )
+            ->setLimit(1)
+            ->execute();
+
+        return $result->getFirst();
     }
 }

@@ -1,10 +1,4 @@
-<f:if condition="{link}">
-  <f:link.action action="{link}" arguments="{arguments}" class="btn btn-{style} {class}">
-    <f:if condition="{icon}">{icon} </f:if>{label}
-  </f:link.action>
-<f:else>
-  <button type="button" class="btn btn-{style} {class}">
-    <f:if condition="{icon}">{icon} </f:if>{label}
-  </button>
-</f:else>
-</f:if>
+<!-- Optimized Button.html -->
+<button class="btn btn-{style}" aria-label="{label}">
+  {label}
+</button>

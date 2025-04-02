@@ -1,11 +1,130 @@
-mod.wizards.newContentElement.wizardItems.plugins {
-    elements.equed_lms_course {
-        iconIdentifier = equed-lms-course
-        title = LMS Course
-        description = Zeigt einen Kurs im EquEd LMS an
-        tt_content_defValues {
-            CType = equed_lms_course
+# ============================
+# Konfiguration der Seite und Backend
+# ============================
+
+# -------------------------
+# Seitenmodul und Layouts
+# -------------------------
+mod.web_list {
+    # Benutzerdefinierte Backend-Layouts für die Seitenübersicht
+    tables {
+        tx_equedlms_domain_model_course
+        tx_equedlms_domain_model_instructor
+        tx_equedlms_domain_model_feedback
+    }
+}
+
+# Backend Layouts (z. B. Kursübersicht, Lektionen)
+mod.web_list.layout {
+    1 = Kursübersicht
+    2 = Lektionen anzeigen
+}
+
+# -------------------------
+# Seitenfelder und Metadaten
+# -------------------------
+TCEFORM.pages {
+    # Felder wie 'title', 'description' können hier angepasst werden
+    title {
+        label = Kursname
+        config {
+            type = input
+            size = 30
+            eval = required
         }
     }
-    show = *
+
+    # Metadaten für die Seite
+    description {
+        label = Kursbeschreibung
+        config {
+            type = text
+            rows = 4
+            cols = 40
+            eval = trim
+        }
+    }
+}
+
+# -------------------------
+# Zugriffsrechte für Inhalte
+# -------------------------
+mod.web_list.permissions {
+    # Sicherstellen, dass nur Administratoren und Prüfungszertifizierer zugreifen können
+    access = user, group
+}
+
+# -------------------------
+# Custom Admin-Menü
+# -------------------------
+mod {
+    web_list {
+        # Benutzerspezifische Funktionen hinzufügen
+        customFunction {
+            type = input
+            size = 30
+            label = Benutzerdefinierte Funktionen
+            eval = required
+        }
+    }
+}
+
+# -------------------------
+# Optimierte Benutzeroberfläche
+# -------------------------
+# Benutzeroberfläche zur Verwaltung von Kursen und Zertifikaten
+mod.web_list.tx_equedlms_domain_model_course {
+    hideTable = 1
+}
+
+mod.web_list.tx_equedlms_domain_model_instructor {
+    hideTable = 1
+}
+
+# -------------------------
+# Metadatenfelder für Kurse
+# -------------------------
+TCEFORM.tx_equedlms_domain_model_course {
+    title {
+        label = Kursname
+    }
+    course_description {
+        label = Kursbeschreibung
+    }
+}
+
+# -------------------------
+# Vereinfachte Handhabung von Prüfungsunterlagen
+# -------------------------
+TCEFORM.tx_equedlms_domain_model_feedback {
+    user_feedback {
+        label = Benutzerfeedback
+        config {
+            type = text
+            rows = 5
+            cols = 40
+            eval = trim
+        }
+    }
+}
+
+# -------------------------
+# Sichtbarkeit der Prüfungsunterlagen
+# -------------------------
+mod.web_list.tx_equedlms_domain_model_feedback {
+    hideTable = 0
+}
+
+# -------------------------
+# Benutzerrechte für das LMS-Backend
+# -------------------------
+mod {
+    web_list {
+        tx_equedlms_domain_model_course {
+            access = user, group
+        }
+        tx_equedlms_domain_model_feedback {
+            access = user, group
+        }
+    }
 }

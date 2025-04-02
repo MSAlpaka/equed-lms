@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Equed\EquedLms\Domain\Repository;
 
 use TYPO3\CMS\Extbase\Persistence\Repository;
@@ -9,46 +7,33 @@ use TYPO3\CMS\Extbase\Persistence\Repository;
 class QuizQuestionRepository extends Repository
 {
     /**
-     * Finde alle Fragen zu einer bestimmten Lektion
-     *
-     * @param int $lessonId
-     * @return array
+     * Find all questions for a specific lesson
      */
     public function findByLesson(int $lessonId): array
     {
         $query = $this->createQuery();
-        $query->matching(
-            $query->equals('lesson', $lessonId)
-        );
-        return $query->execute()->toArray();
+        return $query
+            ->matching(
+                $query->equals('lesson', $lessonId)
+            )
+            ->execute()
+            ->toArray();
     }
 
     /**
-     * Finde alle sichtbaren Fragen
-     *
-     * @return array
+     * Find all required questions for a course (regardless of lesson)
      */
-    public function findVisible(): array
+    public function findRequiredByCourse(int $courseId): array
     {
         $query = $this->createQuery();
-        $query->matching(
-            $query->equals('hidden', 0)
-        );
-        return $query->execute()->toArray();
-    }
-
-    /**
-     * Fragen nach Schwierigkeitsgrad
-     *
-     * @param string $level
-     * @return array
-     */
-    public function findByDifficulty(string $level): array
-    {
-        $query = $this->createQuery();
-        $query->matching(
-            $query->equals('difficulty', $level)
-        );
-        return $query->execute()->toArray();
+        return $query
+            ->matching(
+                $query->logicalAnd([
+                    $query->equals('course', $courseId),
+                    $query->equals('required', true),
+                ])
+            )
+            ->execute()
+            ->toArray();
     }
 }

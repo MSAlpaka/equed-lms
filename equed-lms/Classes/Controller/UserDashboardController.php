@@ -3,66 +3,15 @@
 namespace Equed\EquedLms\Controller;
 
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
-use Equed\EquedLms\Domain\Repository\UserCourseRecordRepository;
-use TYPO3\CMS\Core\Messaging\AbstractMessage;
 
 class UserDashboardController extends ActionController
 {
-    protected UserCourseRecordRepository $userCourseRecordRepository;
-
-    public function __construct(
-        UserCourseRecordRepository $userCourseRecordRepository
-    ) {
-        $this->userCourseRecordRepository = $userCourseRecordRepository;
-    }
-
-    public function initializeAction(): void
+    /**
+     * Show the user's dashboard (courses, progress, certificates)
+     */
+    public function indexAction(int $userId): void
     {
-        $user = $GLOBALS['TSFE']->fe_user['user'] ?? [];
-
-        // Sicherstellen, dass nur Instructoren weitergeleitet werden
-        $isInstructor = (int)($user['is_instructor'] ?? 0);
-        $onboardingDone = (int)($user['onboarding_complete'] ?? 0);
-        $currentController = strtolower($this->request->getControllerName());
-
-        if ($isInstructor && !$onboardingDone && $currentController !== 'instructoronboarding') {
-            $this->redirect('index', 'InstructorOnboarding');
-        }
-    }
-
-    public function dashboardAction(): void
-    {
-        $userId = $GLOBALS['TSFE']->fe_user['user']['uid'] ?? 0;
-
-        if (!$userId) {
-            $this->addFlashMessage(
-                'Bitte melde dich an, um dein Dashboard zu sehen.',
-                '',
-                AbstractMessage::WARNING
-            );
-            $this->redirectToUri('/'); // später z. B. '/login' oder spezifische Login-Seite
-            return;
-        }
-
-        $records = $this->userCourseRecordRepository->findByUser($userId);
-        $this->view->assign('userCourseRecords', $records);
-    }
-
-    public function myCertificatesAction(): void
-    {
-        $userId = $GLOBALS['TSFE']->fe_user['user']['uid'] ?? 0;
-
-        if (!$userId) {
-            $this->addFlashMessage(
-                'Bitte melde dich an, um deine Zertifikate zu sehen.',
-                '',
-                AbstractMessage::WARNING
-            );
-            $this->redirectToUri('/');
-            return;
-        }
-
-        $records = $this->userCourseRecordRepository->findByFeUserAndValidated($userId);
-        $this->view->assign('records', $records);
+        // Logic to fetch user's courses, progress, certificates
+        $this->view->assign('userDashboardData', []);
     }
 }

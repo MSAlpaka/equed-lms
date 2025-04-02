@@ -1,56 +1,84 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Equed\EquedLms\Domain\Model;
 
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
+use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
 
+/**
+ * Represents the participation of a user in a course,
+ * including progress, validation and certification.
+ */
 class UserCourseRecord extends AbstractEntity
 {
-    protected int $user = 0;
-    protected int $course = 0;
+    /**
+     * @var \Equed\EquedLms\Domain\Model\Course
+     */
+    protected Course $course;
 
-    protected bool $completed = false;
+    /**
+     * @var \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
+     */
+    protected FrontendUser $user;
+
+    /**
+     * @var string 'in_progress', 'completed', 'validated', 'rejected'
+     */
+    protected string $status = 'in_progress';
+
+    /**
+     * @var \DateTime|null
+     */
+    protected ?\DateTime $completionDate = null;
+
+    /**
+     * @var bool
+     */
     protected bool $validated = false;
-    protected string $certificateCode = '';
-    protected \DateTimeInterface $completionDate;
 
-    // 🆕 NEU: Instructor-Zuweisung & Matching-Infos
-    protected string $participantPostalCode = '';
-    protected string $matchingStatus = 'pending'; // pending, auto_assigned, manually_assigned, declined
+    /**
+     * @var \TYPO3\CMS\Extbase\Domain\Model\FrontendUser|null
+     */
+    protected ?FrontendUser $certifier = null;
 
-    /** @var \Equed\EquedLms\Domain\Model\Instructor|null */
-    protected $assignedInstructor;
-
-    public function getUser(): int
-    {
-        return $this->user;
-    }
-
-    public function setUser(int $user): void
-    {
-        $this->user = $user;
-    }
-
-    public function getCourse(): int
+    public function getCourse(): Course
     {
         return $this->course;
     }
 
-    public function setCourse(int $course): void
+    public function setCourse(Course $course): void
     {
         $this->course = $course;
     }
 
-    public function isCompleted(): bool
+    public function getUser(): FrontendUser
     {
-        return $this->completed;
+        return $this->user;
     }
 
-    public function setCompleted(bool $completed): void
+    public function setUser(FrontendUser $user): void
     {
-        $this->completed = $completed;
+        $this->user = $user;
+    }
+
+    public function getStatus(): string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): void
+    {
+        $this->status = $status;
+    }
+
+    public function getCompletionDate(): ?\DateTime
+    {
+        return $this->completionDate;
+    }
+
+    public function setCompletionDate(?\DateTime $completionDate): void
+    {
+        $this->completionDate = $completionDate;
     }
 
     public function isValidated(): bool
@@ -63,53 +91,13 @@ class UserCourseRecord extends AbstractEntity
         $this->validated = $validated;
     }
 
-    public function getCertificateCode(): string
+    public function getCertifier(): ?FrontendUser
     {
-        return $this->certificateCode;
+        return $this->certifier;
     }
 
-    public function setCertificateCode(string $certificateCode): void
+    public function setCertifier(?FrontendUser $certifier): void
     {
-        $this->certificateCode = $certificateCode;
-    }
-
-    public function getCompletionDate(): \DateTimeInterface
-    {
-        return $this->completionDate;
-    }
-
-    public function setCompletionDate(\DateTimeInterface $completionDate): void
-    {
-        $this->completionDate = $completionDate;
-    }
-
-    public function getParticipantPostalCode(): string
-    {
-        return $this->participantPostalCode;
-    }
-
-    public function setParticipantPostalCode(string $postalCode): void
-    {
-        $this->participantPostalCode = $postalCode;
-    }
-
-    public function getMatchingStatus(): string
-    {
-        return $this->matchingStatus;
-    }
-
-    public function setMatchingStatus(string $status): void
-    {
-        $this->matchingStatus = $status;
-    }
-
-    public function getAssignedInstructor(): ?\Equed\EquedLms\Domain\Model\Instructor
-    {
-        return $this->assignedInstructor;
-    }
-
-    public function setAssignedInstructor(?\Equed\EquedLms\Domain\Model\Instructor $instructor): void
-    {
-        $this->assignedInstructor = $instructor;
+        $this->certifier = $certifier;
     }
 }

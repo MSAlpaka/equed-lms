@@ -1,82 +1,78 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Equed\EquedLms\Domain\Model;
 
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
+use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
 
+/**
+ * Represents a single quiz/exam attempt for a question.
+ */
 class ExamAttempt extends AbstractEntity
 {
-    protected ?UserCourseRecord $record = null;
+    /**
+     * @var \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
+     */
+    protected FrontendUser $user;
 
-    protected string $type = ''; // 'theory', 'practical', 'case'
+    /**
+     * @var \Equed\EquedLms\Domain\Model\QuizQuestion
+     */
+    protected QuizQuestion $quizQuestion;
 
-    protected bool $passed = false;
+    protected string $givenAnswer = '';
 
-    protected string $feedback = '';
+    protected bool $correct = false;
 
-    protected ?\DateTime $attemptDate = null;
+    protected ?\DateTime $timestamp = null;
 
-    protected ?User $instructor = null;
-
-    public function getRecord(): ?UserCourseRecord
+    public function getUser(): FrontendUser
     {
-        return $this->record;
+        return $this->user;
     }
 
-    public function setRecord(?UserCourseRecord $record): void
+    public function setUser(FrontendUser $user): void
     {
-        $this->record = $record;
+        $this->user = $user;
     }
 
-    public function getType(): string
+    public function getQuizQuestion(): QuizQuestion
     {
-        return $this->type;
+        return $this->quizQuestion;
     }
 
-    public function setType(string $type): void
+    public function setQuizQuestion(QuizQuestion $quizQuestion): void
     {
-        $this->type = $type;
+        $this->quizQuestion = $quizQuestion;
     }
 
-    public function isPassed(): bool
+    public function getGivenAnswer(): string
     {
-        return $this->passed;
+        return $this->givenAnswer;
     }
 
-    public function setPassed(bool $passed): void
+    public function setGivenAnswer(string $givenAnswer): void
     {
-        $this->passed = $passed;
+        $this->givenAnswer = $givenAnswer;
     }
 
-    public function getFeedback(): string
+    public function isCorrect(): bool
     {
-        return $this->feedback;
+        return $this->correct;
     }
 
-    public function setFeedback(string $feedback): void
+    public function setCorrect(bool $correct): void
     {
-        $this->feedback = $feedback;
+        $this->correct = $correct;
     }
 
-    public function getAttemptDate(): ?\DateTime
+    public function getTimestamp(): ?\DateTime
     {
-        return $this->attemptDate;
+        return $this->timestamp;
     }
 
-    public function setAttemptDate(?\DateTime $attemptDate): void
+    public function setTimestamp(?\DateTime $timestamp): void
     {
-        $this->attemptDate = $attemptDate;
-    }
-
-    public function getInstructor(): ?User
-    {
-        return $this->instructor;
-    }
-
-    public function setInstructor(?User $instructor): void
-    {
-        $this->instructor = $instructor;
+        $this->timestamp = $timestamp;
     }
 }

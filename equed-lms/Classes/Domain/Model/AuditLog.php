@@ -3,23 +3,34 @@
 namespace Equed\EquedLms\Domain\Model;
 
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
-use DateTime;
+use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
 
+/**
+ * Logs significant user actions in the LMS.
+ */
 class AuditLog extends AbstractEntity
 {
-    protected int $feUser = 0;
+    /**
+     * @var \TYPO3\CMS\Extbase\Domain\Model\FrontendUser|null
+     */
+    protected ?FrontendUser $feUser = null;
+
     protected string $action = '';
+
     protected int $relatedId = 0;
+
     protected string $relatedType = '';
-    protected ?DateTime $timestamp = null;
+
     protected string $comment = '';
 
-    public function getFeUser(): int
+    protected ?\DateTime $timestamp = null;
+
+    public function getFeUser(): ?FrontendUser
     {
         return $this->feUser;
     }
 
-    public function setFeUser(int $feUser): void
+    public function setFeUser(?FrontendUser $feUser): void
     {
         $this->feUser = $feUser;
     }
@@ -54,16 +65,6 @@ class AuditLog extends AbstractEntity
         $this->relatedType = $relatedType;
     }
 
-    public function getTimestamp(): ?DateTime
-    {
-        return $this->timestamp;
-    }
-
-    public function setTimestamp(?DateTime $timestamp): void
-    {
-        $this->timestamp = $timestamp;
-    }
-
     public function getComment(): string
     {
         return $this->comment;
@@ -72,5 +73,15 @@ class AuditLog extends AbstractEntity
     public function setComment(string $comment): void
     {
         $this->comment = $comment;
+    }
+
+    public function getTimestamp(): ?\DateTime
+    {
+        return $this->timestamp;
+    }
+
+    public function setTimestamp(?\DateTime $timestamp): void
+    {
+        $this->timestamp = $timestamp;
     }
 }

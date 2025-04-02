@@ -1,42 +1,32 @@
 <?php
-return [
-    'ctrl' => [
-        'title' => 'QMS Case',
-        'label' => 'feedback',
-        'tstamp' => 'tstamp',
-        'crdate' => 'crdate',
-        'delete' => 'deleted',
-        'enablecolumns' => [
-            'disabled' => 'hidden',
-        ],
-        'searchFields' => 'feedback',
-        'iconfile' => 'EXT:equed_lms/Resources/Public/Icons/qms_case.svg',
-    ],
-    'interface' => [
-        'showRecordFieldList' => 'feedback, status',
-    ],
-    'types' => [
-        '1' => ['showitem' => 'feedback, status'],
-    ],
-    'columns' => [
-        'feedback' => [
-            'label' => 'Feedback',
-            'config' => [
-                'type' => 'inline',
-                'foreign_table' => 'tx_equedlms_domain_model_feedback',
-                'maxitems' => 1,
-                'minitems' => 1,
-            ],
-        ],
-        'status' => [
-            'label' => 'Status',
+defined('TYPO3_MODE') or die();
+
+// Add a custom field for QMS case severity
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns(
+    'tx_equedlms_domain_model_qmscase',
+    [
+        'severity_level' => [
+            'exclude' => 0,
+            'label' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:tx_equedlms_domain_model_qmscase.severity_level',
             'config' => [
                 'type' => 'select',
+                'renderType' => 'selectSingle',
                 'items' => [
-                    ['Open', 'open'],
-                    ['Resolved', 'resolved'],
+                    ['Low', 1],
+                    ['Medium', 2],
+                    ['High', 3],
                 ],
+                'size' => 1,
+                'maxitems' => 1,
             ],
         ],
-    ],
-];
+    ]
+);
+
+// Add the new field to the backend form
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes(
+    'tx_equedlms_domain_model_qmscase',
+    'severity_level',
+    '',
+    'after:title'
+);

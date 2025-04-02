@@ -2,62 +2,63 @@
 
 return [
     'ctrl' => [
-        'title' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:tx_equedlms_domain_model_auditlog',
+        'title' => 'Audit Log',
         'label' => 'action',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
-        'cruser_id' => 'cruser_id',
-        'versioningWS' => true,
-        'rootLevel' => 0,
+        'delete' => 'deleted',
         'iconfile' => 'EXT:equed_lms/Resources/Public/Icons/auditlog.svg',
-    ],
-    'types' => [
-        '0' => ['showitem' => 'fe_user, action, related_type, related_id, timestamp, comment'],
     ],
     'columns' => [
         'fe_user' => [
-            'label' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:tx_equedlms_domain_model_auditlog.fe_user',
+            'label' => 'User',
             'config' => [
-                'type' => 'input',
-                'eval' => 'int',
-                'readOnly' => true,
+                'type' => 'group',
+                'internal_type' => 'db',
+                'allowed' => 'fe_users',
+                'foreign_table' => 'fe_users',
+                'minitems' => 0,
+                'maxitems' => 1,
             ],
         ],
         'action' => [
-            'label' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:tx_equedlms_domain_model_auditlog.action',
+            'label' => 'Action',
             'config' => [
                 'type' => 'input',
                 'required' => true,
-                'eval' => 'trim',
             ],
         ],
         'related_id' => [
-            'label' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:tx_equedlms_domain_model_auditlog.related_id',
+            'label' => 'Related ID',
             'config' => [
                 'type' => 'input',
                 'eval' => 'int',
             ],
         ],
         'related_type' => [
-            'label' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:tx_equedlms_domain_model_auditlog.related_type',
+            'label' => 'Related Type',
             'config' => [
                 'type' => 'input',
             ],
         ],
-        'timestamp' => [
-            'label' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:tx_equedlms_domain_model_auditlog.timestamp',
-            'config' => [
-                'type' => 'datetime',
-                'readOnly' => true,
-            ],
-        ],
         'comment' => [
-            'label' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:tx_equedlms_domain_model_auditlog.comment',
+            'label' => 'Comment',
             'config' => [
                 'type' => 'text',
-                'cols' => 40,
-                'rows' => 3,
+                'enableRichtext' => false,
             ],
         ],
+        'timestamp' => [
+            'label' => 'Timestamp',
+            'config' => [
+                'type' => 'input',
+                'renderType' => 'inputDateTime',
+                'eval' => 'datetime',
+                'default' => null,
+            ],
+        ],
+    ],
+    'types' => [
+        '0' => ['showitem' => 'fe_user, action, related_id, related_type, comment, timestamp'],
     ],
 ];

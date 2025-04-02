@@ -2,42 +2,57 @@
 
 return [
     'ctrl' => [
-        'title' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:tx_equedlms_domain_model_badge.title',
+        'title' => 'Badge',
         'label' => 'name',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
-        'cruser_id' => 'cruser_id',
-        'iconfile' => 'EXT:equed_lms/Resources/Public/Icons/badge.svg'
+        'delete' => 'deleted',
+        'iconfile' => 'EXT:equed_lms/Resources/Public/Icons/badge.svg',
     ],
     'columns' => [
         'name' => [
-            'label' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:tx_equedlms_domain_model_badge.name',
+            'label' => 'Name',
             'config' => [
                 'type' => 'input',
-                'required' => true
-            ]
+                'required' => true,
+            ],
         ],
         'description' => [
-            'label' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:tx_equedlms_domain_model_badge.description',
+            'label' => 'Description',
             'config' => [
                 'type' => 'text',
-                'rows' => 4
-            ]
+                'enableRichtext' => true,
+            ],
         ],
-        'image' => [
-            'label' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:tx_equedlms_domain_model_badge.image',
+        'identifier' => [
+            'label' => 'Identifier (Slug)',
             'config' => [
-                'type' => 'file',
-                'appearance' => [
-                    'createNewRelationLinkTitle' => 'Add File Reference'
+                'type' => 'input',
+                'eval' => 'trim,alphanum_x,unique',
+            ],
+        ],
+        'icon' => [
+            'label' => 'Icon',
+            'config' => [
+                'type' => 'inline',
+                'foreign_table' => 'sys_file_reference',
+                'foreign_field' => 'uid_foreign',
+                'foreign_sortby' => 'sorting_foreign',
+                'foreign_table_field' => 'tablenames',
+                'foreign_match_fields' => [
+                    'fieldname' => 'icon',
                 ],
-                'maxitems' => 1
-            ]
-        ]
+                'appearance' => [
+                    'createNewRelationLinkTitle' => 'Add Icon',
+                    'showPossibleLocalizationRecords' => true,
+                    'showRemovedLocalizationRecords' => false,
+                    'showAllLocalizationLink' => true,
+                    'showSynchronizationLink' => true,
+                ],
+            ],
+        ],
     ],
     'types' => [
-        '0' => [
-            'showitem' => 'name, description, image'
-        ]
-    ]
+        '0' => ['showitem' => 'name, identifier, description, icon'],
+    ],
 ];

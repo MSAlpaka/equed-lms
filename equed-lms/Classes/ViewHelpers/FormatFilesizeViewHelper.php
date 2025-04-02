@@ -1,27 +1,26 @@
 <?php
+
 namespace Equed\EquedLms\ViewHelpers;
 
-use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
+use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 class FormatFileSizeViewHelper extends AbstractViewHelper
 {
-    public function initializeArguments(): void
+    /**
+     * @param int $fileSize
+     * @return string
+     */
+    public function render(int $fileSize): string
     {
-        $this->registerArgument('size', 'int', 'Dateigröße in Bytes', true);
-    }
-
-    public function render(): string
-    {
-        $bytes = $this->arguments['size'];
-        if ($bytes < 1024) {
-            return $bytes . ' B';
+        // Format file size to a readable string (KB, MB, GB)
+        if ($fileSize >= 1073741824) {
+            return round($fileSize / 1073741824, 2) . ' GB';
+        } elseif ($fileSize >= 1048576) {
+            return round($fileSize / 1048576, 2) . ' MB';
+        } elseif ($fileSize >= 1024) {
+            return round($fileSize / 1024, 2) . ' KB';
+        } else {
+            return $fileSize . ' bytes';
         }
-        if ($bytes < 1024 * 1024) {
-            return round($bytes / 1024, 1) . ' KB';
-        }
-        if ($bytes < 1024 * 1024 * 1024) {
-            return round($bytes / 1024 / 1024, 1) . ' MB';
-        }
-        return round($bytes / 1024 / 1024 / 1024, 1) . ' GB';
     }
 }

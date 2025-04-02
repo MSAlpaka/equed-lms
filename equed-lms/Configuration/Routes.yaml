@@ -1,136 +1,68 @@
--
-  route: 'dashboard'
-  controller: 'Lms'
-  action: 'dashboard'
-  plugin: 'LmsFrontend'
-  extension: 'EquedLms'
+# ================================
+# Routen-Konfiguration für EquEd LMS
+# ================================
 
--
-  route: 'course/{courseId}'
-  controller: 'Lms'
-  action: 'courseShow'
-  plugin: 'LmsFrontend'
-  extension: 'EquedLms'
-  requirements:
-    courseId: '\d+'
+routes:
+  # Route für die Kursübersicht
+  course_list:
+    path: /courses
+    controller: CourseController
+    action: list
+    title: 'Available Courses'
+    defaults:
+      _controller: 'Equed\\EquedLms\\Controller\\CourseController::listAction'
 
--
-  route: 'lesson/{lessonId}'
-  controller: 'Lms'
-  action: 'lessonShow'
-  plugin: 'LmsFrontend'
-  extension: 'EquedLms'
-  requirements:
-    lessonId: '\d+'
+  # Route für die Kursdetails
+  course_show:
+    path: /course/{courseId}
+    controller: CourseController
+    action: show
+    title: 'Course Details'
+    defaults:
+      _controller: 'Equed\\EquedLms\\Controller\\CourseController::showAction'
+    requirements:
+      courseId: \d+
 
--
-  route: 'upload'
-  controller: 'Submission'
-  action: 'uploadForm'
-  plugin: 'SubmissionFrontend'
-  extension: 'EquedLms'
+  # Route für die Einreichung von Aufgaben
+  submission_form:
+    path: /submit-assignment/{assignmentId}
+    controller: SubmissionController
+    action: showForm
+    title: 'Submit Assignment'
+    defaults:
+      _controller: 'Equed\\EquedLms\\Controller\\SubmissionController::showFormAction'
+    requirements:
+      assignmentId: \d+
 
--
-  route: 'my-submissions'
-  controller: 'Submission'
-  action: 'mySubmissions'
-  plugin: 'SubmissionFrontend'
-  extension: 'EquedLms'
+  # Route für die Benutzerprofil-Seite
+  user_profile:
+    path: /profile/{userId}
+    controller: UserController
+    action: show
+    title: 'User Profile'
+    defaults:
+      _controller: 'Equed\\EquedLms\\Controller\\UserController::showAction'
+    requirements:
+      userId: \d+
 
--
-  route: 'instructor/dashboard'
-  controller: 'Instructor'
-  action: 'dashboard'
-  plugin: 'InstructorFrontend'
-  extension: 'EquedLms'
+  # Route für die Zertifikatsanzeige
+  certificate_display:
+    path: /certificate/{certificateId}
+    controller: CertificateController
+    action: show
+    title: 'Certificate Display'
+    defaults:
+      _controller: 'Equed\\EquedLms\\Controller\\CertificateController::showAction'
+    requirements:
+      certificateId: \d+
 
--
-  route: 'submission/{submissionId}'
-  controller: 'Instructor'
-  action: 'evaluateSubmission'
-  plugin: 'InstructorFrontend'
-  extension: 'EquedLms'
-  requirements:
-    submissionId: '\d+'
-
--
-  route: 'my-progress'
-  controller: 'UserDashboard'
-  action: 'myProgress'
-  plugin: 'UserDashboardFrontend'
-  extension: 'EquedLms'
-
--
-  route: 'certifier/dashboard'
-  controller: 'Certifier'
-  action: 'dashboard'
-  plugin: 'CertifierFrontend'
-  extension: 'EquedLms'
-
--
-  route: 'certificate/{recordId}'
-  controller: 'Certificate'
-  action: 'download'
-  plugin: 'CertificateFrontend'
-  extension: 'EquedLms'
-  requirements:
-    recordId: '\d+'
-
--
-  route: 'meine-zertifikate'
-  controller: 'UserDashboard'
-  action: 'myCertificates'
-  plugin: 'UserDashboardFrontend'
-  extension: 'EquedLms'
-
-- route: 'course/book'
-  controller: 'CourseBooking'
-  action: 'bookCourse'
-  plugin: 'CourseBookingFrontend'
-  extension: 'EquedLms'
-
-- route: 'course/{courseId}/feedback'
-  controller: 'Feedback'
-  action: 'submitFeedback'
-  plugin: 'FeedbackFrontend'
-  extension: 'EquedLms'
-  requirements:
-    courseId: '\d+'
-
-- route: 'instructor/onboarding'
-  controller: 'InstructorOnboarding'
-  action: 'index'
-  plugin: 'InstructorFrontend'
-  extension: 'EquedLms'
-
-- route: 'instructor/onboarding/complete'
-  controller: 'InstructorOnboarding'
-  action: 'complete'
-  plugin: 'InstructorFrontend'
-  extension: 'EquedLms'
-
-- route: 'sso/login'
-  controller: 'SsoLogin'
-  action: 'index'
-  plugin: 'LoginFrontend'
-  extension: 'EquedLms'
-
-- route: 'verify'
-  controller: 'Verify'
-  action: 'show'
-  plugin: 'ApiFrontend'
-  extension: 'EquedLms'
-
-- route: 'service-center'
-  controller: 'ServiceCenter'
-  action: 'dashboard'
-  plugin: 'ServiceCenterFrontend'
-  extension: 'EquedLms'
-
-- route: 'service-center/assign/{courseId}'
-  controller: 'ServiceCenter'
-  action: 'assignExternalExaminer'
-  plugin: 'ServiceCenterFrontend'
-  extension: 'EquedLms'
-  requirements:
-    courseId: '\d+'
+  # Route für die Einreichungsüberprüfung durch Instruktoren
+  submission_review:
+    path: /submission-review/{submissionId}
+    controller: InstructorController
+    action: reviewSubmission
+    title: 'Submission Review'
+    defaults:
+      _controller: 'Equed\\EquedLms\\Controller\\InstructorController::reviewSubmissionAction'
+    requirements:
+      submissionId: \d+

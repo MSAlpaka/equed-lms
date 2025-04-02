@@ -1,105 +1,25 @@
-<?xml version='1.0' encoding='utf-8'?>
-<xliff version="1.2">
-  <file source-language="es" datatype="plaintext" original="messages">
-    <body>
-
-      
-      <trans-unit id="dashboard.welcome">
-        <source>👋 ¡Bienvenido de nuevo!</source>
-      <target>Bienvenido/a de nuevo, {user}!</target></trans-unit>
-      <trans-unit id="dashboard.intro">
-        <source>Aquí está tu progreso personal:</source>
-      </trans-unit>
-      <trans-unit id="dashboard.autosave">
-        <source>Tu progreso se guarda automáticamente.</source>
-      </trans-unit>
-      <trans-unit id="dashboard.completed">
-        <source>🎉 ¡Curso completado!</source>
-      </trans-unit>
-      <trans-unit id="dashboard.certificate">
-        <source>📄 Ver certificado</source>
-      </trans-unit>
-      <trans-unit id="dashboard.incomplete">
-        <source>📘 Curso en curso</source>
-      </trans-unit>
-      <trans-unit id="dashboard.noQuiz">
-        <source>Aún no se ha respondido ningún cuestionario</source>
-      </trans-unit>
-      <trans-unit id="dashboard.continue">
-        <source>➕ Continuar curso</source>
-      </trans-unit>
-
-      
-      <trans-unit id="lesson.quiz.title">
-        <source>🔁 Preguntas de repaso</source>
-      </trans-unit>
-      <trans-unit id="lesson.quiz.submit">
-        <source>Enviar respuestas</source>
-      </trans-unit>
-      <trans-unit id="lesson.completedMessage">
-        <source>✔️ ¡Has completado esta lección con éxito!</source>
-      <target>Has completado esta lección.</target></trans-unit>
-      <trans-unit id="quiz.title">
-        <source>Cuestionario: {0}</source>
-      </trans-unit>
-      <trans-unit id="quiz.submit">
-        <source>Enviar cuestionario</source>
-      </trans-unit>
-
-      
-      <trans-unit id="certificate.title">
-        <source>Certificado</source>
-      </trans-unit>
-      <trans-unit id="certificate.description">
-        <source>ha participado con éxito en el curso “{0}”.</source>
-      <target>ha completado con éxito el curso</target></trans-unit>
-      <trans-unit id="certificate.confirmationText">
-        <source>Este certificado confirma la participación completa y la finalización satisfactoria conforme a los estándares de Equine Education Europe.</source>
-      </trans-unit>
-      <trans-unit id="certificate.signature.student">
-        <source>Participante</source>
-      <target>Participante</target></trans-unit>
-      <trans-unit id="certificate.trainingCenter">
-        <source>Centro de formación</source>
-      </trans-unit>
-      <trans-unit id="certificate.centerId">
-        <source>ID del centro</source>
-      </trans-unit>
-      <trans-unit id="certificate.date">
-        <source>Fecha de finalización</source>
-      </trans-unit>
-
-      
-      <trans-unit id="course.intro">
-        <source>Aquí encontrarás toda la información sobre este curso.</source>
-      </trans-unit>
-
-      
-      <trans-unit id="site.title">
-        <source>Plataforma EquEd</source>
-      </trans-unit>
-
-<trans-unit id="error.insufficient_prerequisites">
-    <target xml:lang="es">No cumples con los requisitos previos para este curso.</target>
+<!-- Optimized locallang.xlf (Spanish) -->
+<trans-unit id="course_label" resname="course_label">
+    <source>Course</source>
+    <target>Curso</target>
 </trans-unit>
 
-<trans-unit id="success.course_booked">
-    <target xml:lang="es">El curso ha sido reservado con éxito.</target>
+<trans-unit id="submit_button" resname="submit_button">
+    <source>Submit</source>
+    <target>Enviar</target>
 </trans-unit>
 
-<trans-unit id="evaluation.saved">
-    <target xml:lang="es">Evaluación guardada con éxito.</target>
+<trans-unit id="feedback_label" resname="feedback_label">
+    <source>Feedback</source>
+    <target>Comentarios</target>
 </trans-unit>
 
-<trans-unit id="instructor.noAccess">
-    <target xml:lang="es">No tienes acceso a esta área.</target>
+<trans-unit id="profile_header" resname="profile_header">
+    <source>User Profile</source>
+    <target>Perfil de Usuario</target>
 </trans-unit>
 
-<trans-unit id="submission.loginRequired">
-    <target xml:lang="es">Debes iniciar sesión para enviar.</target>
+<trans-unit id="certificate_header" resname="certificate_header">
+    <source>Certificate</source>
+    <target>Certificado</target>
 </trans-unit>
-
-
-    </body>
-  </file>
-</xliff>

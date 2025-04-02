@@ -1,52 +1,33 @@
 <?php
+
 namespace Equed\EquedLms\ViewHelpers;
 
-use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
-use Equed\EquedLms\Domain\Repository\UserLessonProgressRepository;
-use Equed\EquedLms\Domain\Repository\CourseRepository;
+use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 class CertificateStatusViewHelper extends AbstractViewHelper
 {
-    protected ObjectManager $objectManager;
-
-    public function initializeArguments(): void
+    /**
+     * @param int $userId
+     * @param int $courseId
+     * @return string
+     */
+    public function render(int $userId, int $courseId): string
     {
-        $this->registerArgument('courseId', 'int', 'UID des Kurses', true);
-        $this->registerArgument('feUserId', 'int', 'UID des FE-Benutzers', false);
+        // Check if the user has a certificate for the course
+        $certificate = $this->getCertificateForUser($userId, $courseId);
+        return $certificate ? 'Certificate Issued' : 'No Certificate';
     }
 
-    public function render(): string
+    /**
+     * Fetch the certificate for the user and course
+     *
+     * @param int $userId
+     * @param int $courseId
+     * @return \Equed\EquedLms\Domain\Model\Certificate|null
+     */
+    protected function getCertificateForUser(int $userId, int $courseId)
     {
-        $courseId = $this->arguments['courseId'];
-        $feUserId = $this->arguments['feUserId'] ?? $GLOBALS['TSFE']->fe_user->user['uid'] ?? 0;
-
-        if ($feUserId <= 0) {
-            return '⏳';
-        }
-
-        /** @var UserLessonProgressRepository $progressRepo */
-        $progressRepo = $this->objectManager->get(UserLessonProgressRepository::class);
-        /** @var CourseRepository $courseRepo */
-        $courseRepo = $this->objectManager->get(CourseRepository::class);
-
-        $course = $courseRepo->findByIdentifier($courseId);
-        if ($course === null) {
-            return '⏳';
-        }
-
-        $lessons = $course->getLessons();
-        if ($lessons->count() === 0) {
-            return '✅';
-        }
-
-        foreach ($lessons as $lesson) {
-            $progress = $progressRepo->findOrCreateByFeUserAndLesson($feUserId, $lesson->getUid());
-            if (!$progress->isCompleted()) {
-                return '⏳';
-            }
-        }
-
-        return '✅';
+        $certificateRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Equed\EquedLms\Domain\Repository\CertificateRepository::class);
+        return $certificateRepository->findByUserAndCourse($userId, $courseId);
     }
 }

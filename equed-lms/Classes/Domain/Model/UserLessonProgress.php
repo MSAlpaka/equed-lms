@@ -3,45 +3,46 @@
 namespace Equed\EquedLms\Domain\Model;
 
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
+use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
+use Equed\EquedLms\Domain\Model\Lesson;
 
+/**
+ * Tracks a user's progress through lessons.
+ */
 class UserLessonProgress extends AbstractEntity
 {
-    protected int $feUser = 0;
-    protected bool $confirmed = false;
-    protected float $quizScore = 0.0;
+    /**
+     * @var \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
+     */
+    protected FrontendUser $user;
+
+    /**
+     * @var \Equed\EquedLms\Domain\Model\Lesson
+     */
+    protected Lesson $lesson;
+
     protected bool $completed = false;
 
-    // NEU
-    protected ?Lesson $lesson = null;
+    protected ?\DateTime $completionDate = null;
 
-    public function getFeUser(): int
+    public function getUser(): FrontendUser
     {
-        return $this->feUser;
+        return $this->user;
     }
 
-    public function setFeUser(int $feUser): void
+    public function setUser(FrontendUser $user): void
     {
-        $this->feUser = $feUser;
+        $this->user = $user;
     }
 
-    public function isConfirmed(): bool
+    public function getLesson(): Lesson
     {
-        return $this->confirmed;
+        return $this->lesson;
     }
 
-    public function setConfirmed(bool $confirmed): void
+    public function setLesson(Lesson $lesson): void
     {
-        $this->confirmed = $confirmed;
-    }
-
-    public function getQuizScore(): float
-    {
-        return $this->quizScore;
-    }
-
-    public function setQuizScore(float $quizScore): void
-    {
-        $this->quizScore = $quizScore;
+        $this->lesson = $lesson;
     }
 
     public function isCompleted(): bool
@@ -54,13 +55,13 @@ class UserLessonProgress extends AbstractEntity
         $this->completed = $completed;
     }
 
-    public function getLesson(): ?Lesson
+    public function getCompletionDate(): ?\DateTime
     {
-        return $this->lesson;
+        return $this->completionDate;
     }
 
-    public function setLesson(?Lesson $lesson): void
+    public function setCompletionDate(?\DateTime $completionDate): void
     {
-        $this->lesson = $lesson;
+        $this->completionDate = $completionDate;
     }
 }

@@ -1,45 +1,35 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Equed\EquedLms\Service;
 
-use Equed\EquedLms\Domain\Model\UserCourseRecord;
-use Equed\EquedLms\Domain\Repository\CourseRepository;
+use Equed\EquedLms\Domain\Repository\UserCourseRecordRepository;
 
 class CourseValidationService
 {
     /**
-     * @var CourseRepository
+     * @var \Equed\EquedLms\Domain\Repository\UserCourseRecordRepository
      */
-    protected $courseRepository;
+    protected UserCourseRecordRepository $userCourseRecordRepository;
 
-    public function __construct(CourseRepository $courseRepository)
+    public function __construct(UserCourseRecordRepository $userCourseRecordRepository)
     {
-        $this->courseRepository = $courseRepository;
+        $this->userCourseRecordRepository = $userCourseRecordRepository;
     }
 
     /**
-     * Überprüft die Voraussetzungen für die Kursbuchung
-     *
-     * @param UserCourseRecord $userCourseRecord
-     * @return bool
+     * Validate whether a user has completed all requirements for a course
      */
-    public function checkPrerequisites(UserCourseRecord $userCourseRecord): bool
+    public function validateCourseCompletion(int $userId, int $courseId): bool
     {
-        $course = $userCourseRecord->getCourse();
-        $finishGoal = $course->getFinishGoal();
+        $courseRecords = $this->userCourseRecordRepository->findByUser($userId);
 
-        // Holen der Voraussetzungen des Kurses
-        $prerequisites = $course->getPrerequisites();
-
-        // Prüfen, ob der Teilnehmer alle notwendigen Abschlussziele erfüllt hat
-        foreach ($prerequisites as $prerequisite) {
-            if (!in_array($prerequisite, $userCourseRecord->getCompletedGoals())) {
-                return false; // Voraussetzung nicht erfüllt
+        // Check if all course records are validated for the user and course
+        foreach ($courseRecords as $courseRecord) {
+            if ($courseRecord->getCourse()->getId() === $courseId && !$courseRecord->getValidated()) {
+                return false;
             }
         }
 
-        return true; // Alle Voraussetzungen sind erfüllt
+        return true; // Course is completed and validated
     }
 }

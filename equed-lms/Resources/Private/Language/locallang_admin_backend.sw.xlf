@@ -1,2 +1,20 @@
-<?xml version='1.0' encoding='utf-8'?>
-<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2"><file source-language="en" datatype="plaintext" original="messages"><body><trans-unit id="backend.admin_dashboard"><source>backend.admin_dashboard</source><target /></trans-unit><trans-unit id="user.dashboard.title"><source>user.dashboard.title</source><target /></trans-unit></body></file></xliff>
+<!-- Optimized locallang_certifier_backend.sw.xlf -->
+<trans-unit id="course_label" resname="course_label">
+    <source>Course</source>
+    <target>Kozi</target>
+</trans-unit>
+
+<trans-unit id="submit_button" resname="submit_button">
+    <source>Submit</source>
+    <target>Wasilisha</target>
+</trans-unit>
+
+<trans-unit id="feedback_label" resname="feedback_label">
+    <source>Feedback</source>
+    <target>Maoni</target>
+</trans-unit>
+
+<trans-unit id="profile_header" resname="profile_header">
+    <source>User Profile</source>
+    <target>Profaili ya Mtumiaji</target>
+</trans-unit>

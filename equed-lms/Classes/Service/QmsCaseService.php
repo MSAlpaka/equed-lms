@@ -2,33 +2,28 @@
 
 namespace Equed\EquedLms\Service;
 
-use Equed\EquedLms\Domain\Model\Feedback;
-use Equed\EquedLms\Domain\Model\QmsCase;
-use Equed\EquedLms\Domain\Repository\QmsCaseRepository;
+use Equed\EquedLms\Domain\Repository\AuditLogRepository;
 
 class QmsCaseService
 {
-    protected QmsCaseRepository $qmsCaseRepository;
+    /**
+     * @var \Equed\EquedLms\Domain\Repository\AuditLogRepository
+     */
+    protected AuditLogRepository $auditLogRepository;
 
-    public function __construct(QmsCaseRepository $qmsCaseRepository)
+    public function __construct(AuditLogRepository $auditLogRepository)
     {
-        $this->qmsCaseRepository = $qmsCaseRepository;
+        $this->auditLogRepository = $auditLogRepository;
     }
 
-    public function checkForQmsCase(Feedback $feedback)
+    /**
+     * Create a new QMS case based on audit logs
+     */
+    public function createQmsCase(int $auditLogId): void
     {
-        // Prüfen, ob Abweichungen von den Standards vorliegen
-        foreach ($feedback->getStandardAnswers() as $standardAnswer) {
-            if ($standardAnswer->getAnswer() === 'no') {
-                // Ein QMS-Fall wird erstellt, wenn es eine Abweichung gibt
-                $qmsCase = new QmsCase();
-                $qmsCase->setFeedback($feedback);
-                $qmsCase->setStatus('open');  // QMS-Fall ist offen
-                $this->qmsCaseRepository->add($qmsCase);
+        // Create a case based on the audit log
+        $auditLog = $this->auditLogRepository->findByUid($auditLogId);
 
-                // Benachrichtigung an ServiceCenter oder Certifier (je nach Fall)
-                // Hier könnte eine E-Mail oder eine interne Benachrichtigung erfolgen.
-            }
-        }
+        // Logic to create a QMS case (store in database, notify users, etc.)
     }
 }

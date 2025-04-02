@@ -1,26 +1,43 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Equed\EquedLms\Domain\Model;
 
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
+use Equed\EquedLms\Domain\Model\Lesson;
+use Equed\EquedLms\Domain\Model\Course;
+use Equed\EquedLms\Domain\Model\QuizAnswer;
 
+/**
+ * Represents a quiz question that belongs to a lesson or course.
+ */
 class QuizQuestion extends AbstractEntity
 {
     protected string $questionText = '';
 
     /**
-     * @var ObjectStorage<\Equed\EquedLms\Domain\Model\QuizAnswer>
+     * Possible values: 'single', 'multiple', 'truefalse'
+     */
+    protected string $type = 'single';
+
+    protected bool $required = true;
+
+    protected int $points = 1;
+
+    /**
+     * @var \Equed\EquedLms\Domain\Model\Lesson|null
+     */
+    protected ?Lesson $lesson = null;
+
+    /**
+     * @var \Equed\EquedLms\Domain\Model\Course|null
+     */
+    protected ?Course $course = null;
+
+    /**
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Equed\EquedLms\Domain\Model\QuizAnswer>
      */
     protected ObjectStorage $answers;
-
-    protected int $lesson = 0;
-
-    protected bool $hidden = false;
-
-    protected string $difficulty = '';
 
     public function __construct()
     {
@@ -37,49 +54,68 @@ class QuizQuestion extends AbstractEntity
         $this->questionText = $questionText;
     }
 
-    /**
-     * @return ObjectStorage<\Equed\EquedLms\Domain\Model\QuizAnswer>
-     */
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): void
+    {
+        $this->type = $type;
+    }
+
+    public function isRequired(): bool
+    {
+        return $this->required;
+    }
+
+    public function setRequired(bool $required): void
+    {
+        $this->required = $required;
+    }
+
+    public function getPoints(): int
+    {
+        return $this->points;
+    }
+
+    public function setPoints(int $points): void
+    {
+        $this->points = $points;
+    }
+
+    public function getLesson(): ?Lesson
+    {
+        return $this->lesson;
+    }
+
+    public function setLesson(?Lesson $lesson): void
+    {
+        $this->lesson = $lesson;
+    }
+
+    public function getCourse(): ?Course
+    {
+        return $this->course;
+    }
+
+    public function setCourse(?Course $course): void
+    {
+        $this->course = $course;
+    }
+
     public function getAnswers(): ObjectStorage
     {
         return $this->answers;
     }
 
-    /**
-     * @param ObjectStorage<\Equed\EquedLms\Domain\Model\QuizAnswer> $answers
-     */
-    public function setAnswers(ObjectStorage $answers): void
+    public function addAnswer(QuizAnswer $answer): void
     {
-        $this->answers = $answers;
+        $this->answers->attach($answer);
     }
 
-    public function getLesson(): int
+    public function removeAnswer(QuizAnswer $answer): void
     {
-        return $this->lesson;
-    }
-
-    public function setLesson(int $lesson): void
-    {
-        $this->lesson = $lesson;
-    }
-
-    public function isHidden(): bool
-    {
-        return $this->hidden;
-    }
-
-    public function setHidden(bool $hidden): void
-    {
-        $this->hidden = $hidden;
-    }
-
-    public function getDifficulty(): string
-    {
-        return $this->difficulty;
-    }
-
-    public function setDifficulty(string $difficulty): void
-    {
-        $this->difficulty = $difficulty;
+        $this->answers->detach($answer);
     }
 }

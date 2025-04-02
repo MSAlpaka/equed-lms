@@ -1,36 +1,31 @@
 <?php
+
 namespace Equed\EquedLms\ViewHelpers;
 
-use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
-use TYPO3\CMS\Extbase\Domain\Repository\FrontendUserRepository;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 class UserNameViewHelper extends AbstractViewHelper
 {
-    protected ObjectManager $objectManager;
-
-    public function initializeArguments(): void
+    /**
+     * @param int $userId
+     * @return string
+     */
+    public function render(int $userId): string
     {
-        $this->registerArgument('feUserId', 'int', 'UID des FE-Users', true);
+        // Fetch user name by ID
+        $user = $this->getUserById($userId);
+        return $user ? $user->getFullName() : 'Unknown User';
     }
 
-    public function render(): string
+    /**
+     * Fetch user data by ID
+     *
+     * @param int $userId
+     * @return \TYPO3\CMS\Extbase\Domain\Model\FrontendUser|null
+     */
+    protected function getUserById(int $userId)
     {
-        $feUserId = $this->arguments['feUserId'];
-
-        /** @var FrontendUserRepository $userRepo */
-        $userRepo = $this->objectManager->get(FrontendUserRepository::class);
-        $user = $userRepo->findByUid($feUserId);
-
-        if ($user === null) {
-            return '[User #' . $feUserId . ']';
-        }
-
-        $name = trim($user->getName() ?: '');
-        if ($name !== '') {
-            return $name;
-        }
-
-        return $user->getEmail() ?: '[User #' . $feUserId . ']';
+        $userRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Domain\Repository\FrontendUserRepository::class);
+        return $userRepository->findByUid($userId);
     }
 }
