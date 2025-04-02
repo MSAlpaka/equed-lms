@@ -1,4 +1,4 @@
--- Tabelle für Benutzerspezifische LMS-Daten (falls nicht bereits durch `fe_users` abgedeckt)
+-- Die ursprüngliche Tabelle für Benutzerspezifische LMS-Daten
 CREATE TABLE tx_equedlms_userprofile (
     uid INT(11) NOT NULL AUTO_INCREMENT,
     pid INT(11) DEFAULT 0 NOT NULL,
@@ -28,6 +28,8 @@ CREATE TABLE tx_equedlms_domain_model_course (
     difficulty_level INT(11) DEFAULT 0 NOT NULL,  -- Schwierigkeitsgrad
     provider VARCHAR(255),  -- Anbieter des Kurses
     category INT(11),  -- Fremdschlüssel zu einer Kategorietabelle
+    startDate DATETIME NULL,  -- Neues Feld für Kursstart
+    endDate DATETIME NULL,  -- Neues Feld für Kursende
     PRIMARY KEY (uid),
     KEY category (category),
     FOREIGN KEY (category) REFERENCES tx_equedlms_course_category (uid)
@@ -51,38 +53,9 @@ CREATE TABLE tx_equedlms_domain_model_certificate (
     user_id INT(11) NOT NULL,  -- Verweis auf den Benutzer
     exam_id INT(11) NOT NULL,  -- Verweis auf die Prüfung
     certificate_code VARCHAR(255) NOT NULL, -- Zertifikatscode
-    issued_date DATETIME NOT NULL,  -- Ausstellungsdatum
     PRIMARY KEY (uid),
     FOREIGN KEY (user_id) REFERENCES fe_users (uid),
     FOREIGN KEY (exam_id) REFERENCES tx_equedlms_domain_model_exam (uid)
-);
-
--- Tabelle für Benutzerfortschritte (userprogress)
-CREATE TABLE tx_equedlms_userprogress (
-    uid INT(11) NOT NULL AUTO_INCREMENT,
-    pid INT(11) DEFAULT 0 NOT NULL,
-    user_id INT(11) NOT NULL,
-    course_id INT(11) NOT NULL,
-    points INT(11) DEFAULT 0 NOT NULL,
-    level INT(11) DEFAULT 1 NOT NULL,
-    badges TEXT,
-    PRIMARY KEY (uid),
-    KEY user_course (user_id, course_id),
-    FOREIGN KEY (user_id) REFERENCES fe_users (uid),
-    FOREIGN KEY (course_id) REFERENCES tx_equedlms_domain_model_course (uid)
-);
-
--- Tabelle für Lektionen
-CREATE TABLE tx_equedlms_domain_model_lesson (
-    uid INT AUTO_INCREMENT PRIMARY KEY,
-    pid INT DEFAULT 0 NOT NULL,
-    title VARCHAR(255) NOT NULL,
-    description TEXT,
-    media_reference INT(11),  -- Verweis auf Mediendateien
-    course INT(11) NOT NULL,  -- Verweis auf den Kurs
-    position INT(11) DEFAULT 0 NOT NULL,
-    FOREIGN KEY (course) REFERENCES tx_equedlms_domain_model_course (uid),
-    FOREIGN KEY (media_reference) REFERENCES sys_file_reference (uid)
 );
 
 -- Tabelle für das Audit-Log
@@ -125,3 +98,9 @@ CREATE TABLE tx_equedlms_domain_model_usersubmission (
     FOREIGN KEY (lesson) REFERENCES tx_equedlms_domain_model_lesson (uid),
     FOREIGN KEY (exam_attempt) REFERENCES tx_equedlms_domain_model_examattempt (uid)
 );
+
+-- Neue Felder für das Onboarding im `fe_users`
+ALTER TABLE fe_users 
+ADD COLUMN step1_complete TINYINT(1) UNSIGNED DEFAULT '0',
+ADD COLUMN step2_complete TINYINT(1) UNSIGNED DEFAULT '0',
+ADD COLUMN step3_complete TINYINT(1) UNSIGNED DEFAULT '0';

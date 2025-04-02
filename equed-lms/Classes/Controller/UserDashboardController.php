@@ -8,9 +8,27 @@ use TYPO3\CMS\Core\Messaging\AbstractMessage;
 
 class UserDashboardController extends ActionController
 {
+    protected UserCourseRecordRepository $userCourseRecordRepository;
+
     public function __construct(
-        protected UserCourseRecordRepository $userCourseRecordRepository
-    ) {}
+        UserCourseRecordRepository $userCourseRecordRepository
+    ) {
+        $this->userCourseRecordRepository = $userCourseRecordRepository;
+    }
+
+    public function initializeAction(): void
+    {
+        $user = $GLOBALS['TSFE']->fe_user['user'] ?? [];
+
+        // Sicherstellen, dass nur Instructoren weitergeleitet werden
+        $isInstructor = (int)($user['is_instructor'] ?? 0);
+        $onboardingDone = (int)($user['onboarding_complete'] ?? 0);
+        $currentController = strtolower($this->request->getControllerName());
+
+        if ($isInstructor && !$onboardingDone && $currentController !== 'instructoronboarding') {
+            $this->redirect('index', 'InstructorOnboarding');
+        }
+    }
 
     public function dashboardAction(): void
     {

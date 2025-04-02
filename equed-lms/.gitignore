@@ -1,0 +1,17 @@
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Composer / Vendor
+/vendor/
+/composer.lock
+
+# IDE / Editor configs
+/.idea/
+/.vscode/
+
+# TYPO3 temporary / system
+/.Build/
+/Configuration/Caches/
+/Resources/Public/Generated/
+/Resources/Private/Temp/

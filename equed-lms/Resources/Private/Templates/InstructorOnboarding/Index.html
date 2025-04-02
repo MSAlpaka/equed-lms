@@ -1,0 +1,18 @@
+<f:layout name="Default" />
+
+<f:section name="main">
+  <h1><f:translate key="onboarding.welcome.title" /></h1>
+  <p>
+    <f:translate key="onboarding.welcome.text" arguments="{0: user.name}" />
+  </p>
+
+  <ul>
+    <li>✅ <f:translate key="onboarding.step.readManual" /></li>
+    <li>📥 <f:translate key="onboarding.step.uploadDocuments" /></li>
+    <li>📄 <f:translate key="onboarding.step.acceptGuidelines" /></li>
+  </ul>
+
+  <f:form action="complete">
+    <f:form.submit value="{f:translate(key: 'onboarding.button.complete')}" />
+  </f:form>
+</f:section>

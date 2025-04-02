@@ -33,6 +33,12 @@
       "extension-key": "equed_lms"
     }
   },
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "git@github.com:MSAlpaka/equed-lms.git"
+    }
+  ],
   "require-dev": {
     "squizlabs/php_codesniffer": "^3.7",
     "phpstan/phpstan": "^1.11",

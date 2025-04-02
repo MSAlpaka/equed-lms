@@ -44,41 +44,30 @@ call_user_func(
                         'type' => 'check',
                     ],
                 ],
-
-                // **finish_goal**: Das Feld für das Abschlussziel des Kurses (z. B. "HoofCare Specialist")
-                'finish_goal' => [
-                    'label' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:tx_equedlms_domain_model_course.finish_goal',
+                'startDate' => [
+                    'exclude' => true,
+                    'label' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:tx_equedlms_domain_model_course.startDate',
                     'config' => [
-                        'type' => 'select',
-                        'items' => [
-                            ['HoofCare Specialist', 'hoofcare_specialist'],
-                            ['Specialty Instructor HoofCare for Donkeys', 'specialty_instructor_hoofcare_for_donkeys'],
-                            ['Specialty Instructor HoofCare for Foals', 'specialty_instructor_hoofcare_for_foals'],
-                            // Weitere Ziele hinzufügen
-                        ],
-                        'default' => 'hoofcare_specialist',  // Standardwert
+                        'type' => 'datetime',
                     ],
                 ],
-
-                // **prerequisites**: Das Feld für die Zugangsvoraussetzungen basierend auf den Abschlusszielen anderer Kurse
-                'prerequisites' => [
-                    'label' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:tx_equedlms_domain_model_course.prerequisites',
+                'endDate' => [
+                    'exclude' => true,
+                    'label' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:tx_equedlms_domain_model_course.endDate',
                     'config' => [
-                        'type' => 'inline',
-                        'foreign_table' => 'tx_equedlms_domain_model_course',
-                        'maxitems' => 10,
-                        'minitems' => 0,
+                        'type' => 'datetime',
                     ],
                 ],
-            ]
+            ],
+            1
         );
 
-        // TCA für 'Course' mit den neuen Feldern hinzufügen
+        // TCA für 'Course' Typen hinzufügen
         \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes(
             'tx_equedlms_domain_model_course',
-            'title, description, category, isActive, finish_goal, prerequisites', // Die Felder, die hinzugefügt werden
+            'title, description, category, isActive, startDate, endDate',
             '',
-            'after:title' // Position der neuen Felder im Backend
+            'after:description'
         );
     }
 );
