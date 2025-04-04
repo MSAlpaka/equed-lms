@@ -1,26 +1,63 @@
 <?php
 
-namespace Equed\EquedLms\Controller;
+declare(strict_types=1);
 
-use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+namespace Equed\EquedLms\Domain\Model;
 
-class FeedbackController extends ActionController
+use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
+
+class Feedback extends AbstractEntity
 {
-    /**
-     * Display feedback form for a course or lesson
-     */
-    public function indexAction(int $courseId): void
+    protected int $courseId = 0;
+
+    protected int $userId = 0;
+
+    protected string $message = '';
+
+    protected \DateTimeImmutable $submittedAt;
+
+    public function __construct()
     {
-        // Fetch the course details and show feedback form
-        $this->view->assign('courseId', $courseId);
+        $this->submittedAt = new \DateTimeImmutable();
     }
 
-    /**
-     * Submit feedback for a course or lesson
-     */
-    public function submitAction(int $courseId, string $feedback): void
+    public function getCourseId(): int
     {
-        // Process the feedback submission (e.g., save it to the database)
-        $this->view->assign('feedbackStatus', 'Feedback submitted');
+        return $this->courseId;
+    }
+
+    public function setCourseId(int $courseId): void
+    {
+        $this->courseId = $courseId;
+    }
+
+    public function getUserId(): int
+    {
+        return $this->userId;
+    }
+
+    public function setUserId(int $userId): void
+    {
+        $this->userId = $userId;
+    }
+
+    public function getMessage(): string
+    {
+        return $this->message;
+    }
+
+    public function setMessage(string $message): void
+    {
+        $this->message = $message;
+    }
+
+    public function getSubmittedAt(): \DateTimeImmutable
+    {
+        return $this->submittedAt;
+    }
+
+    public function setSubmittedAt(\DateTimeImmutable $submittedAt): void
+    {
+        $this->submittedAt = $submittedAt;
     }
 }
