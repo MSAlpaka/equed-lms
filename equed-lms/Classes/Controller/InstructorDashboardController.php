@@ -2,13 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Equed\EquedLms\Controller;
+namespace EquedLms\Controller;
 
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
-use Equed\EquedLms\Domain\Repository\InstructorRepository;
-use Equed\EquedLms\Domain\Repository\UserCourseRecordRepository;
+use EquedLms\Domain\Repository\InstructorRepository;
+use EquedLms\Domain\Repository\UserCourseRecordRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Context\Context;
+use TYPO3\CMS\Core\Exception\AccessDeniedException;
 
 class InstructorDashboardController extends ActionController
 {
@@ -23,6 +24,9 @@ class InstructorDashboardController extends ActionController
         $this->userCourseRecordRepository = $userCourseRecordRepository;
     }
 
+    /**
+     * Ensure only logged-in instructors can access the dashboard.
+     */
     protected function initializeAction(): void
     {
         $context = GeneralUtility::makeInstance(Context::class);
@@ -34,7 +38,7 @@ class InstructorDashboardController extends ActionController
     }
 
     /**
-     * Instructor Dashboard Overview
+     * Instructor Dashboard Overview: Displays assigned courses and user statistics.
      */
     public function indexAction(): void
     {
@@ -50,7 +54,7 @@ class InstructorDashboardController extends ActionController
     }
 
     /**
-     * Instructor Performance Statistics
+     * Instructor Performance Statistics: Shows performance data like passed courses, ratings, etc.
      */
     public function performanceAction(): void
     {
@@ -63,10 +67,10 @@ class InstructorDashboardController extends ActionController
     }
 
     /**
-     * Access Denied Error Page
+     * Access Denied Error Page: Redirects or displays an access error message.
      */
     public function accessDeniedAction(): void
     {
-        // Display access denied message
+        $this->view->assign('message', 'You do not have access to this page.');
     }
 }

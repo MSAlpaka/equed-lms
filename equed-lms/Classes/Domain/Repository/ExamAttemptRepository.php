@@ -1,38 +1,47 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Equed\EquedLms\Domain\Repository;
 
+use Equed\EquedLms\Domain\Model\ExamAttempt;
 use TYPO3\CMS\Extbase\Persistence\Repository;
 
+/**
+ * Repository for ExamAttempt entities
+ */
 class ExamAttemptRepository extends Repository
 {
     /**
-     * Find all attempts by a user
+     * Find all exam attempts by user
+     *
+     * @param int $userId
+     * @return ExamAttempt[]
      */
     public function findByUser(int $userId): array
     {
-        $query = $this->createQuery();
-
-        return $query
+        return $this->createQuery()
             ->matching(
-                $query->equals('user', $userId)
+                $this->createQuery()->equals('user', $userId)
             )
             ->execute()
             ->toArray();
     }
 
     /**
-     * Find attempts by user and question
+     * Find exam attempts by user and question
+     *
+     * @param int $userId
+     * @param int $questionId
+     * @return ExamAttempt[]
      */
     public function findByUserAndQuestion(int $userId, int $questionId): array
     {
-        $query = $this->createQuery();
-
-        return $query
+        return $this->createQuery()
             ->matching(
-                $query->logicalAnd([
-                    $query->equals('user', $userId),
-                    $query->equals('quizQuestion', $questionId),
+                $this->createQuery()->logicalAnd([
+                    $this->createQuery()->equals('user', $userId),
+                    $this->createQuery()->equals('quizQuestion', $questionId),
                 ])
             )
             ->execute()
@@ -40,17 +49,18 @@ class ExamAttemptRepository extends Repository
     }
 
     /**
-     * Find correct attempts by user
+     * Find all correct exam attempts by user
+     *
+     * @param int $userId
+     * @return ExamAttempt[]
      */
     public function findCorrectByUser(int $userId): array
     {
-        $query = $this->createQuery();
-
-        return $query
+        return $this->createQuery()
             ->matching(
-                $query->logicalAnd([
-                    $query->equals('user', $userId),
-                    $query->equals('correct', true),
+                $this->createQuery()->logicalAnd([
+                    $this->createQuery()->equals('user', $userId),
+                    $this->createQuery()->equals('correct', true),
                 ])
             )
             ->execute()

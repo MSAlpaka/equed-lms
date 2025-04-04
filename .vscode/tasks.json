@@ -1,0 +1,25 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Bump Patch Version",
+      "type": "shell",
+      "command": "./version-bump.sh patch",
+      "problemMatcher": [],
+      "options": {
+        "cwd": "${workspaceFolder}/packages"
+      }
+    }
+  ]
+}
+
+{
+  "label": "Bump Minor Version",
+  "type": "shell",
+  "command": "./version-bump.sh minor",
+  "problemMatcher": [],
+  "options": {
+    "cwd": "${workspaceFolder}/packages"
+  }
+}
+

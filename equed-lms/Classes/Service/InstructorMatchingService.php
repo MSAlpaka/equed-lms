@@ -1,28 +1,30 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Equed\EquedLms\Service;
 
+use Equed\EquedLms\Domain\Model\Instructor;
 use Equed\EquedLms\Domain\Repository\InstructorRepository;
 
+/**
+ * Service to find suitable instructors based on specialty
+ */
 class InstructorMatchingService
 {
-    /**
-     * @var \Equed\EquedLms\Domain\Repository\InstructorRepository
-     */
-    protected InstructorRepository $instructorRepository;
-
-    public function __construct(InstructorRepository $instructorRepository)
-    {
-        $this->instructorRepository = $instructorRepository;
-    }
+    public function __construct(
+        private readonly InstructorRepository $instructorRepository
+    ) {}
 
     /**
-     * Find an instructor by specialty
+     * Find the first instructor that matches a given specialty
+     *
+     * @param string $specialty
+     * @return Instructor|null
      */
-    public function findInstructorBySpecialty(string $specialty): ?object
+    public function findInstructorBySpecialty(string $specialty): ?Instructor
     {
-        // Logic to find instructor based on specialty
         $instructors = $this->instructorRepository->findBySpecialty($specialty);
-        return $instructors ? $instructors[0] : null; // Return the first matching instructor
+        return $instructors[0] ?? null;
     }
 }

@@ -1,23 +1,32 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Equed\EquedLms\Domain\Repository;
 
+use Equed\EquedLms\Domain\Model\Lesson;
 use TYPO3\CMS\Extbase\Persistence\Repository;
+use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 
+/**
+ * Repository for Lesson entities
+ */
 class LessonRepository extends Repository
 {
     /**
      * Find all lessons for a specific course, ordered by sortOrder
+     *
+     * @param int $courseId
+     * @return Lesson[]
      */
     public function findByCourse(int $courseId): array
     {
-        $query = $this->createQuery();
-        return $query
+        return $this->createQuery()
             ->matching(
-                $query->equals('course', $courseId)
+                $this->createQuery()->equals('course', $courseId)
             )
             ->setOrderings([
-                'sortOrder' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING
+                'sortOrder' => QueryInterface::ORDER_ASCENDING
             ])
             ->execute()
             ->toArray();
@@ -25,15 +34,17 @@ class LessonRepository extends Repository
 
     /**
      * Find required lessons of a course
+     *
+     * @param int $courseId
+     * @return Lesson[]
      */
     public function findRequiredLessonsByCourse(int $courseId): array
     {
-        $query = $this->createQuery();
-        return $query
+        return $this->createQuery()
             ->matching(
-                $query->logicalAnd([
-                    $query->equals('course', $courseId),
-                    $query->equals('required', true),
+                $this->createQuery()->logicalAnd([
+                    $this->createQuery()->equals('course', $courseId),
+                    $this->createQuery()->equals('required', true),
                 ])
             )
             ->execute()

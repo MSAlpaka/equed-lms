@@ -6,48 +6,64 @@ namespace Equed\EquedLms\Domain\Model;
 
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
+use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 
 /**
  * This class represents a Course in the EquEd LMS.
+ *
+ * Courses define the curriculum and serve as the basis for certification and progression.
  */
 class Course extends AbstractEntity
 {
-    /**
-     * @var string
-     */
     protected string $title = '';
 
-    /**
-     * @var string
-     */
     protected string $description = '';
 
-    /**
-     * @var string
-     */
     protected string $category = '';
 
-    /**
-     * @var bool
-     */
     protected bool $isActive = true;
 
     /**
-     * Abschlussziel für die Zertifizierung (z. B. "HoofCare Specialist")
-     *
-     * @var string
+     * Learning outcome / goal (e.g. "HoofCare Specialist")
      */
     protected string $finishGoal = '';
 
     /**
-     * Voraussetzungskürzel (z. B. ['hoofcare_basic'])
+     * List of course shortnames required to participate
      *
      * @var array<int, string>
      */
     protected array $prerequisites = [];
 
     /**
-     * Zugeordnete Lektionen (bidirektional: Lesson.course)
+     * Optional reference to image or banner for the course
+     */
+    protected ?FileReference $image = null;
+
+    /**
+     * Assigned training center (for validation and administration)
+     */
+    protected ?Center $center = null;
+
+    /**
+     * Determines if this course can lead to a certificate
+     */
+    protected bool $grantsCertificate = true;
+
+    /**
+     * Internal sort order for display in frontend
+     */
+    protected int $sorting = 0;
+
+    /**
+     * Optional array of recommended follow-up specialties
+     *
+     * @var array<int, string>
+     */
+    protected array $recommendedSpecialties = [];
+
+    /**
+     * Lessons assigned to this course
      *
      * @var ObjectStorage<Lesson>
      */
@@ -88,7 +104,7 @@ class Course extends AbstractEntity
         $this->category = $category;
     }
 
-    public function isIsActive(): bool
+    public function isActive(): bool
     {
         return $this->isActive;
     }
@@ -122,6 +138,62 @@ class Course extends AbstractEntity
     public function setPrerequisites(array $prerequisites): void
     {
         $this->prerequisites = $prerequisites;
+    }
+
+    public function getImage(): ?FileReference
+    {
+        return $this->image;
+    }
+
+    public function setImage(?FileReference $image): void
+    {
+        $this->image = $image;
+    }
+
+    public function getCenter(): ?Center
+    {
+        return $this->center;
+    }
+
+    public function setCenter(?Center $center): void
+    {
+        $this->center = $center;
+    }
+
+    public function isGrantsCertificate(): bool
+    {
+        return $this->grantsCertificate;
+    }
+
+    public function setGrantsCertificate(bool $grantsCertificate): void
+    {
+        $this->grantsCertificate = $grantsCertificate;
+    }
+
+    public function getSorting(): int
+    {
+        return $this->sorting;
+    }
+
+    public function setSorting(int $sorting): void
+    {
+        $this->sorting = $sorting;
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    public function getRecommendedSpecialties(): array
+    {
+        return $this->recommendedSpecialties;
+    }
+
+    /**
+     * @param array<int, string> $recommendedSpecialties
+     */
+    public function setRecommendedSpecialties(array $recommendedSpecialties): void
+    {
+        $this->recommendedSpecialties = $recommendedSpecialties;
     }
 
     /**

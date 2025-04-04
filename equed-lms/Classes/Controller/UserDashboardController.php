@@ -1,16 +1,17 @@
 <?php
 
-namespace Equed\EquedLms\Controller;
+declare(strict_types=1);
+
+namespace EquedLms\Controller;
 
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Annotation\Inject;
-use TYPO3\CMS\Core\Localization\LanguageService;
-use TYPO3\CMS\Core\Localization\LanguageServiceFactory;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
-use Equed\EquedLms\Domain\Repository\UserRepository;
-use Equed\EquedLms\Domain\Repository\UserCourseRecordRepository;
-use Equed\EquedLms\Domain\Repository\CertificateRepository;
-use Psr\Http\Message\ServerRequestInterface;
+use EquedLms\Domain\Repository\UserRepository;
+use EquedLms\Domain\Repository\UserCourseRecordRepository;
+use EquedLms\Domain\Repository\CertificateRepository;
+use TYPO3\CMS\Core\Context\Context;
+use TYPO3\CMS\Core\Exception\AccessDeniedException;
 
 class UserDashboardController extends ActionController
 {
@@ -23,22 +24,14 @@ class UserDashboardController extends ActionController
     #[Inject]
     protected CertificateRepository $certificateRepository;
 
-    #[Inject]
-    protected LanguageServiceFactory $languageServiceFactory;
-
-    #[Inject]
-    protected ServerRequestInterface $request;
-
     /**
-     * Displays the dashboard for the currently logged-in user
-     *
-     * @param int $userId
+     * Zeigt das Dashboard für den aktuellen Benutzer an.
      */
-    public function indexAction(int $userId): void
+    public function indexAction(): void
     {
-        $user = $this->userRepository->findByUid($userId);
-
-        if ($user === null) {
+        $user = $this->getCurrentFrontendUser();
+        
+        if (!$user) {
             $this->addFlashMessage(
                 $this->translate('error.userNotFound'),
                 '',
@@ -48,8 +41,8 @@ class UserDashboardController extends ActionController
             return;
         }
 
-        $courseRecords = $this->userCourseRecordRepository->findByUser($userId);
-        $certificates = $this->certificateRepository->findByUser($userId);
+        $courseRecords = $this->userCourseRecordRepository->findByUser($user);
+        $certificates = $this->certificateRepository->findByUser($user);
 
         $this->view->assignMultiple([
             'user' => $user,
@@ -59,7 +52,7 @@ class UserDashboardController extends ActionController
     }
 
     /**
-     * Handles error view rendering
+     * Fehlerbehandlungsansicht
      */
     public function errorAction(): void
     {
@@ -67,11 +60,7 @@ class UserDashboardController extends ActionController
     }
 
     /**
-     * Translation helper
-     *
-     * @param string $key
-     * @param array $arguments
-     * @return string
+     * Übersetzungs-Helper für die Sprachdateien
      */
     protected function translate(string $key, array $arguments = []): string
     {
@@ -81,13 +70,19 @@ class UserDashboardController extends ActionController
     }
 
     /**
-     * Returns a modern LanguageService instance
-     *
-     * @return LanguageService
+     * Holt den aktuellen eingeloggten Benutzer
      */
-    protected function getLanguageService(): LanguageService
+    protected function getCurrentFrontendUser(): ?\EquedLms\Domain\Model\FrontendUser
     {
-        $siteLanguage = $this->request->getAttribute('language');
-        return $this->languageServiceFactory->createFromSiteLanguage($siteLanguage);
+        $userId = (int)($GLOBALS['TSFE']->fe_user->user['uid'] ?? 0);
+        return $userId > 0 ? $this->userRepository->findByUid($userId) : null;
+    }
+
+    /**
+     * Holt den LanguageService für Übersetzungen
+     */
+    protected function getLanguageService()
+    {
+        return $GLOBALS['TSFE']->getLanguageService();
     }
 }

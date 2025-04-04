@@ -1,22 +1,29 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Equed\EquedLms\Domain\Repository;
 
+use Equed\EquedLms\Domain\Model\Course;
 use TYPO3\CMS\Extbase\Persistence\Repository;
 
+/**
+ * Repository for Course entities
+ */
 class CourseRepository extends Repository
 {
     /**
      * Find all active and visible courses
+     *
+     * @return Course[]
      */
     public function findAllVisible(): array
     {
-        $query = $this->createQuery();
-        return $query
+        return $this->createQuery()
             ->matching(
-                $query->logicalAnd([
-                    $query->equals('active', true),
-                    $query->equals('visible', true),
+                $this->createQuery()->logicalAnd([
+                    $this->createQuery()->equals('active', true),
+                    $this->createQuery()->equals('visible', true),
                 ])
             )
             ->execute()
@@ -25,31 +32,34 @@ class CourseRepository extends Repository
 
     /**
      * Find all courses for a specific center
+     *
+     * @param int $centerId
+     * @return Course[]
      */
     public function findByCenter(int $centerId): array
     {
-        $query = $this->createQuery();
-        return $query
+        return $this->createQuery()
             ->matching(
-                $query->equals('center', $centerId)
+                $this->createQuery()->equals('center', $centerId)
             )
             ->execute()
             ->toArray();
     }
 
     /**
-     * Find one course by code
+     * Find one course by course code
+     *
+     * @param string $courseCode
+     * @return Course|null
      */
-    public function findOneByCourseCode(string $courseCode): ?object
+    public function findOneByCourseCode(string $courseCode): ?Course
     {
-        $query = $this->createQuery();
-        $result = $query
+        return $this->createQuery()
             ->matching(
-                $query->equals('courseCode', $courseCode)
+                $this->createQuery()->equals('courseCode', $courseCode)
             )
             ->setLimit(1)
-            ->execute();
-
-        return $result->getFirst();
+            ->execute()
+            ->getFirst();
     }
 }

@@ -7,53 +7,59 @@ namespace Equed\EquedLms\Domain\Model;
 use DateTimeInterface;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
+use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 
 /**
- * Zertifikat, das nach Abschluss eines Kurses ausgestellt wurde.
+ * Represents a certificate issued upon successful course completion.
+ * 
+ * Contains a unique code, issuing user, date, status, and references to the related record.
  */
 class Certificate extends AbstractEntity
 {
     /**
-     * Eindeutiger Zertifikatscode (z. B. EQD-HC-000123)
-     *
-     * @var string
+     * Unique certificate code (e.g. EQD-HC-000123)
      */
     protected string $code = '';
 
     /**
-     * Zugehöriger Kursabschluss (Basis des Zertifikats)
-     *
-     * @var UserCourseRecord|null
+     * Associated course record (basis of certification)
      */
     protected ?UserCourseRecord $userCourseRecord = null;
 
     /**
-     * Aussteller:in des Zertifikats (z. B. Instructor oder Certifier)
-     *
-     * @var FrontendUser|null
+     * Issued by (Instructor or Certifier)
      */
     protected ?FrontendUser $issuedBy = null;
 
     /**
-     * Ausstellungsdatum
-     *
-     * @var DateTimeInterface|null
+     * Issue date
      */
     protected ?DateTimeInterface $issuedAt = null;
 
     /**
-     * Status: widerrufen?
-     *
-     * @var bool
+     * Whether the certificate has been revoked
      */
     protected bool $isRevoked = false;
 
     /**
-     * Interne Notiz zur Ausstellung (optional)
-     *
-     * @var string
+     * Whether the certificate is verified (vs. provisional)
+     */
+    protected bool $isVerified = true;
+
+    /**
+     * Optional comment by issuer
      */
     protected string $note = '';
+
+    /**
+     * Optional PDF certificate file (for download/archive)
+     */
+    protected ?FileReference $certificateFile = null;
+
+    /**
+     * Training center where this certificate was issued (optional)
+     */
+    protected ?Center $center = null;
 
     public function getCode(): string
     {
@@ -105,6 +111,16 @@ class Certificate extends AbstractEntity
         $this->isRevoked = $isRevoked;
     }
 
+    public function isVerified(): bool
+    {
+        return $this->isVerified;
+    }
+
+    public function setIsVerified(bool $isVerified): void
+    {
+        $this->isVerified = $isVerified;
+    }
+
     public function getNote(): string
     {
         return $this->note;
@@ -113,5 +129,25 @@ class Certificate extends AbstractEntity
     public function setNote(string $note): void
     {
         $this->note = $note;
+    }
+
+    public function getCertificateFile(): ?FileReference
+    {
+        return $this->certificateFile;
+    }
+
+    public function setCertificateFile(?FileReference $certificateFile): void
+    {
+        $this->certificateFile = $certificateFile;
+    }
+
+    public function getCenter(): ?Center
+    {
+        return $this->center;
+    }
+
+    public function setCenter(?Center $center): void
+    {
+        $this->center = $center;
     }
 }

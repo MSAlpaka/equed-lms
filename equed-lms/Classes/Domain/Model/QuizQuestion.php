@@ -6,42 +6,66 @@ namespace Equed\EquedLms\Domain\Model;
 
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
+use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 
 /**
  * A question in a quiz, linked to a lesson.
+ *
+ * Can include answers, media, difficulty and explanation.
  */
 class QuizQuestion extends AbstractEntity
 {
     /**
-     * @var string
+     * The question text shown to the learner
      */
     protected string $questionText = '';
 
     /**
-     * @var ObjectStorage<QuizAnswer>
+     * Optional explanation shown after answering
      */
-    protected ObjectStorage $answers;
+    protected string $explanation = '';
 
     /**
-     * Zugeordnete Lektion
-     *
-     * @var Lesson|null
+     * Question type: single_choice, multiple_choice, text
      */
-    protected ?Lesson $lesson = null;
+    protected string $questionType = 'single_choice';
 
     /**
-     * Gibt an, ob die Frage versteckt ist
-     *
-     * @var bool
+     * Optional image or media for the question
+     */
+    protected ?FileReference $image = null;
+
+    /**
+     * Optional point value for this question
+     */
+    protected int $score = 1;
+
+    /**
+     * Sort order in the lesson
+     */
+    protected int $position = 0;
+
+    /**
+     * Optional difficulty (e.g. easy, medium, hard)
+     */
+    protected string $difficulty = 'medium';
+
+    /**
+     * Is the question hidden?
      */
     protected bool $hidden = false;
 
     /**
-     * Schwierigkeitsgrad (z. B. easy, medium, hard)
-     *
-     * @var string
+     * Related lesson
      */
-    protected string $difficulty = '';
+    protected ?Lesson $lesson = null;
+
+    /**
+     * Possible answers
+     *
+     * @var ObjectStorage<QuizAnswer>
+     */
+    protected ObjectStorage $answers;
 
     public function __construct()
     {
@@ -56,6 +80,86 @@ class QuizQuestion extends AbstractEntity
     public function setQuestionText(string $questionText): void
     {
         $this->questionText = $questionText;
+    }
+
+    public function getExplanation(): string
+    {
+        return $this->explanation;
+    }
+
+    public function setExplanation(string $explanation): void
+    {
+        $this->explanation = $explanation;
+    }
+
+    public function getQuestionType(): string
+    {
+        return $this->questionType;
+    }
+
+    public function setQuestionType(string $questionType): void
+    {
+        $this->questionType = $questionType;
+    }
+
+    public function getImage(): ?FileReference
+    {
+        return $this->image;
+    }
+
+    public function setImage(?FileReference $image): void
+    {
+        $this->image = $image;
+    }
+
+    public function getScore(): int
+    {
+        return $this->score;
+    }
+
+    public function setScore(int $score): void
+    {
+        $this->score = $score;
+    }
+
+    public function getPosition(): int
+    {
+        return $this->position;
+    }
+
+    public function setPosition(int $position): void
+    {
+        $this->position = $position;
+    }
+
+    public function getDifficulty(): string
+    {
+        return $this->difficulty;
+    }
+
+    public function setDifficulty(string $difficulty): void
+    {
+        $this->difficulty = $difficulty;
+    }
+
+    public function isHidden(): bool
+    {
+        return $this->hidden;
+    }
+
+    public function setHidden(bool $hidden): void
+    {
+        $this->hidden = $hidden;
+    }
+
+    public function getLesson(): ?Lesson
+    {
+        return $this->lesson;
+    }
+
+    public function setLesson(?Lesson $lesson): void
+    {
+        $this->lesson = $lesson;
     }
 
     /**
@@ -82,35 +186,5 @@ class QuizQuestion extends AbstractEntity
     public function removeAnswer(QuizAnswer $answer): void
     {
         $this->answers->detach($answer);
-    }
-
-    public function getLesson(): ?Lesson
-    {
-        return $this->lesson;
-    }
-
-    public function setLesson(?Lesson $lesson): void
-    {
-        $this->lesson = $lesson;
-    }
-
-    public function isHidden(): bool
-    {
-        return $this->hidden;
-    }
-
-    public function setHidden(bool $hidden): void
-    {
-        $this->hidden = $hidden;
-    }
-
-    public function getDifficulty(): string
-    {
-        return $this->difficulty;
-    }
-
-    public function setDifficulty(string $difficulty): void
-    {
-        $this->difficulty = $difficulty;
     }
 }

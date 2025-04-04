@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Equed\EquedLms\Controller;
+namespace EquedLms\Controller;
 
+use EquedLms\Domain\Model\AuditLog;
+use EquedLms\Domain\Repository\AuditLogRepository;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
-use Equed\EquedLms\Domain\Repository\AuditLogRepository;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use Psr\Log\LoggerInterface;
 
@@ -24,8 +25,6 @@ class AuditLogController extends ActionController
 
     /**
      * Lists all audit logs for a specific user.
-     *
-     * @param int $userId The user's unique identifier.
      */
     public function indexAction(int $userId): void
     {
@@ -52,8 +51,6 @@ class AuditLogController extends ActionController
 
     /**
      * Shows audit log details filtered by action type.
-     *
-     * @param string $action The action type to filter logs.
      */
     public function showAction(string $action): void
     {
@@ -80,8 +77,6 @@ class AuditLogController extends ActionController
 
     /**
      * Returns the current backend user's ID, if available.
-     *
-     * @return int|null
      */
     protected function getBackendUserId(): ?int
     {

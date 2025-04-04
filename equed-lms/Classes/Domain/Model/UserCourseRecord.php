@@ -4,120 +4,155 @@ declare(strict_types=1);
 
 namespace Equed\EquedLms\Domain\Model;
 
-use DateTimeInterface;
-use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
+use TYPO3\CMS\Extbase\Annotation\ORM\Cascade;
+use TYPO3\CMS\Extbase\Annotation\ORM\Lazy;
 
-/**
- * Represents the status and metadata of a course that a user is enrolled in.
- */
 class UserCourseRecord extends AbstractEntity
 {
     /**
-     * @var FrontendUser|null
+     * @var \Equed\EquedLms\Domain\Model\CourseInstance
+     * @Lazy
      */
-    protected ?FrontendUser $user = null;
+    protected $courseInstance;
 
     /**
-     * @var Course|null
+     * @var \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
+     * @Lazy
      */
-    protected ?Course $course = null;
+    protected $user;
 
     /**
-     * Wurde der Kurs durch den Instructor als abgeschlossen markiert?
-     *
+     * @var \Equed\EquedLms\Domain\Model\FrontendUser|null
+     * @Lazy
+     */
+    protected $instructor;
+
+    /**
+     * @var \DateTime|null
+     */
+    protected $startedAt;
+
+    /**
+     * @var \DateTime|null
+     */
+    protected $completedAt;
+
+    /**
      * @var bool
      */
-    protected bool $completed = false;
+    protected $instructorConfirmed = false;
 
     /**
-     * Wurde der Abschluss zentral durch das EquEd-Team validiert?
-     *
      * @var bool
      */
-    protected bool $validated = false;
+    protected $certifierValidated = false;
 
     /**
-     * Eindeutiger Zertifikatscode nach Validierung
-     *
+     * @var bool
+     */
+    protected $adminApproved = false;
+
+    /**
      * @var string
      */
-    protected string $certificateCode = '';
+    protected $certificateCode = '';
 
     /**
-     * Datum des bestätigten Kursabschlusses
-     *
-     * @var DateTimeInterface|null
+     * @var \DateTime|null
      */
-    protected ?DateTimeInterface $completionDate = null;
+    protected $certificateIssuedAt;
 
     /**
-     * PLZ der Teilnehmenden – relevant für Matching
-     *
      * @var string
      */
-    protected string $participantPostalCode = '';
+    protected $status = 'in_progress'; // z. B. in_progress, failed, passed, validated
 
     /**
-     * Status der Instructor-Zuweisung
-     * Mögliche Werte: pending, auto_assigned, manually_assigned, declined
-     *
      * @var string
      */
-    protected string $matchingStatus = 'pending';
+    protected $metaJson = ''; // Optionales Zusatzfeld für spätere Daten
 
-    /**
-     * Zugewiesener Instructor (FrontendUser)
-     *
-     * @var FrontendUser|null
-     */
-    protected ?FrontendUser $instructor = null;
+    // --- GETTER & SETTER ---
 
-    /**
-     * Zugewiesenes Ausbildungszentrum
-     *
-     * @var Center|null
-     */
-    protected ?Center $center = null;
+    public function getCourseInstance(): ?CourseInstance
+    {
+        return $this->courseInstance;
+    }
 
-    public function getUser(): ?FrontendUser
+    public function setCourseInstance(?CourseInstance $courseInstance): void
+    {
+        $this->courseInstance = $courseInstance;
+    }
+
+    public function getUser(): ?\TYPO3\CMS\Extbase\Domain\Model\FrontendUser
     {
         return $this->user;
     }
 
-    public function setUser(?FrontendUser $user): void
+    public function setUser(?\TYPO3\CMS\Extbase\Domain\Model\FrontendUser $user): void
     {
         $this->user = $user;
     }
 
-    public function getCourse(): ?Course
+    public function getInstructor(): ?\Equed\EquedLms\Domain\Model\FrontendUser
     {
-        return $this->course;
+        return $this->instructor;
     }
 
-    public function setCourse(?Course $course): void
+    public function setInstructor(?\Equed\EquedLms\Domain\Model\FrontendUser $instructor): void
     {
-        $this->course = $course;
+        $this->instructor = $instructor;
     }
 
-    public function isCompleted(): bool
+    public function getStartedAt(): ?\DateTime
     {
-        return $this->completed;
+        return $this->startedAt;
     }
 
-    public function setCompleted(bool $completed): void
+    public function setStartedAt(?\DateTime $startedAt): void
     {
-        $this->completed = $completed;
+        $this->startedAt = $startedAt;
     }
 
-    public function isValidated(): bool
+    public function getCompletedAt(): ?\DateTime
     {
-        return $this->validated;
+        return $this->completedAt;
     }
 
-    public function setValidated(bool $validated): void
+    public function setCompletedAt(?\DateTime $completedAt): void
     {
-        $this->validated = $validated;
+        $this->completedAt = $completedAt;
+    }
+
+    public function isInstructorConfirmed(): bool
+    {
+        return $this->instructorConfirmed;
+    }
+
+    public function setInstructorConfirmed(bool $instructorConfirmed): void
+    {
+        $this->instructorConfirmed = $instructorConfirmed;
+    }
+
+    public function isCertifierValidated(): bool
+    {
+        return $this->certifierValidated;
+    }
+
+    public function setCertifierValidated(bool $certifierValidated): void
+    {
+        $this->certifierValidated = $certifierValidated;
+    }
+
+    public function isAdminApproved(): bool
+    {
+        return $this->adminApproved;
+    }
+
+    public function setAdminApproved(bool $adminApproved): void
+    {
+        $this->adminApproved = $adminApproved;
     }
 
     public function getCertificateCode(): string
@@ -130,53 +165,33 @@ class UserCourseRecord extends AbstractEntity
         $this->certificateCode = $certificateCode;
     }
 
-    public function getCompletionDate(): ?DateTimeInterface
+    public function getCertificateIssuedAt(): ?\DateTime
     {
-        return $this->completionDate;
+        return $this->certificateIssuedAt;
     }
 
-    public function setCompletionDate(?DateTimeInterface $completionDate): void
+    public function setCertificateIssuedAt(?\DateTime $certificateIssuedAt): void
     {
-        $this->completionDate = $completionDate;
+        $this->certificateIssuedAt = $certificateIssuedAt;
     }
 
-    public function getParticipantPostalCode(): string
+    public function getStatus(): string
     {
-        return $this->participantPostalCode;
+        return $this->status;
     }
 
-    public function setParticipantPostalCode(string $postalCode): void
+    public function setStatus(string $status): void
     {
-        $this->participantPostalCode = $postalCode;
+        $this->status = $status;
     }
 
-    public function getMatchingStatus(): string
+    public function getMetaJson(): string
     {
-        return $this->matchingStatus;
+        return $this->metaJson;
     }
 
-    public function setMatchingStatus(string $status): void
+    public function setMetaJson(string $metaJson): void
     {
-        $this->matchingStatus = $status;
-    }
-
-    public function getInstructor(): ?FrontendUser
-    {
-        return $this->instructor;
-    }
-
-    public function setInstructor(?FrontendUser $instructor): void
-    {
-        $this->instructor = $instructor;
-    }
-
-    public function getCenter(): ?Center
-    {
-        return $this->center;
-    }
-
-    public function setCenter(?Center $center): void
-    {
-        $this->center = $center;
+        $this->metaJson = $metaJson;
     }
 }

@@ -1,45 +1,79 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Equed\EquedLms\Service;
 
+use Equed\EquedLms\Domain\Model\FrontendUser;
+use Equed\EquedLms\Domain\Model\UserCourseRecord;
 use Equed\EquedLms\Domain\Repository\UserCourseRecordRepository;
+use Psr\Log\LoggerInterface;
 
+/**
+ * Service for handling user course records and their status
+ */
 class UserCourseRecordService
 {
-    /**
-     * @var \Equed\EquedLms\Domain\Repository\UserCourseRecordRepository
-     */
-    protected UserCourseRecordRepository $userCourseRecordRepository;
+    public function __construct(
+        private readonly UserCourseRecordRepository $userCourseRecordRepository,
+        private readonly LoggerInterface $logger
+    ) {}
 
-    public function __construct(UserCourseRecordRepository $userCourseRecordRepository)
+    /**
+     * Check if a user has already booked a course in the program
+     *
+     * @param int $userId
+     * @param int $programId
+     * @return bool
+     */
+    public function hasAlreadyBooked(int $userId, int $programId): bool
     {
-        $this->userCourseRecordRepository = $userCourseRecordRepository;
+        return count($this->userCourseRecordRepository->findByUserAndProgram($userId, $programId)) > 0;
     }
 
     /**
-     * Get the course record for a user and course
+     * Mark the course record as completed
+     *
+     * @param UserCourseRecord $record
+     * @param FrontendUser $instructor
      */
-    public function getUserCourseRecord(int $userId, int $courseId): ?object
+    public function markAsCompleted(UserCourseRecord $record, FrontendUser $instructor): void
     {
-        $records = $this->userCourseRecordRepository->findByUser($userId);
-        foreach ($records as $record) {
-            if ($record->getCourse()->getId() === $courseId) {
-                return $record;
-            }
-        }
+        try {
+            $record->setStatus('completed');
+            $record->setMarkedAsCompletedBy($instructor);
+            $record->setMarkedAsCompletedAt(new \DateTimeImmutable());
 
-        return null;
-    }
-
-    /**
-     * Mark course completion for a user
-     */
-    public function markCourseCompleted(int $userId, int $courseId): void
-    {
-        $record = $this->getUserCourseRecord($userId, $courseId);
-        if ($record) {
-            $record->setValidated(true);
             $this->userCourseRecordRepository->update($record);
+        } catch (\Throwable $e) {
+            $this->logger->error('Error marking course record as completed', [
+                'recordId' => $record->getId(),
+                'error' => $e->getMessage(),
+            ]);
+            throw new \RuntimeException('Unable to mark course record as completed.');
+        }
+    }
+
+    /**
+     * Validate the course record and issue a certificate
+     *
+     * @param UserCourseRecord $record
+     * @param FrontendUser $certifier
+     */
+    public function validateRecord(UserCourseRecord $record, FrontendUser $certifier): void
+    {
+        try {
+            $record->setValidatedBy($certifier);
+            $record->setValidatedAt(new \DateTimeImmutable());
+            $record->setCertificateIssued(true);
+
+            $this->userCourseRecordRepository->update($record);
+        } catch (\Throwable $e) {
+            $this->logger->error('Error validating course record', [
+                'recordId' => $record->getId(),
+                'error' => $e->getMessage(),
+            ]);
+            throw new \RuntimeException('Unable to validate course record.');
         }
     }
 }

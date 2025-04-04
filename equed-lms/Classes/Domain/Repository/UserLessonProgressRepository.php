@@ -1,22 +1,30 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Equed\EquedLms\Domain\Repository;
 
+use Equed\EquedLms\Domain\Model\UserLessonProgress;
 use TYPO3\CMS\Extbase\Persistence\Repository;
 
+/**
+ * Repository for UserLessonProgress entities
+ */
 class UserLessonProgressRepository extends Repository
 {
     /**
      * Find all completed lessons by user
+     *
+     * @param int $userId
+     * @return UserLessonProgress[]
      */
     public function findCompletedByUser(int $userId): array
     {
-        $query = $this->createQuery();
-        return $query
+        return $this->createQuery()
             ->matching(
-                $query->logicalAnd([
-                    $query->equals('user', $userId),
-                    $query->equals('completed', true),
+                $this->createQuery()->logicalAnd([
+                    $this->createQuery()->equals('user', $userId),
+                    $this->createQuery()->equals('completed', true),
                 ])
             )
             ->execute()
@@ -24,20 +32,22 @@ class UserLessonProgressRepository extends Repository
     }
 
     /**
-     * Find specific lesson progress for user
+     * Find progress of a specific lesson for a user
+     *
+     * @param int $userId
+     * @param int $lessonId
+     * @return UserLessonProgress|null
      */
-    public function findByUserAndLesson(int $userId, int $lessonId): ?object
+    public function findByUserAndLesson(int $userId, int $lessonId): ?UserLessonProgress
     {
-        $query = $this->createQuery();
-        $result = $query
+        return $this->createQuery()
             ->matching(
-                $query->logicalAnd([
-                    $query->equals('user', $userId),
-                    $query->equals('lesson', $lessonId),
+                $this->createQuery()->logicalAnd([
+                    $this->createQuery()->equals('user', $userId),
+                    $this->createQuery()->equals('lesson', $lessonId),
                 ])
             )
-            ->execute();
-
-        return $result->getFirst();
+            ->execute()
+            ->getFirst();
     }
 }

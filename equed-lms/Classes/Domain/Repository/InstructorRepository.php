@@ -1,20 +1,27 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Equed\EquedLms\Domain\Repository;
 
+use Equed\EquedLms\Domain\Model\Instructor;
 use TYPO3\CMS\Extbase\Persistence\Repository;
 
+/**
+ * Repository for Instructor entities
+ */
 class InstructorRepository extends Repository
 {
     /**
      * Find all verified instructors
+     *
+     * @return Instructor[]
      */
     public function findAllVerified(): array
     {
-        $query = $this->createQuery();
-        return $query
+        return $this->createQuery()
             ->matching(
-                $query->equals('verified', true)
+                $this->createQuery()->equals('verified', true)
             )
             ->execute()
             ->toArray();
@@ -22,14 +29,15 @@ class InstructorRepository extends Repository
 
     /**
      * Find instructors with a specific specialty (substring match)
+     *
+     * @param string $specialty
+     * @return Instructor[]
      */
     public function findBySpecialty(string $specialty): array
     {
-        $query = $this->createQuery();
-
-        return $query
+        return $this->createQuery()
             ->matching(
-                $query->like('specialties', '%' . $specialty . '%')
+                $this->createQuery()->like('specialties', '%' . $specialty . '%')
             )
             ->execute()
             ->toArray();
@@ -37,18 +45,18 @@ class InstructorRepository extends Repository
 
     /**
      * Find instructor by frontend user ID
+     *
+     * @param int $feUserId
+     * @return Instructor|null
      */
-    public function findOneByUserId(int $feUserId): ?object
+    public function findOneByUserId(int $feUserId): ?Instructor
     {
-        $query = $this->createQuery();
-
-        $result = $query
+        return $this->createQuery()
             ->matching(
-                $query->equals('user', $feUserId)
+                $this->createQuery()->equals('user', $feUserId)
             )
             ->setLimit(1)
-            ->execute();
-
-        return $result->getFirst();
+            ->execute()
+            ->getFirst();
     }
 }

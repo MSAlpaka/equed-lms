@@ -1,13 +1,15 @@
 <?php
+
 declare(strict_types=1);
 
-namespace Equed\EquedLms\Controller;
+namespace EquedLms\Controller;
 
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Annotation\Inject;
-use Equed\EquedLms\Domain\Repository\InstructorRepository;
+use EquedLms\Domain\Repository\InstructorRepository;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Exception\AccessDeniedException;
 
 class InstructorOnboardingController extends ActionController
 {
@@ -20,13 +22,13 @@ class InstructorOnboardingController extends ActionController
     public function indexAction(): void
     {
         $context = GeneralUtility::makeInstance(Context::class);
-        $userId = $context->getPropertyFromAspect('frontend.user', 'id');
+        $userId = (int)$context->getPropertyFromAspect('frontend.user', 'id');
 
         if (!$userId) {
             $this->redirect('login', 'Auth');
         }
 
-        $instructor = $this->instructorRepository->findByUid((int)$userId);
+        $instructor = $this->instructorRepository->findByUid($userId);
 
         if (!$instructor || !$instructor->isInstructor()) {
             $this->redirect('accessDenied', 'Error');
@@ -45,13 +47,13 @@ class InstructorOnboardingController extends ActionController
     public function completeAction(): void
     {
         $context = GeneralUtility::makeInstance(Context::class);
-        $userId = $context->getPropertyFromAspect('frontend.user', 'id');
+        $userId = (int)$context->getPropertyFromAspect('frontend.user', 'id');
 
         if (!$userId) {
             $this->redirect('login', 'Auth');
         }
 
-        $instructor = $this->instructorRepository->findByUid((int)$userId);
+        $instructor = $this->instructorRepository->findByUid($userId);
 
         if (!$instructor || !$instructor->isInstructor()) {
             $this->redirect('accessDenied', 'Error');
@@ -61,7 +63,11 @@ class InstructorOnboardingController extends ActionController
         $onboardingStatus->setComplete(true);
         $this->instructorRepository->update($instructor);
 
-        $this->addFlashMessage('Das Onboarding wurde erfolgreich abgeschlossen.', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::OK);
+        $this->addFlashMessage(
+            $this->translate('onboarding.complete.message'),
+            '',
+            \TYPO3\CMS\Core\Messaging\AbstractMessage::OK
+        );
 
         $this->redirect('dashboard', 'Instructor');
     }

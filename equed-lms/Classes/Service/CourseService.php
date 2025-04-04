@@ -1,23 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Equed\EquedLms\Service;
 
+use Equed\EquedLms\Domain\Model\Course;
 use Equed\EquedLms\Domain\Repository\CourseRepository;
 
+/**
+ * Service for handling course-related logic
+ */
 class CourseService
 {
-    /**
-     * @var \Equed\EquedLms\Domain\Repository\CourseRepository
-     */
-    protected CourseRepository $courseRepository;
-
-    public function __construct(CourseRepository $courseRepository)
-    {
-        $this->courseRepository = $courseRepository;
-    }
+    public function __construct(
+        private readonly CourseRepository $courseRepository
+    ) {}
 
     /**
      * Get all visible courses for a specific center
+     *
+     * @param int $centerId
+     * @return Course[]
      */
     public function getVisibleCoursesByCenter(int $centerId): array
     {
@@ -25,9 +28,12 @@ class CourseService
     }
 
     /**
-     * Get course by course code
+     * Get a course by its unique code
+     *
+     * @param string $courseCode
+     * @return Course|null
      */
-    public function getCourseByCode(string $courseCode): ?object
+    public function getCourseByCode(string $courseCode): ?Course
     {
         return $this->courseRepository->findOneByCourseCode($courseCode);
     }

@@ -1,18 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Equed\EquedLms\Domain\Model;
 
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
 
 /**
- * Logs significant user actions in the LMS.
+ * This model logs significant user actions in the LMS for audit and QMS purposes.
+ * 
+ * Examples:
+ * - Course completion
+ * - Exam attempt
+ * - Certification issued
+ * - QMS Incident created
  */
 class AuditLog extends AbstractEntity
 {
-    /**
-     * @var \TYPO3\CMS\Extbase\Domain\Model\FrontendUser|null
-     */
     protected ?FrontendUser $feUser = null;
 
     protected string $action = '';

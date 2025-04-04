@@ -1,33 +1,37 @@
 <?php
 
-namespace Equed\EquedLms\ViewHelpers;
+declare(strict_types=1);
+
+namespace EquedLms\ViewHelpers;
 
 use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use EquedLms\Domain\Repository\UserCourseRecordRepository;
 
 class UserCourseRecordViewHelper extends AbstractViewHelper
 {
     /**
-     * @param int $userId
-     * @param int $courseId
-     * @return string
-     */
-    public function render(int $userId, int $courseId): string
-    {
-        // Fetch user course record data
-        $courseRecord = $this->getUserCourseRecord($userId, $courseId);
-        return $courseRecord ? 'Completed: ' . ($courseRecord->getValidated() ? 'Yes' : 'No') : 'No record found';
-    }
-
-    /**
-     * Fetch user course record by userId and courseId
+     * Gibt den Status einer Kursbuchung für einen User und ein Programm zurück
      *
      * @param int $userId
-     * @param int $courseId
-     * @return \Equed\EquedLms\Domain\Model\UserCourseRecord|null
+     * @param int $programId
+     * @return string one of: 'none', 'completed', 'open'
      */
-    protected function getUserCourseRecord(int $userId, int $courseId)
+    public function render(int $userId, int $programId): string
     {
-        $repository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Equed\EquedLms\Domain\Repository\UserCourseRecordRepository::class);
-        return $repository->findByUserAndCourse($userId, $courseId);
+        $repo = GeneralUtility::makeInstance(UserCourseRecordRepository::class);
+        $records = $repo->findByUserAndProgram($userId, $programId);
+
+        if (empty($records)) {
+            return 'none';
+        }
+
+        foreach ($records as $record) {
+            if ($record->getStatus() === 'completed' && $record->isCertificateIssued()) {
+                return 'completed';
+            }
+        }
+
+        return 'open';
     }
 }

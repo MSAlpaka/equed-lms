@@ -2,62 +2,66 @@
 
 declare(strict_types=1);
 
-namespace Equed\EquedLms\Domain\Model;
+namespace EquedLms\Controller;
 
-use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
+use EquedLms\Domain\Model\Feedback;
+use EquedLms\Domain\Repository\FeedbackRepository;
+use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-class Feedback extends AbstractEntity
+class FeedbackController extends ActionController
 {
-    protected int $courseId = 0;
+    protected FeedbackRepository $feedbackRepository;
 
-    protected int $userId = 0;
-
-    protected string $message = '';
-
-    protected \DateTimeImmutable $submittedAt;
-
-    public function __construct()
+    public function __construct(FeedbackRepository $feedbackRepository)
     {
-        $this->submittedAt = new \DateTimeImmutable();
+        $this->feedbackRepository = $feedbackRepository;
     }
 
-    public function getCourseId(): int
+    /**
+     * Zeigt alle Feedbacks zu einem bestimmten Kurs an
+     */
+    public function listAction(int $courseId): void
     {
-        return $this->courseId;
+        $feedbacks = $this->feedbackRepository->findByCourseId($courseId);
+        $this->view->assign('feedbacks', $feedbacks);
     }
 
-    public function setCourseId(int $courseId): void
+    /**
+     * Zeigt ein bestimmtes Feedback an
+     */
+    public function showAction(Feedback $feedback): void
     {
-        $this->courseId = $courseId;
+        $this->view->assign('feedback', $feedback);
     }
 
-    public function getUserId(): int
+    /**
+     * Erstellt neues Feedback für einen Kurs
+     */
+    public function createAction(int $courseId, string $message): void
     {
-        return $this->userId;
+        $feedback = new Feedback();
+        $feedback->setCourseId($courseId);
+        $feedback->setUserId($this->getFrontendUserId()); // Holt die ID des eingeloggten Benutzers
+        $feedback->setMessage($message);
+        $this->feedbackRepository->add($feedback);
+        $this->redirect('list', null, null, ['courseId' => $courseId]);
     }
 
-    public function setUserId(int $userId): void
+    /**
+     * Löscht ein Feedback
+     */
+    public function deleteAction(Feedback $feedback): void
     {
-        $this->userId = $userId;
+        $this->feedbackRepository->remove($feedback);
+        $this->redirect('list', null, null, ['courseId' => $feedback->getCourseId()]);
     }
 
-    public function getMessage(): string
+    /**
+     * Holt die Benutzer-ID des eingeloggten Nutzers
+     */
+    protected function getFrontendUserId(): int
     {
-        return $this->message;
-    }
-
-    public function setMessage(string $message): void
-    {
-        $this->message = $message;
-    }
-
-    public function getSubmittedAt(): \DateTimeImmutable
-    {
-        return $this->submittedAt;
-    }
-
-    public function setSubmittedAt(\DateTimeImmutable $submittedAt): void
-    {
-        $this->submittedAt = $submittedAt;
+        return (int)GeneralUtility::makeInstance(Context::class)->getPropertyFromAspect('frontend.user', 'id');
     }
 }

@@ -1,11 +1,15 @@
 <?php
 
-namespace Equed\EquedLms\Controller;
+declare(strict_types=1);
 
+namespace EquedLms\Controller;
+
+use EquedLms\Domain\Repository\UserCourseRecordRepository;
+use EquedLms\Service\VerificationService;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
-use Equed\EquedLms\Domain\Repository\UserCourseRecordRepository;
-use Equed\EquedLms\Service\VerificationService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Exception\AccessDeniedException;
+use TYPO3\CMS\Core\Messaging\AbstractMessage;
 
 class VerifyController extends ActionController
 {
@@ -21,7 +25,7 @@ class VerifyController extends ActionController
     }
 
     /**
-     * Verify user data or course completion
+     * Verifiziert die Kursabschlussdaten des Benutzers
      */
     public function indexAction(int $userId = 0, int $courseId = 0): void
     {
@@ -29,7 +33,7 @@ class VerifyController extends ActionController
             $this->addFlashMessage(
                 $this->translate('verify.error.missingParameters'),
                 '',
-                \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR
+                AbstractMessage::ERROR
             );
             $this->redirect('error');
         }
@@ -40,10 +44,13 @@ class VerifyController extends ActionController
             $this->addFlashMessage(
                 $this->translate('verify.error.noRecordFound'),
                 '',
-                \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR
+                AbstractMessage::ERROR
             );
             $this->redirect('error');
         }
+
+        // Zugriffssteuerung könnte hier eingefügt werden
+        $this->checkPermissions($userCourseRecord);
 
         $verificationStatus = $this->verificationService->verifyCourseCompletion($userCourseRecord);
 
@@ -54,19 +61,49 @@ class VerifyController extends ActionController
     }
 
     /**
-     * Translate labels
+     * Überprüft, ob der Benutzer Berechtigungen hat
+     */
+    protected function checkPermissions($userCourseRecord): void
+    {
+        $user = $this->getCurrentUser();
+
+        if (!$user || !$user->hasPermissionToVerifyCourse($userCourseRecord)) {
+            throw new AccessDeniedException($this->translate('accessDenied.verify'));
+        }
+    }
+
+    /**
+     * Holt den aktuellen eingeloggten Benutzer
+     */
+    protected function getCurrentUser(): ?\EquedLms\Domain\Model\FrontendUser
+    {
+        $userId = (int)($GLOBALS['TSFE']->fe_user->user['uid'] ?? 0);
+        return $userId > 0 ? $this->userRepository->findByUid($userId) : null;
+    }
+
+    /**
+     * Übersetzungs-Helper für die Sprachdateien
      */
     protected function translate(string $key, array $arguments = []): string
     {
-        return $this->translator->translate(
-            $key,
-            'equedlms',
-            $arguments
-        );
+        $languageService = $this->getLanguageService();
+        $label = 'LLL:EXT:equed_lms/Resources/Private/Language/locallang.xlf:' . $key;
+        return $languageService->sL($label) ?? $key;
     }
 
+    /**
+     * Holt den LanguageService für Übersetzungen
+     */
+    protected function getLanguageService()
+    {
+        return $GLOBALS['TSFE']->getLanguageService();
+    }
+
+    /**
+     * Fehlerseite
+     */
     public function errorAction(): void
     {
-        // Zeigt eine Standard-Fehlerseite an
+        $this->view->assign('message', $this->translate('verify.error.general'));
     }
 }

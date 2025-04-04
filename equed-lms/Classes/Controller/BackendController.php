@@ -2,26 +2,26 @@
 
 declare(strict_types=1);
 
-namespace Equed\EquedLms\Controller;
+namespace EquedLms\Controller;
 
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Exception\AccessDeniedException;
-use Equed\EquedLms\Domain\Repository\CourseRepository;
-use Equed\EquedLms\Domain\Repository\UserCourseRecordRepository;
+use EquedLms\Domain\Repository\CourseInstanceRepository;
+use EquedLms\Domain\Repository\FrontendUserRepository;
 
 class BackendController extends ActionController
 {
-    protected CourseRepository $courseRepository;
-    protected UserCourseRecordRepository $userCourseRecordRepository;
+    protected CourseInstanceRepository $courseInstanceRepository;
+    protected FrontendUserRepository $frontendUserRepository;
 
     public function __construct(
-        CourseRepository $courseRepository,
-        UserCourseRecordRepository $userCourseRecordRepository
+        CourseInstanceRepository $courseInstanceRepository,
+        FrontendUserRepository $frontendUserRepository
     ) {
         parent::__construct();
-        $this->courseRepository = $courseRepository;
-        $this->userCourseRecordRepository = $userCourseRecordRepository;
+        $this->courseInstanceRepository = $courseInstanceRepository;
+        $this->frontendUserRepository = $frontendUserRepository;
     }
 
     /**
@@ -32,10 +32,10 @@ class BackendController extends ActionController
         $this->checkAccess();
 
         $dashboardData = [
-            'courseCount' => $this->courseRepository->countAll(),
-            'activeUserCount' => $this->userCourseRecordRepository->countActiveUsers(),
-            'completedCourses' => $this->userCourseRecordRepository->countCompletedCourses(),
-            // TODO: Weitere sinnvolle Metriken einbinden
+            'courseCount' => $this->courseInstanceRepository->countAll(),
+            'activeUserCount' => $this->frontendUserRepository->countActiveUsers(),
+            'completedCourses' => $this->courseInstanceRepository->countCompletedCourses(),
+            // Weitere Metriken wie ausstehende Prüfungen könnten hier eingebaut werden
         ];
 
         $this->view->assignMultiple([
@@ -52,9 +52,8 @@ class BackendController extends ActionController
 
         $this->view->assignMultiple([
             'managementData' => [
-                'pendingValidations' => [],
+                'pendingValidations' => [], // Hier können noch dynamische Daten hinzugefügt werden
                 'openReports' => [],
-                // TODO: Anbindung an Zertifizierungsprozesse, QMS etc.
             ]
         ]);
     }
@@ -67,12 +66,8 @@ class BackendController extends ActionController
         /** @var BackendUserAuthentication|null $backendUser */
         $backendUser = $GLOBALS['BE_USER'] ?? null;
 
-        $allowedAdminUid = 1; // Setze hier deine eigene BE-User-ID, falls abweichend
-
-        if (
-            !$backendUser instanceof BackendUserAuthentication ||
-            (!$backendUser->isAdmin() && (int)$backendUser->user['uid'] !== $allowedAdminUid)
-        ) {
+        // Dynamische Adminprüfung statt harter Kodierung einer UID
+        if (!$backendUser instanceof BackendUserAuthentication || !$backendUser->isAdmin()) {
             throw new AccessDeniedException('Access denied: Only the main admin may access this section.', 1670000051);
         }
     }

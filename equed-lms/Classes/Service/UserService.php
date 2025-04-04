@@ -1,36 +1,55 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Equed\EquedLms\Service;
 
-use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
+use Equed\EquedLms\Domain\Model\FrontendUser;
 use TYPO3\CMS\Extbase\Persistence\Repository;
+use Psr\Log\LoggerInterface;
 
+/**
+ * Service to manage user data and roles
+ */
 class UserService
 {
-    /**
-     * @var \TYPO3\CMS\Extbase\Persistence\Repository
-     */
-    protected Repository $userRepository;
-
-    public function __construct(Repository $userRepository)
-    {
-        $this->userRepository = $userRepository;
-    }
+    public function __construct(
+        private readonly Repository $userRepository,
+        private readonly LoggerInterface $logger
+    ) {}
 
     /**
-     * Find user by ID
+     * Find a user by their ID
+     *
+     * @param int $userId
+     * @return FrontendUser|null
      */
     public function getUserById(int $userId): ?FrontendUser
     {
-        return $this->userRepository->findByUid($userId);
+        try {
+            return $this->userRepository->findByUid($userId);
+        } catch (\Throwable $e) {
+            $this->logger->error('Error finding user by ID', [
+                'userId' => $userId,
+                'error' => $e->getMessage(),
+            ]);
+            return null;
+        }
     }
 
     /**
-     * Find all users assigned to a course
+     * Get all users assigned to a specific course
+     *
+     * @param int $courseId
+     * @return FrontendUser[] 
      */
     public function getUsersByCourse(int $courseId): array
     {
-        // Logic to get all users enrolled in a course
+        // Example logic: Fetch users enrolled in a course from a CourseUserRepository
+        // $courseUsers = $this->courseUserRepository->findByCourse($courseId);
+        // return $courseUsers;
+
+        // Placeholder: Add actual logic for retrieving users based on course ID
         return [];
     }
 }
