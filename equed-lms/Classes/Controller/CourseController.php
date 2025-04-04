@@ -5,39 +5,41 @@ namespace Equed\EquedLms\Controller;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use Equed\EquedLms\Domain\Repository\CourseRepository;
 use Equed\EquedLms\Domain\Model\Course;
+use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
+use Psr\Log\LoggerInterface;
 
-class CourseController extends ActionController
+class CourseController extends ActionController implements LoggerAwareInterface
 {
-    protected CourseRepository $courseRepository;
+    use LoggerAwareTrait;
 
-    public function __construct(CourseRepository $courseRepository)
-    {
-        $this->courseRepository = $courseRepository;
+    public function __construct(
+        protected readonly CourseRepository $courseRepository,
+        LoggerInterface $logger = null
+    ) {
+        if ($logger === null) {
+            $this->logger = GeneralUtility::makeInstance(LoggerInterface::class);
+        } else {
+            $this->setLogger($logger);
+        }
     }
 
-    /**
-     * Displays a list of all visible courses
-     *
-     * @return void
-     */
     public function indexAction(): void
     {
         $courses = $this->courseRepository->findAllVisible();
         $this->view->assign('courses', $courses);
+        $this->logger->info('Displayed course list with ' . count($courses) . ' entries.');
     }
 
-    /**
-     * Displays details of a specific course
-     *
-     * @param int $courseId UID of the course
-     * @return void
-     */
     public function showAction(int $courseId): void
     {
         $course = $this->courseRepository->findByUid($courseId);
 
         if (!$course instanceof Course) {
+            $this->logger->warning("Course with UID $courseId not found.");
             $this->addFlashMessage(
                 $this->translate('course.notFound.message'),
                 $this->translate('course.notFound.title'),
@@ -47,15 +49,9 @@ class CourseController extends ActionController
         }
 
         $this->view->assign('course', $course);
+        $this->logger->info("Displayed course with UID $courseId: " . $course->getTitle());
     }
 
-    /**
-     * Helper method for translation
-     *
-     * @param string $key
-     * @param array $arguments
-     * @return string
-     */
     protected function translate(string $key, array $arguments = []): string
     {
         return $this->getLanguageService()->sL(
@@ -64,13 +60,8 @@ class CourseController extends ActionController
         ) ?? $key;
     }
 
-    /**
-     * Returns the TYPO3 language service
-     *
-     * @return \TYPO3\CMS\Core\Localization\LanguageService
-     */
-    protected function getLanguageService(): \TYPO3\CMS\Core\Localization\LanguageService
+    protected function getLanguageService(): LanguageService
     {
-        return $GLOBALS['LANG'] ?? $GLOBALS['BE_USER']->uc['lang'] ?? $GLOBALS['TSFE']->lang ?? 'en';
+        return GeneralUtility::makeInstance(LanguageService::class);
     }
 }

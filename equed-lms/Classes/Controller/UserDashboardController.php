@@ -3,21 +3,31 @@
 namespace Equed\EquedLms\Controller;
 
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+use TYPO3\CMS\Extbase\Annotation\Inject;
+use TYPO3\CMS\Core\Localization\LanguageService;
+use TYPO3\CMS\Core\Localization\LanguageServiceFactory;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use Equed\EquedLms\Domain\Repository\UserRepository;
 use Equed\EquedLms\Domain\Repository\UserCourseRecordRepository;
 use Equed\EquedLms\Domain\Repository\CertificateRepository;
+use Psr\Http\Message\ServerRequestInterface;
 
 class UserDashboardController extends ActionController
 {
-    #[\TYPO3\CMS\Extbase\Annotation\Inject]
+    #[Inject]
     protected UserRepository $userRepository;
 
-    #[\TYPO3\CMS\Extbase\Annotation\Inject]
+    #[Inject]
     protected UserCourseRecordRepository $userCourseRecordRepository;
 
-    #[\TYPO3\CMS\Extbase\Annotation\Inject]
+    #[Inject]
     protected CertificateRepository $certificateRepository;
+
+    #[Inject]
+    protected LanguageServiceFactory $languageServiceFactory;
+
+    #[Inject]
+    protected ServerRequestInterface $request;
 
     /**
      * Displays the dashboard for the currently logged-in user
@@ -34,7 +44,7 @@ class UserDashboardController extends ActionController
                 '',
                 AbstractMessage::ERROR
             );
-            $this->redirect('error');
+            $this->forward('error');
             return;
         }
 
@@ -49,6 +59,14 @@ class UserDashboardController extends ActionController
     }
 
     /**
+     * Handles error view rendering
+     */
+    public function errorAction(): void
+    {
+        $this->view->assign('message', $this->translate('error.general'));
+    }
+
+    /**
      * Translation helper
      *
      * @param string $key
@@ -57,15 +75,19 @@ class UserDashboardController extends ActionController
      */
     protected function translate(string $key, array $arguments = []): string
     {
-        return $this->getLanguageService()->sL('LLL:EXT:equed_lms/Resources/Private/Language/locallang.xlf:' . $key, $arguments)
-            ?? $key;
+        $languageService = $this->getLanguageService();
+        $label = 'LLL:EXT:equed_lms/Resources/Private/Language/locallang.xlf:' . $key;
+        return $languageService->sL($label) ?? $key;
     }
 
     /**
-     * Returns the LanguageService instance
+     * Returns a modern LanguageService instance
+     *
+     * @return LanguageService
      */
-    protected function getLanguageService(): \TYPO3\CMS\Core\Localization\LanguageService
+    protected function getLanguageService(): LanguageService
     {
-        return $GLOBALS['LANG'] ?? $GLOBALS['BE_USER']->uc['lang'] ?? $GLOBALS['TSFE']->config['config']['language'] ?? 'default';
+        $siteLanguage = $this->request->getAttribute('language');
+        return $this->languageServiceFactory->createFromSiteLanguage($siteLanguage);
     }
 }
