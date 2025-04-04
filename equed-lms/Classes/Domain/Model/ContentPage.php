@@ -1,43 +1,43 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Equed\EquedLms\Domain\Model;
 
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
-use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
-use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 
 /**
- * Represents a content block/page in a lesson or course.
+ * Einzelne Inhaltsseite innerhalb einer Lektion.
  */
 class ContentPage extends AbstractEntity
 {
+    /**
+     * Titel der Seite
+     *
+     * @var string
+     */
     protected string $title = '';
 
-    protected string $content = '';
-
-    protected int $sorting = 0;
-
-    protected bool $visible = true;
-
     /**
-     * @var \Equed\EquedLms\Domain\Model\Course|null
+     * Textinhalt (HTML/Text)
+     *
+     * @var string
      */
-    protected ?Course $course = null;
+    protected string $text = '';
 
     /**
-     * @var \Equed\EquedLms\Domain\Model\Lesson|null
+     * Sortierreihenfolge innerhalb der Lektion
+     *
+     * @var int
+     */
+    protected int $position = 0;
+
+    /**
+     * Zugehörige Lektion
+     *
+     * @var Lesson|null
      */
     protected ?Lesson $lesson = null;
-
-    /**
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\FileReference>
-     */
-    protected ObjectStorage $attachments;
-
-    public function __construct()
-    {
-        $this->attachments = new ObjectStorage();
-    }
 
     public function getTitle(): string
     {
@@ -49,44 +49,24 @@ class ContentPage extends AbstractEntity
         $this->title = $title;
     }
 
-    public function getContent(): string
+    public function getText(): string
     {
-        return $this->content;
+        return $this->text;
     }
 
-    public function setContent(string $content): void
+    public function setText(string $text): void
     {
-        $this->content = $content;
+        $this->text = $text;
     }
 
-    public function getSorting(): int
+    public function getPosition(): int
     {
-        return $this->sorting;
+        return $this->position;
     }
 
-    public function setSorting(int $sorting): void
+    public function setPosition(int $position): void
     {
-        $this->sorting = $sorting;
-    }
-
-    public function isVisible(): bool
-    {
-        return $this->visible;
-    }
-
-    public function setVisible(bool $visible): void
-    {
-        $this->visible = $visible;
-    }
-
-    public function getCourse(): ?Course
-    {
-        return $this->course;
-    }
-
-    public function setCourse(?Course $course): void
-    {
-        $this->course = $course;
+        $this->position = $position;
     }
 
     public function getLesson(): ?Lesson
@@ -97,20 +77,5 @@ class ContentPage extends AbstractEntity
     public function setLesson(?Lesson $lesson): void
     {
         $this->lesson = $lesson;
-    }
-
-    public function getAttachments(): ObjectStorage
-    {
-        return $this->attachments;
-    }
-
-    public function addAttachment(FileReference $file): void
-    {
-        $this->attachments->attach($file);
-    }
-
-    public function removeAttachment(FileReference $file): void
-    {
-        $this->attachments->detach($file);
     }
 }

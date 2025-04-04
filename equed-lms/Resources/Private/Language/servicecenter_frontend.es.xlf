@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en" datatype="plaintext" original="messages" target-language="es">
+    <body>
+      <trans-unit id="service.assignExaminer"><source>Assign Examiner</source><target>Asignar examinador</target></trans-unit>
+      <trans-unit id="service.openCase"><source>Open case</source><target>Abrir caso</target></trans-unit>
+      <trans-unit id="service.note"><source>Service note</source><target>Nota de servicio</target></trans-unit>
+    </body>
+  </file>
+</xliff>

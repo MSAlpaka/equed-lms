@@ -2,101 +2,63 @@
 
 return [
     'ctrl' => [
-        'title' => 'Center',
+        'title' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:tx_equedlms_domain_model_center.title',
         'label' => 'name',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
-        'delete' => 'deleted',
-        'iconfile' => 'EXT:equed_lms/Resources/Public/Icons/center.svg',
+        'cruser_id' => 'cruser_id',
+        'iconfile' => 'EXT:equed_lms/Resources/Public/Icons/center.svg'
     ],
     'columns' => [
         'name' => [
-            'label' => 'Name',
+            'label' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:tx_equedlms_domain_model_center.name',
             'config' => [
                 'type' => 'input',
-                'required' => true,
-            ],
+                'required' => true
+            ]
         ],
         'street' => [
-            'label' => 'Street',
-            'config' => [
-                'type' => 'input',
-            ],
+            'label' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:tx_equedlms_domain_model_center.street',
+            'config' => ['type' => 'input']
         ],
         'zip' => [
-            'label' => 'ZIP',
-            'config' => [
-                'type' => 'input',
-            ],
+            'label' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:tx_equedlms_domain_model_center.zip',
+            'config' => ['type' => 'input']
         ],
         'city' => [
-            'label' => 'City',
-            'config' => [
-                'type' => 'input',
-            ],
-        ],
-        'country' => [
-            'label' => 'Country',
-            'config' => [
-                'type' => 'input',
-            ],
-        ],
-        'phone' => [
-            'label' => 'Phone',
-            'config' => [
-                'type' => 'input',
-                'eval' => 'trim',
-            ],
+            'label' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:tx_equedlms_domain_model_center.city',
+            'config' => ['type' => 'input']
         ],
         'website' => [
-            'label' => 'Website',
-            'config' => [
-                'type' => 'input',
-                'eval' => 'trim',
-                'renderType' => 'inputLink',
-            ],
+            'label' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:tx_equedlms_domain_model_center.website',
+            'config' => ['type' => 'input']
         ],
         'center_id' => [
-            'label' => 'Center ID',
-            'config' => [
-                'type' => 'input',
-                'eval' => 'trim,alphanum',
-            ],
+            'label' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:tx_equedlms_domain_model_center.center_id',
+            'config' => ['type' => 'input']
         ],
         'logo' => [
-            'label' => 'Logo',
+            'label' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:tx_equedlms_domain_model_center.logo',
             'config' => [
-                'type' => 'inline',
-                'foreign_table' => 'sys_file_reference',
-                'foreign_field' => 'uid_foreign',
-                'foreign_sortby' => 'sorting_foreign',
-                'foreign_table_field' => 'tablenames',
-                'foreign_match_fields' => [
-                    'fieldname' => 'logo',
-                ],
+                'type' => 'file',
                 'appearance' => [
-                    'createNewRelationLinkTitle' => 'Add Logo',
-                    'showPossibleLocalizationRecords' => true,
-                    'showRemovedLocalizationRecords' => false,
-                    'showAllLocalizationLink' => true,
-                    'showSynchronizationLink' => true,
+                    'createNewRelationLinkTitle' => 'LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:cm.createNewRelation'
                 ],
-            ],
+                'allowed' => 'jpg,jpeg,png,svg',
+                'maxitems' => 1
+            ]
         ],
         'certifier' => [
-            'label' => 'Responsible Certifier',
+            'label' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:tx_equedlms_domain_model_center.certifier',
             'config' => [
                 'type' => 'group',
                 'internal_type' => 'db',
                 'allowed' => 'fe_users',
-                'foreign_table' => 'fe_users',
-                'minitems' => 0,
                 'maxitems' => 1,
-            ],
+            ]
         ],
     ],
     'types' => [
-        '0' => ['showitem' =>
-            'name, street, zip, city, country, phone, website, center_id, logo, certifier'],
+        '1' => ['showitem' => 'name, street, zip, city, website, center_id, logo, certifier'],
     ],
 ];

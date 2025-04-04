@@ -1,4 +1,5 @@
 <?php
+defined('TYPO3_MODE') or die();
 
 return [
     'ctrl' => [
@@ -6,94 +7,57 @@ return [
         'label' => 'title',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
-        'delete' => 'deleted',
-        'iconfile' => 'EXT:equed_lms/Resources/Public/Icons/course.svg',
+        'cruser_id' => 'cruser_id',
+        'default_sortby' => 'ORDER BY title',
+        'enablecolumns' => [
+            'disabled' => 'hidden',
+            'starttime' => 'starttime',
+            'endtime' => 'endtime',
+        ],
+        'dividers2tabs' => TRUE,
+        'searchFields' => 'title,description',
+    ],
+    'interface' => [
+        'showRecordFieldList' => 'title, description, lessons',
+    ],
+    'types' => [
+        '1' => ['showitem' => 'title, description, lessons'],
     ],
     'columns' => [
         'title' => [
+            'exclude' => 0,
             'label' => 'Title',
             'config' => [
                 'type' => 'input',
-                'required' => true,
-            ],
+                'size' => 30,
+                'eval' => 'trim,required',
+            ]
         ],
         'description' => [
+            'exclude' => 0,
             'label' => 'Description',
             'config' => [
                 'type' => 'text',
-                'enableRichtext' => true,
-            ],
+                'cols' => 40,
+                'rows' => 15,
+            ]
         ],
-        'category' => [
-            'label' => 'Category',
+        'lessons' => [
+            'exclude' => 0,
+            'label' => 'Lessons',
             'config' => [
-                'type' => 'select',
-                'renderType' => 'selectSingle',
-                'items' => [
-                    ['-- Select Category --', ''],
-                    ['Basic', 'basic'],
-                    ['Specialist', 'specialist'],
-                    ['Instructor', 'instructor'],
-                    ['Techniques', 'techniques'],
-                    ['Try HoofCare', 'try'],
+                'type' => 'inline',
+                'foreign_table' => 'tx_equedlms_domain_model_lesson',
+                'foreign_field' => 'course',
+                'maxitems' => 9999,
+                'appearance' => [
+                    'collapseAll' => 1,
+                    'levelLinksPosition' => 'top',
+                    'showSynchronizationLink' => 1,
+                    'showPossibleLocalizationRecords' => 1,
+                    'showAllLocalizationLink' => 1
                 ],
             ],
         ],
-        'course_code' => [
-            'label' => 'Course Code',
-            'config' => [
-                'type' => 'input',
-                'eval' => 'trim,alphanum',
-            ],
-        ],
-        'prerequisites' => [
-            'label' => 'Prerequisites',
-            'config' => [
-                'type' => 'text',
-                'rows' => 3,
-            ],
-        ],
-        'duration_hours' => [
-            'label' => 'Duration (in hours)',
-            'config' => [
-                'type' => 'input',
-                'eval' => 'int',
-            ],
-        ],
-        'visible' => [
-            'label' => 'Visible',
-            'config' => [
-                'type' => 'check',
-                'default' => 1,
-            ],
-        ],
-        'requires_external_examiner' => [
-            'label' => 'Requires External Examiner',
-            'config' => [
-                'type' => 'check',
-                'default' => 0,
-            ],
-        ],
-        'active' => [
-            'label' => 'Active',
-            'config' => [
-                'type' => 'check',
-                'default' => 1,
-            ],
-        ],
-        'center' => [
-            'label' => 'Offered by Center',
-            'config' => [
-                'type' => 'select',
-                'renderType' => 'selectSingle',
-                'foreign_table' => 'tx_equedlms_domain_model_center',
-                'minitems' => 0,
-                'maxitems' => 1,
-            ],
-        ],
-    ],
-    'types' => [
-        '0' => ['showitem' =>
-            'title, category, course_code, description, prerequisites, duration_hours, center, visible, active, requires_external_examiner'],
     ],
 ];

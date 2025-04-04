@@ -1,27 +1,48 @@
 <?php
-defined('TYPO3_MODE') or die();
 
-// Add a field for tracking the last login date of a frontend user
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns(
-    'fe_users',
-    [
-        'last_login' => [
-            'exclude' => 0,
-            'label' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:fe_users.last_login',
-            'config' => [
-                'type' => 'input',
-                'size' => 10,
-                'eval' => 'datetime',
-                'default' => 0,
-            ],
+defined('TYPO3') or die();
+
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+
+$additionalColumns = [
+    'is_certifier' => [
+        'exclude' => true,
+        'label' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:fe_users.is_certifier',
+        'config' => [
+            'type' => 'check',
+            'default' => 0,
         ],
-    ]
-);
+    ],
+    'step1_complete' => [
+        'exclude' => true,
+        'label' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:fe_users.step1_complete',
+        'config' => [
+            'type' => 'check',
+            'default' => 0,
+        ],
+    ],
+    'step2_complete' => [
+        'exclude' => true,
+        'label' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:fe_users.step2_complete',
+        'config' => [
+            'type' => 'check',
+            'default' => 0,
+        ],
+    ],
+    'onboarding_complete' => [
+        'exclude' => true,
+        'label' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:fe_users.onboarding_complete',
+        'config' => [
+            'type' => 'check',
+            'default' => 0,
+        ],
+    ],
+];
 
-// Add the new field to the backend form
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes(
-    'fe_users',
-    'last_login',
-    '',
-    'after:crdate'
-);
+ExtensionManagementUtility::addTCAcolumns('fe_users', $additionalColumns);
+
+// Optional: Ausgabe in allen TCA-Typen sichtbar machen
+ExtensionManagementUtility::addToAllTCAtypes('fe_users', '
+    --div--;LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:fe_users.tab_equed,
+    is_certifier, step1_complete, step2_complete, onboarding_complete
+');

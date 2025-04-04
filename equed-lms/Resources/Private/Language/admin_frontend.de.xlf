@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en" datatype="plaintext" original="messages" target-language="de">
+    <body>
+      <trans-unit id="admin.edit"><source>Edit Entry</source><target>Eintrag bearbeiten</target></trans-unit>
+      <trans-unit id="admin.save"><source>Save</source><target>Speichern</target></trans-unit>
+      <trans-unit id="admin.delete"><source>Delete</source><target>Löschen</target></trans-unit>
+      <trans-unit id="admin.noPermission"><source>You do not have permission to perform this action.</source><target>Du hast keine Berechtigung für diese Aktion.</target></trans-unit>
+    </body>
+  </file>
+</xliff>

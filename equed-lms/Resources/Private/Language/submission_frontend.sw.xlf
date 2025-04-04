@@ -1,2 +1,10 @@
 <?xml version='1.0' encoding='utf-8'?>
-<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2"><file source-language="en" datatype="plaintext" original="messages"><body><trans-unit id="submission.comment"><source>submission.comment</source><target>Maoni</target></trans-unit><trans-unit id="submission.course"><source>submission.course</source><target>Kozi</target></trans-unit><trans-unit id="submission.date"><source>submission.date</source><target>Imewasilishwa tarehe</target></trans-unit><trans-unit id="submission.download"><source>submission.download</source><target>Pakua faili</target></trans-unit><trans-unit id="submission.file"><source>submission.file</source><target>Faili Uliyopakia</target></trans-unit><trans-unit id="submission.mySubmissions"><source>submission.mySubmissions</source><target /></trans-unit><trans-unit id="submission.noSubmissions"><source>submission.noSubmissions</source><target /></trans-unit><trans-unit id="submission.status"><source>submission.status</source><target /></trans-unit><trans-unit id="submission.type"><source>submission.type</source><target /></trans-unit></body></file></xliff>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en" datatype="plaintext" original="messages" target-language="sw">
+    <body>
+      <trans-unit id="submission.send"><source>Submit Report</source><target>Tuma ripoti</target></trans-unit>
+      <trans-unit id="submission.comment"><source>Comment</source><target>Maoni</target></trans-unit>
+      <trans-unit id="submission.status.reviewed"><source>Reviewed</source><target>Imekaguliwa</target></trans-unit>
+    </body>
+  </file>
+</xliff>

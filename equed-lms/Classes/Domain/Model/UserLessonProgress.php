@@ -1,48 +1,88 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Equed\EquedLms\Domain\Model;
 
-use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
-use Equed\EquedLms\Domain\Model\Lesson;
+use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 
 /**
- * Tracks a user's progress through lessons.
+ * Fortschritt eines/einer Teilnehmenden in einer bestimmten Lektion.
  */
 class UserLessonProgress extends AbstractEntity
 {
     /**
-     * @var \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
+     * @var FrontendUser|null
      */
-    protected FrontendUser $user;
+    protected ?FrontendUser $feUser = null;
 
     /**
-     * @var \Equed\EquedLms\Domain\Model\Lesson
+     * Zugeordnete Lektion
+     *
+     * @var Lesson|null
      */
-    protected Lesson $lesson;
+    protected ?Lesson $lesson = null;
 
+    /**
+     * Wurde die Lektion als abgeschlossen bestätigt?
+     *
+     * @var bool
+     */
+    protected bool $confirmed = false;
+
+    /**
+     * Quiz-Ergebnis (z. B. Prozentzahl)
+     *
+     * @var float
+     */
+    protected float $quizScore = 0.0;
+
+    /**
+     * Wurde die Lektion abgeschlossen?
+     *
+     * @var bool
+     */
     protected bool $completed = false;
 
-    protected ?\DateTime $completionDate = null;
-
-    public function getUser(): FrontendUser
+    public function getFeUser(): ?FrontendUser
     {
-        return $this->user;
+        return $this->feUser;
     }
 
-    public function setUser(FrontendUser $user): void
+    public function setFeUser(?FrontendUser $feUser): void
     {
-        $this->user = $user;
+        $this->feUser = $feUser;
     }
 
-    public function getLesson(): Lesson
+    public function getLesson(): ?Lesson
     {
         return $this->lesson;
     }
 
-    public function setLesson(Lesson $lesson): void
+    public function setLesson(?Lesson $lesson): void
     {
         $this->lesson = $lesson;
+    }
+
+    public function isConfirmed(): bool
+    {
+        return $this->confirmed;
+    }
+
+    public function setConfirmed(bool $confirmed): void
+    {
+        $this->confirmed = $confirmed;
+    }
+
+    public function getQuizScore(): float
+    {
+        return $this->quizScore;
+    }
+
+    public function setQuizScore(float $quizScore): void
+    {
+        $this->quizScore = $quizScore;
     }
 
     public function isCompleted(): bool
@@ -53,15 +93,5 @@ class UserLessonProgress extends AbstractEntity
     public function setCompleted(bool $completed): void
     {
         $this->completed = $completed;
-    }
-
-    public function getCompletionDate(): ?\DateTime
-    {
-        return $this->completionDate;
-    }
-
-    public function setCompletionDate(?\DateTime $completionDate): void
-    {
-        $this->completionDate = $completionDate;
     }
 }

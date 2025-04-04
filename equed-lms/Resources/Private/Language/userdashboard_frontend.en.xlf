@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en" datatype="plaintext" original="messages" target-language="en">
+    <body>
+      <trans-unit id="userdashboard.profile"><source>My Profile</source><target>My Profile</target></trans-unit>
+      <trans-unit id="userdashboard.courses"><source>My Courses</source><target>My Courses</target></trans-unit>
+      <trans-unit id="userdashboard.logout"><source>Logout</source><target>Logout</target></trans-unit>
+    </body>
+  </file>
+</xliff>

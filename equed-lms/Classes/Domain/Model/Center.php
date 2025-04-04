@@ -1,39 +1,34 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Equed\EquedLms\Domain\Model;
 
-use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
-use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
+use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
+use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 
 /**
- * Represents a training center within the EquEd LMS.
+ * Repräsentiert ein EquEd-Ausbildungszentrum.
  */
 class Center extends AbstractEntity
 {
     protected string $name = '';
-
     protected string $street = '';
-
     protected string $zip = '';
-
     protected string $city = '';
-
-    protected string $country = '';
-
-    protected string $phone = '';
-
     protected string $website = '';
-
-    protected string $centerId = ''; // für eindeutige Zuordnung
+    protected string $centerId = '';
 
     /**
-     * @var \TYPO3\CMS\Extbase\Domain\Model\FileReference|null
+     * @var FileReference|null
      */
     protected ?FileReference $logo = null;
 
     /**
-     * @var \TYPO3\CMS\Extbase\Domain\Model\FrontendUser|null
+     * Zuständiger Certifier (FE-User)
+     *
+     * @var FrontendUser|null
      */
     protected ?FrontendUser $certifier = null;
 
@@ -75,26 +70,6 @@ class Center extends AbstractEntity
     public function setCity(string $city): void
     {
         $this->city = $city;
-    }
-
-    public function getCountry(): string
-    {
-        return $this->country;
-    }
-
-    public function setCountry(string $country): void
-    {
-        $this->country = $country;
-    }
-
-    public function getPhone(): string
-    {
-        return $this->phone;
-    }
-
-    public function setPhone(string $phone): void
-    {
-        $this->phone = $phone;
     }
 
     public function getWebsite(): string

@@ -1,2 +1,10 @@
-<?xml version='1.0' encoding='utf-8'?>
-<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2"><file source-language="en" datatype="plaintext" original="messages"><body><trans-unit id="fe_users.is_certifier"><source>fe_users.is_certifier</source><target /></trans-unit><trans-unit id="fe_users.photo"><source>fe_users.photo</source><target /></trans-unit></body></file></xliff>
+<!-- Optimized user_db.xlf -->
+<trans-unit id="course_label" resname="course_label">
+    <source>Course</source>
+    <target>Kurs</target>
+</trans-unit>
+
+<trans-unit id="submit_button" resname="submit_button">
+    <source>Submit</source>
+    <target>Absenden</target>
+</

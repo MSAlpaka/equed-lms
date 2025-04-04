@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en" datatype="plaintext" original="messages" target-language="sw">
+    <body>
+      <trans-unit id="course.start"><source>Start Course</source><target>Anza kozi</target></trans-unit>
+      <trans-unit id="dashboard.continue"><source>Continue</source><target>Endelea</target></trans-unit>
+      <trans-unit id="dashboard.completed"><source>Completed</source><target>Imekamilika</target></trans-unit>
+      <trans-unit id="dashboard.certificate"><source>Certificate</source><target>Cheti</target></trans-unit>
+      <trans-unit id="dashboard.incomplete"><source>Incomplete</source><target>Haijakamilika</target></trans-unit>
+      <trans-unit id="lesson.quiz.title"><source>Quiz</source><target>Mtihani</target></trans-unit>
+      <trans-unit id="lesson.quiz.submit"><source>Submit Quiz</source><target>Tuma Mtihani</target></trans-unit>
+      <trans-unit id="lesson.completedMessage"><source>You have completed this lesson.</source><target>Umemaliza somo hili.</target></trans-unit>
+      <trans-unit id="quiz.submit"><source>Submit</source><target>Tuma</target></trans-unit>
+    </body>
+  </file>
+</xliff>

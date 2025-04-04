@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en" datatype="plaintext" original="messages" target-language="fr">
+    <body>
+      <trans-unit id="feedback.rate"><source>Rate this course</source><target>Évaluer ce cours</target></trans-unit>
+      <trans-unit id="feedback.comment"><source>Leave a comment</source><target>Laisser un commentaire</target></trans-unit>
+      <trans-unit id="feedback.submit"><source>Submit feedback</source><target>Soumettre le feedback</target></trans-unit>
+    </body>
+  </file>
+</xliff>

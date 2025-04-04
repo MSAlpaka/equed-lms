@@ -1,31 +1,45 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Equed\EquedLms\Domain\Model;
 
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 
 /**
- * Represents a single answer option for a quiz question.
+ * Antwortmöglichkeit zu einer Quizfrage
  */
 class QuizAnswer extends AbstractEntity
 {
-    protected string $text = '';
+    /**
+     * Antworttext
+     *
+     * @var string
+     */
+    protected string $answerText = '';
 
+    /**
+     * Ist diese Antwort korrekt?
+     *
+     * @var bool
+     */
     protected bool $isCorrect = false;
 
     /**
-     * @var \Equed\EquedLms\Domain\Model\QuizQuestion
+     * Zugehörige Frage
+     *
+     * @var QuizQuestion|null
      */
-    protected QuizQuestion $question;
+    protected ?QuizQuestion $question = null;
 
-    public function getText(): string
+    public function getAnswerText(): string
     {
-        return $this->text;
+        return $this->answerText;
     }
 
-    public function setText(string $text): void
+    public function setAnswerText(string $answerText): void
     {
-        $this->text = $text;
+        $this->answerText = $answerText;
     }
 
     public function isCorrect(): bool
@@ -38,12 +52,12 @@ class QuizAnswer extends AbstractEntity
         $this->isCorrect = $isCorrect;
     }
 
-    public function getQuestion(): QuizQuestion
+    public function getQuestion(): ?QuizQuestion
     {
         return $this->question;
     }
 
-    public function setQuestion(QuizQuestion $question): void
+    public function setQuestion(?QuizQuestion $question): void
     {
         $this->question = $question;
     }

@@ -1,85 +1,82 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Equed\EquedLms\Domain\Model;
 
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
-use Equed\EquedLms\Domain\Model\Course;
-use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 
 /**
- * Represents a user submission (e.g. for exams, reports, documents).
+ * Einreichung eines Teilnehmenden (z. B. für Tests, Fallberichte, Prüfungen etc.)
  */
 class UserSubmission extends AbstractEntity
 {
     /**
-     * @var \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
+     * @var FrontendUser|null
      */
-    protected FrontendUser $user;
+    protected ?FrontendUser $feUser = null;
 
     /**
-     * @var \Equed\EquedLms\Domain\Model\Course
+     * Typ der Einreichung (z. B. 'theory_test', 'practical_case', 'report')
+     *
+     * @var string
      */
-    protected Course $course;
+    protected string $type = '';
 
     /**
-     * @var \TYPO3\CMS\Extbase\Domain\Model\FileReference|null
+     * Status der Einreichung (z. B. 'submitted', 'approved', 'rejected')
+     *
+     * @var string
      */
-    protected ?FileReference $file = null;
+    protected string $status = '';
 
     /**
+     * Optionaler Kommentar oder Feedback
+     *
      * @var string
      */
     protected string $comment = '';
 
     /**
-     * @var string Status of submission: 'submitted', 'reviewed', 'rejected', 'approved'
+     * Bewertung (z. B. Note, Punkte, bestanden/nicht bestanden)
+     *
+     * @var string
      */
-    protected string $status = 'submitted';
+    protected string $grade = '';
 
     /**
-     * @var \DateTime|null
+     * Zugehöriger Kurs-Teilnahmedatensatz
+     *
+     * @var UserCourseRecord|null
      */
-    protected ?\DateTime $submittedAt = null;
+    protected ?UserCourseRecord $userCourseRecord = null;
 
-    public function getUser(): FrontendUser
+    /**
+     * Zugehörige Lektion (falls einreichungsspezifisch)
+     *
+     * @var Lesson|null
+     */
+    protected ?Lesson $lesson = null;
+
+    public function getFeUser(): ?FrontendUser
     {
-        return $this->user;
+        return $this->feUser;
     }
 
-    public function setUser(FrontendUser $user): void
+    public function setFeUser(?FrontendUser $feUser): void
     {
-        $this->user = $user;
+        $this->feUser = $feUser;
     }
 
-    public function getCourse(): Course
+    public function getType(): string
     {
-        return $this->course;
+        return $this->type;
     }
 
-    public function setCourse(Course $course): void
+    public function setType(string $type): void
     {
-        $this->course = $course;
-    }
-
-    public function getFile(): ?FileReference
-    {
-        return $this->file;
-    }
-
-    public function setFile(?FileReference $file): void
-    {
-        $this->file = $file;
-    }
-
-    public function getComment(): string
-    {
-        return $this->comment;
-    }
-
-    public function setComment(string $comment): void
-    {
-        $this->comment = $comment;
+        $this->type = $type;
     }
 
     public function getStatus(): string
@@ -92,13 +89,43 @@ class UserSubmission extends AbstractEntity
         $this->status = $status;
     }
 
-    public function getSubmittedAt(): ?\DateTime
+    public function getComment(): string
     {
-        return $this->submittedAt;
+        return $this->comment;
     }
 
-    public function setSubmittedAt(?\DateTime $submittedAt): void
+    public function setComment(string $comment): void
     {
-        $this->submittedAt = $submittedAt;
+        $this->comment = $comment;
+    }
+
+    public function getGrade(): string
+    {
+        return $this->grade;
+    }
+
+    public function setGrade(string $grade): void
+    {
+        $this->grade = $grade;
+    }
+
+    public function getUserCourseRecord(): ?UserCourseRecord
+    {
+        return $this->userCourseRecord;
+    }
+
+    public function setUserCourseRecord(?UserCourseRecord $userCourseRecord): void
+    {
+        $this->userCourseRecord = $userCourseRecord;
+    }
+
+    public function getLesson(): ?Lesson
+    {
+        return $this->lesson;
+    }
+
+    public function setLesson(?Lesson $lesson): void
+    {
+        $this->lesson = $lesson;
     }
 }

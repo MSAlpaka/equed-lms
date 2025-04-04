@@ -1,2 +1,10 @@
 <?xml version='1.0' encoding='utf-8'?>
-<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2"><file source-language="en" datatype="plaintext" original="messages"><body><trans-unit id="submission.comment"><source>submission.comment</source><target>Commentaire</target></trans-unit><trans-unit id="submission.course"><source>submission.course</source><target>Cours</target></trans-unit><trans-unit id="submission.date"><source>submission.date</source><target>Soumis le</target></trans-unit><trans-unit id="submission.download"><source>submission.download</source><target>Télécharger la soumission</target></trans-unit><trans-unit id="submission.file"><source>submission.file</source><target>Fichier téléversé</target></trans-unit><trans-unit id="submission.mySubmissions"><source>submission.mySubmissions</source><target /></trans-unit><trans-unit id="submission.noSubmissions"><source>submission.noSubmissions</source><target /></trans-unit><trans-unit id="submission.status"><source>submission.status</source><target /></trans-unit><trans-unit id="submission.type"><source>submission.type</source><target /></trans-unit></body></file></xliff>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en" datatype="plaintext" original="messages" target-language="fr">
+    <body>
+      <trans-unit id="submission.send"><source>Submit Report</source><target>Soumettre le rapport</target></trans-unit>
+      <trans-unit id="submission.comment"><source>Comment</source><target>Commentaire</target></trans-unit>
+      <trans-unit id="submission.status.reviewed"><source>Reviewed</source><target>Révisé</target></trans-unit>
+    </body>
+  </file>
+</xliff>

@@ -1,2 +1,10 @@
 <?xml version='1.0' encoding='utf-8'?>
-<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2"><file source-language="en" datatype="plaintext" original="messages"><body><trans-unit id="verify.center"><source>verify.center</source><target /></trans-unit><trans-unit id="verify.checkValidity"><source>verify.checkValidity</source><target /></trans-unit><trans-unit id="verify.completionDate"><source>verify.completionDate</source><target /></trans-unit><trans-unit id="verify.course"><source>verify.course</source><target /></trans-unit><trans-unit id="verify.enterCertificateCode"><source>verify.enterCertificateCode</source><target>Weka Nambari ya Cheti</target></trans-unit><trans-unit id="verify.issuedBy"><source>verify.issuedBy</source><target /></trans-unit><trans-unit id="verify.notFound"><source>verify.notFound</source><target>Cheti hakijapatikana</target></trans-unit><trans-unit id="verify.scanQRCode"><source>verify.scanQRCode</source><target /></trans-unit><trans-unit id="verify.status"><source>verify.status</source><target /></trans-unit><trans-unit id="verify.title"><source>verify.title</source><target>Thibitisha Cheti</target></trans-unit></body></file></xliff>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en" datatype="plaintext" original="messages" target-language="sw">
+    <body>
+      <trans-unit id="verify.code"><source>Enter Verification Code</source><target>Weka msimbo wa uthibitisho</target></trans-unit>
+      <trans-unit id="verify.button"><source>Verify</source><target>Thibitisha</target></trans-unit>
+      <trans-unit id="verify.invalid"><source>Invalid code. Please try again.</source><target>Msimbo batili. Tafadhali jaribu tena.</target></trans-unit>
+    </body>
+  </file>
+</xliff>

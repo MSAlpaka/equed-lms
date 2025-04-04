@@ -1,36 +1,62 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Equed\EquedLms\Domain\Model;
 
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
+use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 /**
- * Represents a course offered by EquEd.
+ * This class represents a Course in the EquEd LMS.
  */
 class Course extends AbstractEntity
 {
+    /**
+     * @var string
+     */
     protected string $title = '';
 
+    /**
+     * @var string
+     */
     protected string $description = '';
 
-    protected string $category = ''; // z. B. "Basic", "Specialty", "Instructor"
-
-    protected string $courseCode = ''; // für Zertifikate & Tracking
-
-    protected string $prerequisites = ''; // ggf. künftig als Relation abbilden
-
-    protected int $durationHours = 0;
-
-    protected bool $visible = true;
-
-    protected bool $requiresExternalExaminer = false;
-
-    protected bool $active = true;
+    /**
+     * @var string
+     */
+    protected string $category = '';
 
     /**
-     * @var \Equed\EquedLms\Domain\Model\Center|null
+     * @var bool
      */
-    protected ?Center $center = null;
+    protected bool $isActive = true;
+
+    /**
+     * Abschlussziel für die Zertifizierung (z. B. "HoofCare Specialist")
+     *
+     * @var string
+     */
+    protected string $finishGoal = '';
+
+    /**
+     * Voraussetzungskürzel (z. B. ['hoofcare_basic'])
+     *
+     * @var array<int, string>
+     */
+    protected array $prerequisites = [];
+
+    /**
+     * Zugeordnete Lektionen (bidirektional: Lesson.course)
+     *
+     * @var ObjectStorage<Lesson>
+     */
+    protected ObjectStorage $lessons;
+
+    public function __construct()
+    {
+        $this->lessons = new ObjectStorage();
+    }
 
     public function getTitle(): string
     {
@@ -62,73 +88,65 @@ class Course extends AbstractEntity
         $this->category = $category;
     }
 
-    public function getCourseCode(): string
+    public function isIsActive(): bool
     {
-        return $this->courseCode;
+        return $this->isActive;
     }
 
-    public function setCourseCode(string $courseCode): void
+    public function setIsActive(bool $isActive): void
     {
-        $this->courseCode = $courseCode;
+        $this->isActive = $isActive;
     }
 
-    public function getPrerequisites(): string
+    public function getFinishGoal(): string
+    {
+        return $this->finishGoal;
+    }
+
+    public function setFinishGoal(string $finishGoal): void
+    {
+        $this->finishGoal = $finishGoal;
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    public function getPrerequisites(): array
     {
         return $this->prerequisites;
     }
 
-    public function setPrerequisites(string $prerequisites): void
+    /**
+     * @param array<int, string> $prerequisites
+     */
+    public function setPrerequisites(array $prerequisites): void
     {
         $this->prerequisites = $prerequisites;
     }
 
-    public function getDurationHours(): int
+    /**
+     * @return ObjectStorage<Lesson>
+     */
+    public function getLessons(): ObjectStorage
     {
-        return $this->durationHours;
+        return $this->lessons;
     }
 
-    public function setDurationHours(int $durationHours): void
+    /**
+     * @param ObjectStorage<Lesson> $lessons
+     */
+    public function setLessons(ObjectStorage $lessons): void
     {
-        $this->durationHours = $durationHours;
+        $this->lessons = $lessons;
     }
 
-    public function isVisible(): bool
+    public function addLesson(Lesson $lesson): void
     {
-        return $this->visible;
+        $this->lessons->attach($lesson);
     }
 
-    public function setVisible(bool $visible): void
+    public function removeLesson(Lesson $lesson): void
     {
-        $this->visible = $visible;
-    }
-
-    public function isRequiresExternalExaminer(): bool
-    {
-        return $this->requiresExternalExaminer;
-    }
-
-    public function setRequiresExternalExaminer(bool $requiresExternalExaminer): void
-    {
-        $this->requiresExternalExaminer = $requiresExternalExaminer;
-    }
-
-    public function isActive(): bool
-    {
-        return $this->active;
-    }
-
-    public function setActive(bool $active): void
-    {
-        $this->active = $active;
-    }
-
-    public function getCenter(): ?Center
-    {
-        return $this->center;
-    }
-
-    public function setCenter(?Center $center): void
-    {
-        $this->center = $center;
+        $this->lessons->detach($lesson);
     }
 }

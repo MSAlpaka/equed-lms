@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en" datatype="plaintext" original="messages" target-language="sw">
+    <body>
+      <trans-unit id="booking.course"><source>Book Course</source><target>Weka nafasi ya kozi</target></trans-unit>
+      <trans-unit id="booking.instructor"><source>Your Instructor</source><target>Mwalimu wako</target></trans-unit>
+      <trans-unit id="booking.location"><source>Course location</source><target>Mahali pa kozi</target></trans-unit>
+    </body>
+  </file>
+</xliff>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en" datatype="plaintext" original="messages" target-language="fr">
+    <body>
+      <trans-unit id="course.start"><source>Start Course</source><target>Démarrer le cours</target></trans-unit>
+      <trans-unit id="dashboard.continue"><source>Continue</source><target>Continuer</target></trans-unit>
+      <trans-unit id="dashboard.completed"><source>Completed</source><target>Terminé</target></trans-unit>
+      <trans-unit id="dashboard.certificate"><source>Certificate</source><target>Certificat</target></trans-unit>
+      <trans-unit id="dashboard.incomplete"><source>Incomplete</source><target>Incomplet</target></trans-unit>
+      <trans-unit id="lesson.quiz.title"><source>Quiz</source><target>Quiz</target></trans-unit>
+      <trans-unit id="lesson.quiz.submit"><source>Submit Quiz</source><target>Soumettre le quiz</target></trans-unit>
+      <trans-unit id="lesson.completedMessage"><source>You have completed this lesson.</source><target>Vous avez terminé cette leçon.</target></trans-unit>
+      <trans-unit id="quiz.submit"><source>Submit</source><target>Soumettre</target></trans-unit>
+    </body>
+  </file>
+</xliff>

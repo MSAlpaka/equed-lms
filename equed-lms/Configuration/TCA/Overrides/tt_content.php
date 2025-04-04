@@ -1,27 +1,37 @@
 <?php
-defined('TYPO3_MODE') or die();
 
-// Add a new field to tt_content for custom course content
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns(
-    'tt_content',
-    [
-        'course_material' => [
-            'exclude' => 0,
-            'label' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:tt_content.course_material',
-            'config' => [
-                'type' => 'text',
-                'cols' => 40,
-                'rows' => 5,
-                'eval' => 'trim',
-            ],
-        ],
-    ]
-);
+defined('TYPO3') or die();
 
-// Add the new field to the backend form
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes(
-    'tt_content',
-    'course_material',
-    '',
-    'after:header'
-);
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+
+// ✅ Bestehende CType: Certification Card
+$GLOBALS['TCA']['tt_content']['types']['certification_card'] = [
+    'showitem' => '
+        --palette--;;general,
+        header,
+        --palette--;;headers,
+        bodytext,
+        --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,
+        pi_flexform,
+        --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,
+        hidden,starttime,endtime
+    ',
+];
+
+// ALT: Plugin-Registrierung via list_type – bitte auf CType umstellen
+
+// ✅ NEU als CType: Instructor Onboarding
+$GLOBALS['TCA']['tt_content']['types']['equed_instructor_onboarding'] = [
+    'showitem' => '
+        --palette--;;general,
+        header,
+        --palette--;;headers,
+        bodytext,
+        --div--;General,
+        pi_flexform,
+        --div--;Access,
+        hidden,starttime,endtime
+    ',
+];
+
+// Weitere CType-Definitionen können hier folgen
