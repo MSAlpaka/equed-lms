@@ -1,14 +1,17 @@
-<trans-unit id="course_label" resname="course_label">
-    <source>Course</source>
-    <target>Cours</target>
-</trans-unit>
-
-<trans-unit id="submit_button" resname="submit_button">
-    <source>Submit</source>
-    <target>Soumettre</target>
-</trans-unit>
-
-<trans-unit id="feedback_label" resname="feedback_label">
-    <source>Feedback</source>
-    <target>Retour</target>
-</trans-unit>
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2">
+  <file source_language="en" target_language="fr">
+    <trans-unit id="locallang.general.welcome">
+      <source>locallang.general.welcome</source>
+      <target>Bienvenue</target>
+    </trans-unit>
+    <trans-unit id="locallang.general.settings">
+      <source>locallang.general.settings</source>
+      <target>Paramètres généraux</target>
+    </trans-unit>
+    <trans-unit id="locallang.general.logout">
+      <source>locallang.general.logout</source>
+      <target>Se déconnecter</target>
+    </trans-unit>
+  </file>
+</xliff>

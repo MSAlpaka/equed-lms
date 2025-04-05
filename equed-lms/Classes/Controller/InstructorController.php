@@ -1,44 +1,90 @@
 <?php
+// InstructorController.php
 
-declare(strict_types=1);
-
-namespace Equed\EquedLms\Controller;
+namespace Vendor\EquedLms\Controller;
 
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
-use Equed\EquedLms\Domain\Repository\InstructorRepository;
-use Equed\EquedLms\Domain\Model\Instructor;
-use TYPO3\CMS\Core\Error\Http\NotFoundException;
+use Vendor\EquedLms\Domain\Model\Course;
+use Vendor\EquedLms\Domain\Repository\CourseRepository;
 
 class InstructorController extends ActionController
 {
-    protected InstructorRepository $instructorRepository;
+    /**
+     * @var CourseRepository
+     */
+    protected $courseRepository;
 
-    public function __construct(InstructorRepository $instructorRepository)
+    /**
+     * @param CourseRepository $courseRepository
+     */
+    public function injectCourseRepository(CourseRepository $courseRepository)
     {
-        $this->instructorRepository = $instructorRepository;
+        $this->courseRepository = $courseRepository;
     }
 
     /**
-     * List all verified instructors
+     * Evaluate action (only for assigned courses)
      */
-    public function indexAction(): void
+    public function evaluateAction($courseId)
     {
-        $instructors = $this->instructorRepository->findAllVerified();
-        $this->view->assign('instructors', $instructors);
-    }
+        $user = $this->getAuthenticatedUser();
+        $course = $this->courseRepository->findByUid($courseId);
 
-    /**
-     * Show instructor details
-     *
-     * @param int $instructorId
-     * @throws NotFoundException
-     */
-    public function showAction(int $instructorId): void
-    {
-        $instructor = $this->instructorRepository->findOneByUserId($instructorId);
-        if (!$instructor instanceof Instructor) {
-            throw new NotFoundException('Instructor not found.', 1700000010);
+        // Ensure the course is assigned to the current user (Instructor)
+        if ($course && $course->getInstructor() === $user) {
+            // Submit feedback for the course
+            $this->courseRepository->submitFeedback($courseId, $user, $this->request->getArgument('feedback'));
+            $this->addFlashMessage(
+                $this->translate('feedback_submitted')
+            );
+        } else {
+            $this->addFlashMessage(
+                $this->translate('error_not_assigned_or_completed'),
+                '',
+                \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR
+            );
         }
-        $this->view->assign('instructor', $instructor);
+    }
+
+    /**
+     * Mark course as completed (only for assigned courses)
+     */
+    public function markCompleteAction($courseId)
+    {
+        $user = $this->getAuthenticatedUser();
+        $course = $this->courseRepository->findByUid($courseId);
+
+        if ($course && $course->getInstructor() === $user) {
+            // Mark the course as completed
+            $course->setStatus('completed');
+            $this->courseRepository->update($course);
+            $this->addFlashMessage(
+                $this->translate('course_completed')
+            );
+        } else {
+            $this->addFlashMessage(
+                $this->translate('error_not_assigned_to_course'),
+                '',
+                \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR
+            );
+        }
+    }
+
+    /**
+     * Helper function to get the authenticated user
+     */
+    protected function getAuthenticatedUser()
+    {
+        // Assuming we have a method to retrieve the logged-in user
+        return $this->getUser();
+    }
+
+    /**
+     * Helper function for translation
+     */
+    protected function translate($key)
+    {
+        return $this->getLocalizationService()->getLocalizedString($key);
     }
 }
+?>

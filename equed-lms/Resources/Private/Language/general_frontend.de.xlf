@@ -1,15 +1,21 @@
-<?xml version='1.0' encoding='utf-8'?>
-<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-  <file source-language="en" datatype="plaintext" original="messages" target-language="de">
-    <body>
-      <trans-unit id="button.submit"><source>Submit</source><target>Absenden</target></trans-unit>
-      <trans-unit id="button.cancel"><source>Cancel</source><target>Abbrechen</target></trans-unit>
-      <trans-unit id="nav.dashboard"><source>Dashboard</source><target>Übersicht</target></trans-unit>
-      <trans-unit id="nav.my_courses"><source>My Courses</source><target>Meine Kurse</target></trans-unit>
-      <trans-unit id="message.loading"><source>Loading...</source><target>Lädt...</target></trans-unit>
-      <trans-unit id="message.error"><source>An error occurred.</source><target>Ein Fehler ist aufgetreten.</target></trans-unit>
-      <trans-unit id="message.no_courses"><source>No courses available.</source><target>Keine Kurse verfügbar.</target></trans-unit>
-      <trans-unit id="message.login_required"><source>You need to be logged in.</source><target>Du musst eingeloggt sein.</target></trans-unit>
-    </body>
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2">
+  <file source_language="en" target_language="de">
+    <trans-unit id="general.dashboard.title">
+      <source>general.dashboard.title</source>
+      <target>Allgemeines Dashboard</target>
+    </trans-unit>
+    <trans-unit id="general.dashboard.welcome">
+      <source>general.dashboard.welcome</source>
+      <target>Willkommen im allgemeinen Dashboard</target>
+    </trans-unit>
+    <trans-unit id="general.notifications.header">
+      <source>general.notifications.header</source>
+      <target>Benachrichtigungen</target>
+    </trans-unit>
+    <trans-unit id="general.logout.button">
+      <source>general.logout.button</source>
+      <target>Abmelden</target>
+    </trans-unit>
   </file>
 </xliff>

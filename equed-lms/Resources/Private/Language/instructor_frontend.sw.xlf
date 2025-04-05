@@ -1,9 +1,21 @@
-<?xml version="1.0" encoding="utf-8"?>
-<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-  <file source-language="en" datatype="plaintext" original="messages" target-language="sw">
-    <body>
-      <trans-unit id="instructor.evaluate.save"><source>Save Evaluation</source><target>Hifadhi tathmini</target></trans-unit>
-      <trans-unit id="instructor.validation.saveAttempt"><source>Save Validation</source><target>Hifadhi jaribio</target></trans-unit>
-    </body>
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2">
+  <file source_language="en" target_language="sw">
+    <trans-unit id="instructor.dashboard.title">
+      <source>instructor.dashboard.title</source>
+      <target>Dashibodi ya Mwalimu</target>
+    </trans-unit>
+    <trans-unit id="instructor.dashboard.welcome">
+      <source>instructor.dashboard.welcome</source>
+      <target>Karibu kwenye Dashibodi ya Mwalimu</target>
+    </trans-unit>
+    <trans-unit id="instructor.notifications.header">
+      <source>instructor.notifications.header</source>
+      <target>Arifa</target>
+    </trans-unit>
+    <trans-unit id="instructor.logout.button">
+      <source>instructor.logout.button</source>
+      <target>Ondoka</target>
+    </trans-unit>
   </file>
 </xliff>

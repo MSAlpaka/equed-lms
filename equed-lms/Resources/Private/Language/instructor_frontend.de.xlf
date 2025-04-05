@@ -1,9 +1,21 @@
-<?xml version="1.0" encoding="utf-8"?>
-<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-  <file source-language="en" datatype="plaintext" original="messages" target-language="de">
-    <body>
-      <trans-unit id="instructor.evaluate.save"><source>Save Evaluation</source><target>Bewertung speichern</target></trans-unit>
-      <trans-unit id="instructor.validation.saveAttempt"><source>Save Validation</source><target>Versuch speichern</target></trans-unit>
-    </body>
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2">
+  <file source_language="en" target_language="de">
+    <trans-unit id="instructor.dashboard.title">
+      <source>instructor.dashboard.title</source>
+      <target>Instructor Dashboard</target>
+    </trans-unit>
+    <trans-unit id="instructor.dashboard.welcome">
+      <source>instructor.dashboard.welcome</source>
+      <target>Willkommen im Instructor Dashboard</target>
+    </trans-unit>
+    <trans-unit id="instructor.notifications.header">
+      <source>instructor.notifications.header</source>
+      <target>Benachrichtigungen</target>
+    </trans-unit>
+    <trans-unit id="instructor.logout.button">
+      <source>instructor.logout.button</source>
+      <target>Abmelden</target>
+    </trans-unit>
   </file>
 </xliff>

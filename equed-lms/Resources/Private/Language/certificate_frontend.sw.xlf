@@ -1,8 +1,25 @@
-<?xml version="1.0" encoding="utf-8"?>
-<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-  <file source-language="en" datatype="plaintext" original="messages" target-language="sw">
-    <body>
-      <trans-unit id="certificate.userPhoto"><source>User Photo</source><target>Picha ya mtumiaji</target></trans-unit>
-    </body>
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2">
+  <file source_language="en" target_language="sw">
+    <trans-unit id="certificate.title">
+      <source>certificate.title</source>
+      <target>Cheti</target>
+    </trans-unit>
+    <trans-unit id="certificate.issueDate">
+      <source>certificate.issueDate</source>
+      <target>Tarehe ya utoaji</target>
+    </trans-unit>
+    <trans-unit id="certificate.validUntil">
+      <source>certificate.validUntil</source>
+      <target>Hadi</target>
+    </trans-unit>
+    <trans-unit id="certificate.certificateNumber">
+      <source>certificate.certificateNumber</source>
+      <target>Namba ya Cheti</target>
+    </trans-unit>
+    <trans-unit id="certificate.signature">
+      <source>certificate.signature</source>
+      <target>Sigature</target>
+    </trans-unit>
   </file>
 </xliff>

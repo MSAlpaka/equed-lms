@@ -1,15 +1,33 @@
-<!-- Optimized general_db.xlf -->
-<trans-unit id="course_label" resname="course_label">
-    <source>Course</source>
-    <target>Kurs</target>
-</trans-unit>
-
-<trans-unit id="submit_button" resname="submit_button">
-    <source>Submit</source>
-    <target>Absenden</target>
-</trans-unit>
-
-<trans-unit id="save_changes" resname="save_changes">
-    <source>Save Changes</source>
-    <target>Änderungen speichern</target>
-</trans-unit>
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2">
+  <file source_language="en" target_language="de">
+    <trans-unit id="instructor.evaluate.save">
+      <source>instructor.evaluate.save</source>
+      <target>Speichern</target>
+    </trans-unit>
+    <trans-unit id="instructor.validation.saveAttempt">
+      <source>instructor.validation.saveAttempt</source>
+      <target>Versuch speichern</target>
+    </trans-unit>
+    <trans-unit id="quiz.submit">
+      <source>quiz.submit</source>
+      <target>Abschicken</target>
+    </trans-unit>
+    <trans-unit id="certificate.userPhoto">
+      <source>certificate.userPhoto</source>
+      <target>Benutzerfoto</target>
+    </trans-unit>
+    <trans-unit id="onboarding.button.complete">
+      <source>onboarding.button.complete</source>
+      <target>Abschließen</target>
+    </trans-unit>
+    <trans-unit id="certifier.validation.reject">
+      <source>certifier.validation.reject</source>
+      <target>Abgelehnt</target>
+    </trans-unit>
+    <trans-unit id="certifier.validation.confirm">
+      <source>certifier.validation.confirm</source>
+      <target>Bestätigen</target>
+    </trans-unit>
+  </file>
+</xliff>

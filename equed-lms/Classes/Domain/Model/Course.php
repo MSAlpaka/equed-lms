@@ -16,63 +16,46 @@ use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 class Course extends AbstractEntity
 {
     protected string $title = '';
-
     protected string $description = '';
-
     protected string $category = '';
-
     protected bool $isActive = true;
 
-    /**
-     * Learning outcome / goal (e.g. "HoofCare Specialist")
-     */
+    /** @var string Learning outcome / goal (e.g. "HoofCare Specialist") */
     protected string $finishGoal = '';
 
-    /**
-     * List of course shortnames required to participate
-     *
-     * @var array<int, string>
-     */
+    /** @var array<int, string> List of course shortnames required to participate */
     protected array $prerequisites = [];
 
-    /**
-     * Optional reference to image or banner for the course
-     */
+    /** @var FileReference Optional reference to image or banner for the course */
     protected ?FileReference $image = null;
 
-    /**
-     * Assigned training center (for validation and administration)
-     */
+    /** @var Center Assigned training center (for validation and administration) */
     protected ?Center $center = null;
 
-    /**
-     * Determines if this course can lead to a certificate
-     */
+    /** @var bool Determines if this course can lead to a certificate */
     protected bool $grantsCertificate = true;
 
-    /**
-     * Internal sort order for display in frontend
-     */
+    /** @var int Internal sort order for display in frontend */
     protected int $sorting = 0;
 
-    /**
-     * Optional array of recommended follow-up specialties
-     *
-     * @var array<int, string>
-     */
+    /** @var array<int, string> Optional array of recommended follow-up specialties */
     protected array $recommendedSpecialties = [];
 
-    /**
-     * Lessons assigned to this course
-     *
-     * @var ObjectStorage<Lesson>
-     */
+    /** @var ObjectStorage<Lesson> Lessons assigned to this course */
     protected ObjectStorage $lessons;
+
+    /** @var User|null Instructor assigned to the course */
+    protected ?User $instructor = null;
+
+    /** @var bool Whether external validation is required for this course */
+    protected bool $requiresExternalValidation = false;
 
     public function __construct()
     {
         $this->lessons = new ObjectStorage();
     }
+
+    // Getter and Setter methods for all properties
 
     public function getTitle(): string
     {
@@ -160,7 +143,7 @@ class Course extends AbstractEntity
         $this->center = $center;
     }
 
-    public function isGrantsCertificate(): bool
+    public function grantsCertificate(): bool
     {
         return $this->grantsCertificate;
     }
@@ -196,29 +179,34 @@ class Course extends AbstractEntity
         $this->recommendedSpecialties = $recommendedSpecialties;
     }
 
-    /**
-     * @return ObjectStorage<Lesson>
-     */
     public function getLessons(): ObjectStorage
     {
         return $this->lessons;
     }
 
-    /**
-     * @param ObjectStorage<Lesson> $lessons
-     */
     public function setLessons(ObjectStorage $lessons): void
     {
         $this->lessons = $lessons;
     }
 
-    public function addLesson(Lesson $lesson): void
+    public function getInstructor(): ?User
     {
-        $this->lessons->attach($lesson);
+        return $this->instructor;
     }
 
-    public function removeLesson(Lesson $lesson): void
+    public function setInstructor(?User $instructor): void
     {
-        $this->lessons->detach($lesson);
+        $this->instructor = $instructor;
+    }
+
+    public function requiresExternalValidation(): bool
+    {
+        return $this->requiresExternalValidation;
+    }
+
+    public function setRequiresExternalValidation(bool $requiresExternalValidation): void
+    {
+        $this->requiresExternalValidation = $requiresExternalValidation;
     }
 }
+?>

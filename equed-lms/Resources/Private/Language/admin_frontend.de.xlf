@@ -1,11 +1,21 @@
-<?xml version='1.0' encoding='utf-8'?>
-<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-  <file source-language="en" datatype="plaintext" original="messages" target-language="de">
-    <body>
-      <trans-unit id="admin.edit"><source>Edit Entry</source><target>Eintrag bearbeiten</target></trans-unit>
-      <trans-unit id="admin.save"><source>Save</source><target>Speichern</target></trans-unit>
-      <trans-unit id="admin.delete"><source>Delete</source><target>Löschen</target></trans-unit>
-      <trans-unit id="admin.noPermission"><source>You do not have permission to perform this action.</source><target>Du hast keine Berechtigung für diese Aktion.</target></trans-unit>
-    </body>
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2">
+  <file source_language="en" target_language="de">
+    <trans-unit id="admin.dashboard.title">
+      <source>admin.dashboard.title</source>
+      <target>Admin Dashboard</target>
+    </trans-unit>
+    <trans-unit id="admin.dashboard.welcome">
+      <source>admin.dashboard.welcome</source>
+      <target>Willkommen im Admin Dashboard</target>
+    </trans-unit>
+    <trans-unit id="admin.notifications.header">
+      <source>admin.notifications.header</source>
+      <target>Benachrichtigungen</target>
+    </trans-unit>
+    <trans-unit id="admin.logout.button">
+      <source>admin.logout.button</source>
+      <target>Abmelden</target>
+    </trans-unit>
   </file>
 </xliff>

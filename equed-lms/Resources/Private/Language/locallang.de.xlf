@@ -1,25 +1,17 @@
-<!-- Optimized locallang.xlf (German) -->
-<trans-unit id="course_label" resname="course_label">
-    <source>Course</source>
-    <target>Kurs</target>
-</trans-unit>
-
-<trans-unit id="submit_button" resname="submit_button">
-    <source>Submit</source>
-    <target>Absenden</target> <!-- 'Absenden' is a more common translation -->
-</trans-unit>
-
-<trans-unit id="feedback_label" resname="feedback_label">
-    <source>Feedback</source>
-    <target>Feedback</target>
-</trans-unit>
-
-<trans-unit id="profile_header" resname="profile_header">
-    <source>User Profile</source>
-    <target>Benutzerprofil</target>
-</trans-unit>
-
-<trans-unit id="certificate_header" resname="certificate_header">
-    <source>Certificate</source>
-    <target>Zertifikat</target>
-</trans-unit>
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2">
+  <file source_language="en" target_language="de">
+    <trans-unit id="locallang.general.welcome">
+      <source>locallang.general.welcome</source>
+      <target>Willkommen</target>
+    </trans-unit>
+    <trans-unit id="locallang.general.settings">
+      <source>locallang.general.settings</source>
+      <target>Allgemeine Einstellungen</target>
+    </trans-unit>
+    <trans-unit id="locallang.general.logout">
+      <source>locallang.general.logout</source>
+      <target>Abmelden</target>
+    </trans-unit>
+  </file>
+</xliff>

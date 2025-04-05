@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2">
+  <file source_language="en" target_language="en">
+    <trans-unit id="locallang.general.welcome">
+      <source>locallang.general.welcome</source>
+      <target>Welcome</target>
+    </trans-unit>
+    <trans-unit id="locallang.general.settings">
+      <source>locallang.general.settings</source>
+      <target>General Settings</target>
+    </trans-unit>
+    <trans-unit id="locallang.general.logout">
+      <source>locallang.general.logout</source>
+      <target>Log Out</target>
+    </trans-unit>
+  </file>
+</xliff>

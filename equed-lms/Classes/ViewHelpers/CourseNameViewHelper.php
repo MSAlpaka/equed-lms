@@ -3,30 +3,31 @@
 namespace Equed\EquedLms\ViewHelpers;
 
 use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use Equed\EquedLms\Domain\Repository\CourseRepository;
 
 class CourseNameViewHelper extends AbstractViewHelper
 {
-    /**
-     * @param int $courseId
-     * @return string
-     */
-    public function render(int $courseId): string
+    public function initializeArguments(): void
     {
-        // Fetch course name from the database
-        $course = $this->getCourseById($courseId);
-        return $course ? $course->getName() : 'Unknown Course';
+        $this->registerArgument('courseId', 'int', 'Course ID', true);
     }
 
-    /**
-     * Fetch course by ID
-     *
-     * @param int $courseId
-     * @return \Equed\EquedLms\Domain\Model\Course|null
-     */
+    public function render(): string
+    {
+        $courseId = (int)$this->arguments['courseId'];
+        $course = $this->getCourseById($courseId);
+
+        return $course?->getName()
+            ?? LocalizationUtility::translate('course.unknown', 'equed_lms')
+            ?? 'Unknown Course';
+    }
+
     protected function getCourseById(int $courseId)
     {
-        // Call to repository or service to get course data
-        $courseRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Equed\EquedLms\Domain\Repository\CourseRepository::class);
+        /** @var CourseRepository $courseRepository */
+        $courseRepository = GeneralUtility::makeInstance(CourseRepository::class);
         return $courseRepository->findByIdentifier($courseId);
     }
 }

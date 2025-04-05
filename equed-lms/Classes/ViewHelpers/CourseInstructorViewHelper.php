@@ -3,30 +3,32 @@
 namespace Equed\EquedLms\ViewHelpers;
 
 use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use Equed\EquedLms\Domain\Repository\CourseRepository;
 
 class CourseInstructorViewHelper extends AbstractViewHelper
 {
-    /**
-     * @param int $courseId
-     * @return string
-     */
-    public function render(int $courseId): string
+    public function initializeArguments(): void
     {
-        // Fetch course instructor
-        $course = $this->getCourseById($courseId);
-        $instructor = $course ? $course->getInstructor() : null;
-        return $instructor ? $instructor->getName() : 'No Instructor Assigned';
+        $this->registerArgument('courseId', 'int', 'Course ID', true);
     }
 
-    /**
-     * Fetch course data by ID
-     *
-     * @param int $courseId
-     * @return \Equed\EquedLms\Domain\Model\Course|null
-     */
+    public function render(): string
+    {
+        $courseId = (int)$this->arguments['courseId'];
+        $course = $this->getCourseById($courseId);
+        $instructor = $course ? $course->getInstructor() : null;
+
+        return $instructor?->getName()
+            ?? LocalizationUtility::translate('course.instructor.none', 'equed_lms')
+            ?? 'No Instructor Assigned';
+    }
+
     protected function getCourseById(int $courseId)
     {
-        $courseRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Equed\EquedLms\Domain\Repository\CourseRepository::class);
+        /** @var CourseRepository $courseRepository */
+        $courseRepository = GeneralUtility::makeInstance(CourseRepository::class);
         return $courseRepository->findByIdentifier($courseId);
     }
 }

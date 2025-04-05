@@ -1,9 +1,21 @@
-<?xml version="1.0" encoding="utf-8"?>
-<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-  <file source-language="en" datatype="plaintext" original="messages" target-language="de">
-    <body>
-      <trans-unit id="certifier.validation.confirm"><source>Confirm Record</source><target>Eintrag bestätigen</target></trans-unit>
-      <trans-unit id="certifier.validation.reject"><source>Reject Record</source><target>Eintrag ablehnen</target></trans-unit>
-    </body>
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2">
+  <file source_language="en" target_language="de">
+    <trans-unit id="certifier.dashboard.title">
+      <source>certifier.dashboard.title</source>
+      <target>Certifier Dashboard</target>
+    </trans-unit>
+    <trans-unit id="certifier.dashboard.welcome">
+      <source>certifier.dashboard.welcome</source>
+      <target>Willkommen im Certifier Dashboard</target>
+    </trans-unit>
+    <trans-unit id="certifier.notifications.header">
+      <source>certifier.notifications.header</source>
+      <target>Benachrichtigungen</target>
+    </trans-unit>
+    <trans-unit id="certifier.logout.button">
+      <source>certifier.logout.button</source>
+      <target>Abmelden</target>
+    </trans-unit>
   </file>
 </xliff>

@@ -1,76 +1,129 @@
 <?php
+// InstructorDashboardController.php
 
-declare(strict_types=1);
-
-namespace EquedLms\Controller;
+namespace Vendor\EquedLms\Controller;
 
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
-use EquedLms\Domain\Repository\InstructorRepository;
-use EquedLms\Domain\Repository\UserCourseRecordRepository;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Context\Context;
-use TYPO3\CMS\Core\Exception\AccessDeniedException;
+use Vendor\EquedLms\Domain\Model\Course;
+use Vendor\EquedLms\Domain\Repository\CourseRepository;
 
 class InstructorDashboardController extends ActionController
 {
-    protected InstructorRepository $instructorRepository;
-    protected UserCourseRecordRepository $userCourseRecordRepository;
+    /**
+     * @var CourseRepository
+     */
+    protected $courseRepository;
 
-    public function __construct(
-        InstructorRepository $instructorRepository,
-        UserCourseRecordRepository $userCourseRecordRepository
-    ) {
-        $this->instructorRepository = $instructorRepository;
-        $this->userCourseRecordRepository = $userCourseRecordRepository;
+    /**
+     * @param CourseRepository $courseRepository
+     */
+    public function injectCourseRepository(CourseRepository $courseRepository)
+    {
+        $this->courseRepository = $courseRepository;
     }
 
     /**
-     * Ensure only logged-in instructors can access the dashboard.
+     * Action to display the dashboard for the instructor
      */
-    protected function initializeAction(): void
+    public function indexAction()
     {
-        $context = GeneralUtility::makeInstance(Context::class);
-        $instructorId = (int)$context->getPropertyFromAspect('frontend.user', 'id');
+        $user = $this->getAuthenticatedUser();
+        
+        // Retrieve all courses assigned to the current instructor
+        $assignedCourses = $this->courseRepository->findAssignedCoursesByInstructor($user);
 
-        if (!$this->instructorRepository->isInstructor($instructorId)) {
-            $this->redirect('accessDenied', 'Error');
+        $this->view->assign('assignedCourses', $assignedCourses);
+    }
+
+    /**
+     * Action to display the feedback form for a specific course
+     */
+    public function feedbackAction($courseId)
+    {
+        $user = $this->getAuthenticatedUser();
+        $course = $this->courseRepository->findByUid($courseId);
+
+        // Ensure that the course is assigned to the current user (Instructor)
+        if ($course && $course->getInstructor() === $user) {
+            $this->view->assign('course', $course);
+        } else {
+            $this->addFlashMessage(
+                $this->translate('error_not_assigned_to_course'),
+                '',
+                \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR
+            );
+            $this->redirect('index');
         }
     }
 
     /**
-     * Instructor Dashboard Overview: Displays assigned courses and user statistics.
+     * Action to submit feedback for a specific course
      */
-    public function indexAction(): void
+    public function submitFeedbackAction($courseId)
     {
-        $context = GeneralUtility::makeInstance(Context::class);
-        $instructorId = (int)$context->getPropertyFromAspect('frontend.user', 'id');
+        $user = $this->getAuthenticatedUser();
+        $course = $this->courseRepository->findByUid($courseId);
 
-        $assignedCourses = $this->userCourseRecordRepository->findCoursesByInstructor($instructorId);
+        // Ensure that the course is assigned to the current user (Instructor)
+        if ($course && $course->getInstructor() === $user) {
+            // Submit feedback for the course
+            $feedback = $this->request->getArgument('feedback');
+            $this->courseRepository->submitFeedback($courseId, $user, $feedback);
+            $this->addFlashMessage(
+                $this->translate('feedback_submitted')
+            );
+        } else {
+            $this->addFlashMessage(
+                $this->translate('error_not_assigned_or_completed'),
+                '',
+                \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR
+            );
+        }
 
-        $this->view->assignMultiple([
-            'assignedCourses' => $assignedCourses,
-            'instructor' => $this->instructorRepository->findByUid($instructorId)
-        ]);
+        $this->redirect('index');
     }
 
     /**
-     * Instructor Performance Statistics: Shows performance data like passed courses, ratings, etc.
+     * Action to mark the course as completed
      */
-    public function performanceAction(): void
+    public function markCompleteAction($courseId)
     {
-        $context = GeneralUtility::makeInstance(Context::class);
-        $instructorId = (int)$context->getPropertyFromAspect('frontend.user', 'id');
+        $user = $this->getAuthenticatedUser();
+        $course = $this->courseRepository->findByUid($courseId);
 
-        $stats = $this->instructorRepository->getPerformanceStats($instructorId);
+        if ($course && $course->getInstructor() === $user) {
+            // Mark the course as completed
+            $course->setStatus('completed');
+            $this->courseRepository->update($course);
+            $this->addFlashMessage(
+                $this->translate('course_completed')
+            );
+        } else {
+            $this->addFlashMessage(
+                $this->translate('error_not_assigned_to_course'),
+                '',
+                \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR
+            );
+        }
 
-        $this->view->assign('performanceStats', $stats);
+        $this->redirect('index');
     }
 
     /**
-     * Access Denied Error Page: Redirects or displays an access error message.
+     * Helper function to get the authenticated user
      */
-    public function accessDeniedAction(): void
+    protected function getAuthenticatedUser()
     {
-        $this->view->assign('message', 'You do not have access to this page.');
+        // Assuming we have a method to retrieve the logged-in user
+        return $this->getUser();
+    }
+
+    /**
+     * Helper function for translation
+     */
+    protected function translate($key)
+    {
+        return $this->getLocalizationService()->getLocalizedString($key);
     }
 }
+?>

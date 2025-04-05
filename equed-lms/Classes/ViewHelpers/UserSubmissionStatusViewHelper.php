@@ -3,33 +3,34 @@
 namespace Equed\EquedLms\ViewHelpers;
 
 use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use Equed\EquedLms\Domain\Repository\UserSubmissionRepository;
 
 class UserSubmissionStatusViewHelper extends AbstractViewHelper
 {
-    /**
-     * @param int $userId
-     * @param int $submissionId
-     * @return string
-     */
-    public function render(int $userId, int $submissionId): string
+    public function initializeArguments(): void
     {
-        // Fetch submission status for a user
-        $status = $this->getSubmissionStatus($userId, $submissionId);
-        return $status ? 'Submitted' : 'Not Submitted';
+        $this->registerArgument('userId', 'int', 'User ID', true);
+        $this->registerArgument('submissionId', 'int', 'Submission ID', true);
     }
 
-    /**
-     * Get the submission status for a specific user and submission
-     *
-     * @param int $userId
-     * @param int $submissionId
-     * @return bool
-     */
+    public function render(): string
+    {
+        $userId = (int)$this->arguments['userId'];
+        $submissionId = (int)$this->arguments['submissionId'];
+
+        $status = $this->getSubmissionStatus($userId, $submissionId);
+        $key = $status ? 'submission.status.submitted' : 'submission.status.not_submitted';
+
+        return LocalizationUtility::translate($key, 'equed_lms') ?? ($status ? 'Submitted' : 'Not Submitted');
+    }
+
     protected function getSubmissionStatus(int $userId, int $submissionId): bool
     {
-        // Fetch submission status from the repository
-        $repository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Equed\EquedLms\Domain\Repository\UserSubmissionRepository::class);
+        /** @var UserSubmissionRepository $repository */
+        $repository = GeneralUtility::makeInstance(UserSubmissionRepository::class);
         $submission = $repository->findByUserAndSubmission($userId, $submissionId);
-        return $submission ? $submission->getStatus() === 'submitted' : false;
+        return $submission?->getStatus() === 'submitted';
     }
 }

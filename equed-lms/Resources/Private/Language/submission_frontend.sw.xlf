@@ -1,10 +1,29 @@
-<?xml version='1.0' encoding='utf-8'?>
-<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-  <file source-language="en" datatype="plaintext" original="messages" target-language="sw">
-    <body>
-      <trans-unit id="submission.send"><source>Submit Report</source><target>Tuma ripoti</target></trans-unit>
-      <trans-unit id="submission.comment"><source>Comment</source><target>Maoni</target></trans-unit>
-      <trans-unit id="submission.status.reviewed"><source>Reviewed</source><target>Imekaguliwa</target></trans-unit>
-    </body>
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2">
+  <file source_language="en" target_language="sw">
+    <trans-unit id="submission.title">
+      <source>submission.title</source>
+      <target>Uwasilishaji</target>
+    </trans-unit>
+    <trans-unit id="submission.description">
+      <source>submission.description</source>
+      <target>Tafadhali wasilisha nyaraka zako hapa.</target>
+    </trans-unit>
+    <trans-unit id="submission.file">
+      <source>submission.file</source>
+      <target>Pakia faili</target>
+    </trans-unit>
+    <trans-unit id="submission.submit">
+      <source>submission.submit</source>
+      <target>Wasilisha</target>
+    </trans-unit>
+    <trans-unit id="submission.success">
+      <source>submission.success</source>
+      <target>Uwasilishaji wako umekamilika kwa mafanikio.</target>
+    </trans-unit>
+    <trans-unit id="submission.error">
+      <source>submission.error</source>
+      <target>Hitilafu wakati wa kuwasilisha. Tafadhali jaribu tena.</target>
+    </trans-unit>
   </file>
 </xliff>

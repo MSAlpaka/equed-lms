@@ -1,2 +1,33 @@
-<?xml version='1.0' encoding='utf-8'?>
-<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2"><file source-language="en" datatype="plaintext" original="messages"><body><trans-unit id="course.certificate_available"><source>course.certificate_available</source><target /></trans-unit><trans-unit id="course.description"><source>course.description</source><target /></trans-unit><trans-unit id="course.lessons"><source>course.lessons</source><target /></trans-unit><trans-unit id="course.require_case_study"><source>course.require_case_study</source><target /></trans-unit><trans-unit id="course.require_practice"><source>course.require_practice</source><target /></trans-unit><trans-unit id="course.require_theory"><source>course.require_theory</source><target /></trans-unit><trans-unit id="course.title"><source>course.title</source><target /></trans-unit><trans-unit id="tx_equedlms_domain_model_badge.description"><source>tx_equedlms_domain_model_badge.description</source><target /></trans-unit><trans-unit id="tx_equedlms_domain_model_badge.image"><source>tx_equedlms_domain_model_badge.image</source><target /></trans-unit><trans-unit id="tx_equedlms_domain_model_badge.name"><source>tx_equedlms_domain_model_badge.name</source><target /></trans-unit><trans-unit id="tx_equedlms_domain_model_contentpage.bodytext"><source>tx_equedlms_domain_model_contentpage.bodytext</source><target /></trans-unit><trans-unit id="tx_equedlms_domain_model_contentpage.lesson"><source>tx_equedlms_domain_model_contentpage.lesson</source><target /></trans-unit><trans-unit id="tx_equedlms_domain_model_contentpage.sort_order"><source>tx_equedlms_domain_model_contentpage.sort_order</source><target /></trans-unit><trans-unit id="tx_equedlms_domain_model_contentpage.title"><source>tx_equedlms_domain_model_contentpage.title</source><target /></trans-unit></body></file></xliff>
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2">
+  <file source_language="en" target_language="es">
+    <trans-unit id="instructor.evaluate.save">
+      <source>instructor.evaluate.save</source>
+      <target>Guardar</target>
+    </trans-unit>
+    <trans-unit id="instructor.validation.saveAttempt">
+      <source>instructor.validation.saveAttempt</source>
+      <target>Guardar intento</target>
+    </trans-unit>
+    <trans-unit id="quiz.submit">
+      <source>quiz.submit</source>
+      <target>Enviar</target>
+    </trans-unit>
+    <trans-unit id="certificate.userPhoto">
+      <source>certificate.userPhoto</source>
+      <target>Foto de usuario</target>
+    </trans-unit>
+    <trans-unit id="onboarding.button.complete">
+      <source>onboarding.button.complete</source>
+      <target>Completar</target>
+    </trans-unit>
+    <trans-unit id="certifier.validation.reject">
+      <source>certifier.validation.reject</source>
+      <target>Rechazar</target>
+    </trans-unit>
+    <trans-unit id="certifier.validation.confirm">
+      <source>certifier.validation.confirm</source>
+      <target>Confirmar</target>
+    </trans-unit>
+  </file>
+</xliff>

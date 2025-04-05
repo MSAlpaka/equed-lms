@@ -1,20 +1,21 @@
-<!-- Optimized locallang_certifier_backend.sw.xlf -->
-<trans-unit id="course_label" resname="course_label">
-    <source>Course</source>
-    <target>Kozi</target>
-</trans-unit>
-
-<trans-unit id="submit_button" resname="submit_button">
-    <source>Submit</source>
-    <target>Wasilisha</target>
-</trans-unit>
-
-<trans-unit id="feedback_label" resname="feedback_label">
-    <source>Feedback</source>
-    <target>Maoni</target>
-</trans-unit>
-
-<trans-unit id="profile_header" resname="profile_header">
-    <source>User Profile</source>
-    <target>Profaili ya Mtumiaji</target>
-</trans-unit>
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2">
+  <file source_language="en" target_language="sw">
+    <trans-unit id="admin.title">
+      <source>admin.title</source>
+      <target>Dashibodi ya Msimamizi</target>
+    </trans-unit>
+    <trans-unit id="admin.users">
+      <source>admin.users</source>
+      <target>Usimamizi wa watumiaji</target>
+    </trans-unit>
+    <trans-unit id="admin.settings">
+      <source>admin.settings</source>
+      <target>Mipangilio ya Msimamizi</target>
+    </trans-unit>
+    <trans-unit id="admin.logout">
+      <source>admin.logout</source>
+      <target>Ondoka</target>
+    </trans-unit>
+  </file>
+</xliff>

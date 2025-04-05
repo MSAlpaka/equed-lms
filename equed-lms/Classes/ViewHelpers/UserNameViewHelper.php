@@ -3,29 +3,31 @@
 namespace Equed\EquedLms\ViewHelpers;
 
 use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use TYPO3\CMS\Extbase\Domain\Repository\FrontendUserRepository;
 
 class UserNameViewHelper extends AbstractViewHelper
 {
-    /**
-     * @param int $userId
-     * @return string
-     */
-    public function render(int $userId): string
+    public function initializeArguments(): void
     {
-        // Fetch user name by ID
-        $user = $this->getUserById($userId);
-        return $user ? $user->getFullName() : 'Unknown User';
+        $this->registerArgument('userId', 'int', 'Frontend User UID', true);
     }
 
-    /**
-     * Fetch user data by ID
-     *
-     * @param int $userId
-     * @return \TYPO3\CMS\Extbase\Domain\Model\FrontendUser|null
-     */
+    public function render(): string
+    {
+        $userId = (int)$this->arguments['userId'];
+        $user = $this->getUserById($userId);
+
+        return $user?->getFullName()
+            ?? LocalizationUtility::translate('user.unknown', 'equed_lms')
+            ?? 'Unknown User';
+    }
+
     protected function getUserById(int $userId)
     {
-        $userRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Domain\Repository\FrontendUserRepository::class);
-        return $userRepository->findByUid($userId);
+        /** @var FrontendUserRepository $repo */
+        $repo = GeneralUtility::makeInstance(FrontendUserRepository::class);
+        return $repo->findByUid($userId);
     }
 }

@@ -3,47 +3,39 @@
 namespace Equed\EquedLms\ViewHelpers;
 
 use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use Equed\EquedLms\Domain\Repository\CourseRepository;
 
 class CourseTypeViewHelper extends AbstractViewHelper
 {
-    /**
-     * @param int $courseId
-     * @return string
-     */
-    public function render(int $courseId): string
+    public function initializeArguments(): void
     {
-        // Fetch course type
-        $course = $this->getCourseById($courseId);
-        return $course ? $this->getCourseType($course->getType()) : 'Unknown Course Type';
+        $this->registerArgument('courseId', 'int', 'Course ID', true);
     }
 
-    /**
-     * Fetch course data by ID
-     *
-     * @param int $courseId
-     * @return \Equed\EquedLms\Domain\Model\Course|null
-     */
+    public function render(): string
+    {
+        $courseId = (int)$this->arguments['courseId'];
+        $course = $this->getCourseById($courseId);
+
+        $type = $course?->getType();
+        return $this->getCourseTypeLabel((int)$type);
+    }
+
     protected function getCourseById(int $courseId)
     {
-        $courseRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Equed\EquedLms\Domain\Repository\CourseRepository::class);
-        return $courseRepository->findByIdentifier($courseId);
+        /** @var CourseRepository $repo */
+        $repo = GeneralUtility::makeInstance(CourseRepository::class);
+        return $repo->findByIdentifier($courseId);
     }
 
-    /**
-     * Get the readable course type
-     *
-     * @param int $type
-     * @return string
-     */
-    protected function getCourseType(int $type): string
+    protected function getCourseTypeLabel(int $type): string
     {
-        switch ($type) {
-            case 1:
-                return 'Online';
-            case 2:
-                return 'In-person';
-            default:
-                return 'Hybrid';
-        }
+        return match ($type) {
+            1 => LocalizationUtility::translate('course.type.online', 'equed_lms') ?? 'Online',
+            2 => LocalizationUtility::translate('course.type.inperson', 'equed_lms') ?? 'In-person',
+            default => LocalizationUtility::translate('course.type.hybrid', 'equed_lms') ?? 'Hybrid',
+        };
     }
 }

@@ -1,70 +1,74 @@
 <?php
+// CertifierController.php
 
-namespace Equed\EquedLms\Controller;
+namespace Vendor\EquedLms\Controller;
 
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
-use Equed\EquedLms\Domain\Repository\UserCourseRecordRepository;
-use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
-use TYPO3\CMS\Extbase\Annotation\Inject;
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
-use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
-use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
+use Vendor\EquedLms\Domain\Model\Course;
+use Vendor\EquedLms\Domain\Repository\CourseRepository;
 
 class CertifierController extends ActionController
 {
-    #[Inject]
-    protected UserCourseRecordRepository $userCourseRecordRepository;
+    /**
+     * @var CourseRepository
+     */
+    protected $courseRepository;
 
-    #[Inject]
-    protected PersistenceManager $persistenceManager;
-
-    protected function initializeView(ViewInterface $view): void
+    /**
+     * @param CourseRepository $courseRepository
+     */
+    public function injectCourseRepository(CourseRepository $courseRepository)
     {
-        parent::initializeView($view);
-        // Prüfen, ob eingeloggter User ein Certifier ist (vereinfachter Platzhalter)
-        $feUser = $GLOBALS['TSFE']->fe_user->user ?? null;
-        if (!$feUser || ($feUser['usergroup'] ?? '') !== 'certifier') {
-            $this->addFlashMessage('Kein Zugriff – nur für Certifier sichtbar.', '', 
-                \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR);
-            $this->redirect('index', 'Dashboard');
-        }
+        $this->courseRepository = $courseRepository;
     }
 
-    public function indexAction(): void
+    /**
+     * Validate a course (only for Certifiers and when validation is required)
+     */
+    public function validateAction($courseId)
     {
-        $pendingRecords = $this->userCourseRecordRepository->findPendingValidations();
-        $this->view->assignMultiple([
-            'pendingRecords' => $pendingRecords,
-        ]);
-    }
+        $course = $this->courseRepository->findByUid($courseId);
 
-    public function validateAction(int $courseRecordId, bool $isValid): void
-    {
-        $record = $this->userCourseRecordRepository->findByUid($courseRecordId);
-
-        if (!$record) {
-            $this->addFlashMessage('Kursdatensatz nicht gefunden.', '', 
-                \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR);
-            $this->redirect('index');
-            return;
-        }
-
-        if ($isValid) {
-            $record->setValidationStatus('valid');
-            $record->setValidatedAt(new \DateTimeImmutable());
-            $record->setValidatedBy($GLOBALS['TSFE']->fe_user->user['uid'] ?? 0);
-            $this->addFlashMessage('Zertifizierung erfolgreich bestätigt.');
+        if ($course->getRequiresExternalValidation()) {
+            // Ensure the user is a Certifier
+            if ($this->getAuthenticatedUser()->hasRole('Certifier')) {
+                // Mark the course as validated
+                $course->setStatus('validated');
+                $this->courseRepository->update($course);
+                $this->addFlashMessage(
+                    $this->translate('course_validated')
+                );
+            } else {
+                $this->addFlashMessage(
+                    $this->translate('error_no_validation_permission'),
+                    '',
+                    \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR
+                );
+            }
         } else {
-            $record->setValidationStatus('rejected');
-            $this->addFlashMessage('Zertifizierung wurde abgelehnt.', '', 
-                \TYPO3\CMS\Core\Messaging\FlashMessage::WARNING);
+            $this->addFlashMessage(
+                $this->translate('course_no_validation_needed'),
+                '',
+                \TYPO3\CMS\Core\Messaging\AbstractMessage::INFO
+            );
         }
+    }
 
-        $this->userCourseRecordRepository->update($record);
-        $this->persistenceManager->persistAll();
+    /**
+     * Helper function to get the authenticated user
+     */
+    protected function getAuthenticatedUser()
+    {
+        // Assuming we have a method to retrieve the logged-in user
+        return $this->getUser();
+    }
 
-        // (Optional: Trigger für Zertifikat oder Benachrichtigung hier einfügen)
-
-        $this->redirect('index');
+    /**
+     * Helper function for translation
+     */
+    protected function translate($key)
+    {
+        return $this->getLocalizationService()->getLocalizedString($key);
     }
 }
+?>

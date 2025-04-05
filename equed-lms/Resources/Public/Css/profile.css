@@ -1,0 +1,34 @@
+/* Tailwind-optimiertes Profilmodul */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.profile-container {
+  @apply max-w-4xl mx-auto p-4;
+}
+
+.profile-header {
+  @apply text-2xl font-bold text-gray-800 dark:text-white mb-4;
+}
+
+.profile-details {
+  @apply bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md;
+}
+
+.profile-item {
+  @apply mb-4;
+}
+
+.profile-label {
+  @apply text-sm text-gray-500 dark:text-gray-400 uppercase tracking-wide;
+}
+
+.profile-value {
+  @apply text-base text-gray-800 dark:text-white font-medium;
+}
+
+@media (max-width: 768px) {
+  .profile-header {
+    @apply text-xl;
+  }
+}

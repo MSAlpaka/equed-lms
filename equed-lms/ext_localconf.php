@@ -2,6 +2,8 @@
 
 defined('TYPO3') or die();
 
+use function str_contains;
+
 use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
 use Equed\EquedLms\Controller\CourseController;
 use Equed\EquedLms\Controller\LessonController;
@@ -12,11 +14,12 @@ use Equed\EquedLms\Controller\UserSubmissionController;
 use Equed\EquedLms\Controller\UserCourseRecordController;
 use Equed\EquedLms\Controller\SsoLoginController;
 
-// Kontext-Ermittlung anhand der Domain
+// Kontext-Ermittlung anhand der Domain / Determine context based on domain
 $host = $_SERVER['HTTP_HOST'] ?? 'unknown';
 $isTraining = str_contains($host, 'training.equed.eu');
 
 // Volles LMS NUR in training.equed.eu aktivieren
+// Activate full LMS features only on training.equed.eu
 if ($isTraining) {
     ExtensionUtility::configurePlugin(
         'Equed.EquedLms',
@@ -76,6 +79,7 @@ if ($isTraining) {
 }
 
 // SSO-Login ist in ALLEN Instanzen aktiv
+// SSO login is active in ALL instances
 ExtensionUtility::configurePlugin(
     'Equed.EquedLms',
     'SsoLogin',

@@ -1,2 +1,21 @@
-<?xml version='1.0' encoding='utf-8'?>
-<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2"><file source-language="en" datatype="plaintext" original="messages"><body><trans-unit id="fe_users.is_certifier"><source>fe_users.is_certifier</source><target /></trans-unit><trans-unit id="fe_users.photo"><source>fe_users.photo</source><target /></trans-unit></body></file></xliff>
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2">
+  <file source_language="en" target_language="sw">
+    <trans-unit id="user.dashboard.view">
+      <source>user.dashboard.view</source>
+      <target>Angalia dashibodi</target>
+    </trans-unit>
+    <trans-unit id="user.profile.update">
+      <source>user.profile.update</source>
+      <target>Update Profile</target>
+    </trans-unit>
+    <trans-unit id="user.logout">
+      <source>user.logout</source>
+      <target>Ondoka</target>
+    </trans-unit>
+    <trans-unit id="user.notifications.view">
+      <source>user.notifications.view</source>
+      <target>Tazama arifa</target>
+    </trans-unit>
+  </file>
+</xliff>

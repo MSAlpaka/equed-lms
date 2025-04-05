@@ -1,10 +1,21 @@
-<!-- Optimized user_frontend.xlf -->
-<trans-unit id="submit_button" resname="submit_button">
-    <source>Submit</source>
-    <target>Absenden</target>
-</trans-unit>
-
-<trans-unit id="profile_header" resname="profile_header">
-    <source>User Profile</source>
-    <target>Benutzerprofil</target>
-</trans-unit>
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2">
+  <file source_language="en" target_language="de">
+    <trans-unit id="user.profile.view">
+      <source>user.profile.view</source>
+      <target>Profil anzeigen</target>
+    </trans-unit>
+    <trans-unit id="user.edit.profile">
+      <source>user.edit.profile</source>
+      <target>Profil bearbeiten</target>
+    </trans-unit>
+    <trans-unit id="user.notifications">
+      <source>user.notifications</source>
+      <target>Benachrichtigungen</target>
+    </trans-unit>
+    <trans-unit id="user.login">
+      <source>user.login</source>
+      <target>Anmelden</target>
+    </trans-unit>
+  </file>
+</xliff>

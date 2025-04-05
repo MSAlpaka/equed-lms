@@ -1,2 +1,21 @@
-<?xml version='1.0' encoding='utf-8'?>
-<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2"><file source-language="en" datatype="plaintext" original="messages"><body><trans-unit id="certificate.date"><source>certificate.date</source><target /></trans-unit><trans-unit id="certificate.issuedTo"><source>certificate.issuedTo</source><target /></trans-unit><trans-unit id="certificate.title"><source>certificate.title</source><target /></trans-unit><trans-unit id="user.certificates"><source>user.certificates</source><target /></trans-unit><trans-unit id="user.courses.active"><source>user.courses.active</source><target /></trans-unit><trans-unit id="user.logout"><source>user.logout</source><target /></trans-unit></body></file></xliff>
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2">
+  <file source_language="en" target_language="en">
+    <trans-unit id="user.dashboard.title">
+      <source>user.dashboard.title</source>
+      <target>User Dashboard</target>
+    </trans-unit>
+    <trans-unit id="user.dashboard.welcome">
+      <source>user.dashboard.welcome</source>
+      <target>Welcome to the User Dashboard</target>
+    </trans-unit>
+    <trans-unit id="user.settings">
+      <source>user.settings</source>
+      <target>User Settings</target>
+    </trans-unit>
+    <trans-unit id="user.logout.button">
+      <source>user.logout.button</source>
+      <target>Log Out</target>
+    </trans-unit>
+  </file>
+</xliff>

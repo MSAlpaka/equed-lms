@@ -1,20 +1,21 @@
-<!-- Optimized locallang_user_backend.en.xlf -->
-<trans-unit id="course_label" resname="course_label">
-    <source>Course</source>
-    <target>Course</target>
-</trans-unit>
-
-<trans-unit id="submit_button" resname="submit_button">
-    <source>Submit</source>
-    <target>Submit</target>
-</trans-unit>
-
-<trans-unit id="feedback_label" resname="feedback_label">
-    <source>Feedback</source>
-    <target>Feedback</target>
-</trans-unit>
-
-<trans-unit id="profile_header" resname="profile_header">
-    <source>User Profile</source>
-    <target>User Profile</target>
-</trans-unit>
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2">
+  <file source_language="en" target_language="en">
+    <trans-unit id="admin.title">
+      <source>admin.title</source>
+      <target>Admin Dashboard</target>
+    </trans-unit>
+    <trans-unit id="admin.users">
+      <source>admin.users</source>
+      <target>User Management</target>
+    </trans-unit>
+    <trans-unit id="admin.settings">
+      <source>admin.settings</source>
+      <target>Admin Settings</target>
+    </trans-unit>
+    <trans-unit id="admin.logout">
+      <source>admin.logout</source>
+      <target>Log Out</target>
+    </trans-unit>
+  </file>
+</xliff

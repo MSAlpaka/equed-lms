@@ -1,10 +1,21 @@
-<!-- Optimized user_db.xlf -->
-<trans-unit id="course_label" resname="course_label">
-    <source>Course</source>
-    <target>Kurs</target>
-</trans-unit>
-
-<trans-unit id="submit_button" resname="submit_button">
-    <source>Submit</source>
-    <target>Absenden</target>
-</
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2">
+  <file source_language="en" target_language="de">
+    <trans-unit id="user.dashboard.view">
+      <source>user.dashboard.view</source>
+      <target>Dashboard anzeigen</target>
+    </trans-unit>
+    <trans-unit id="user.profile.update">
+      <source>user.profile.update</source>
+      <target>Profil aktualisieren</target>
+    </trans-unit>
+    <trans-unit id="user.logout">
+      <source>user.logout</source>
+      <target>Abmelden</target>
+    </trans-unit>
+    <trans-unit id="user.notifications.view">
+      <source>user.notifications.view</source>
+      <target>Benachrichtigungen anzeigen</target>
+    </trans-unit>
+  </file>
+</xliff>

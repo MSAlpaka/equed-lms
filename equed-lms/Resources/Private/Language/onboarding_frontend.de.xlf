@@ -1,8 +1,29 @@
-<?xml version="1.0" encoding="utf-8"?>
-<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-  <file source-language="en" datatype="plaintext" original="messages" target-language="de">
-    <body>
-      <trans-unit id="onboarding.button.complete"><source>Complete Onboarding</source><target>Onboarding abschließen</target></trans-unit>
-    </body>
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2">
+  <file source_language="en" target_language="de">
+    <trans-unit id="onboarding.title">
+      <source>onboarding.title</source>
+      <target>Onboarding</target>
+    </trans-unit>
+    <trans-unit id="onboarding.welcome">
+      <source>onboarding.welcome</source>
+      <target>Willkommen zum Onboarding</target>
+    </trans-unit>
+    <trans-unit id="onboarding.step1">
+      <source>onboarding.step1</source>
+      <target>Schritt 1: Informationen eingeben</target>
+    </trans-unit>
+    <trans-unit id="onboarding.step2">
+      <source>onboarding.step2</source>
+      <target>Schritt 2: Kursauswahl</target>
+    </trans-unit>
+    <trans-unit id="onboarding.step3">
+      <source>onboarding.step3</source>
+      <target>Schritt 3: Bestätigung</target>
+    </trans-unit>
+    <trans-unit id="onboarding.complete">
+      <source>onboarding.complete</source>
+      <target>Onboarding abgeschlossen</target>
+    </trans-unit>
   </file>
 </xliff>

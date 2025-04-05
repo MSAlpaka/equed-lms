@@ -1,10 +1,21 @@
-<?xml version='1.0' encoding='utf-8'?>
-<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-  <file source-language="en" datatype="plaintext" original="messages" target-language="de">
-    <body>
-      <trans-unit id="service.assignExaminer"><source>Assign Examiner</source><target>Prüfer zuweisen</target></trans-unit>
-      <trans-unit id="service.openCase"><source>Open case</source><target>Fall eröffnen</target></trans-unit>
-      <trans-unit id="service.note"><source>Service note</source><target>Service-Hinweis</target></trans-unit>
-    </body>
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2">
+  <file source_language="en" target_language="de">
+    <trans-unit id="servicecenter.dashboard.title">
+      <source>servicecenter.dashboard.title</source>
+      <target>ServiceCenter Dashboard</target>
+    </trans-unit>
+    <trans-unit id="servicecenter.dashboard.welcome">
+      <source>servicecenter.dashboard.welcome</source>
+      <target>Willkommen im ServiceCenter Dashboard</target>
+    </trans-unit>
+    <trans-unit id="servicecenter.dashboard.requests">
+      <source>servicecenter.dashboard.requests</source>
+      <target>Anfragen</target>
+    </trans-unit>
+    <trans-unit id="servicecenter.logout.button">
+      <source>servicecenter.logout.button</source>
+      <target>Abmelden</target>
+    </trans-unit>
   </file>
 </xliff>

@@ -3,30 +3,33 @@
 namespace Equed\EquedLms\ViewHelpers;
 
 use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use Equed\EquedLms\Domain\Repository\InstructorRepository;
 
 class InstructorSpecialtyViewHelper extends AbstractViewHelper
 {
-    /**
-     * @param int $instructorId
-     * @return string
-     */
-    public function render(int $instructorId): string
+    public function initializeArguments(): void
     {
-        // Fetch instructor specialty
-        $specialty = $this->getInstructorSpecialty($instructorId);
-        return $specialty ? $specialty : 'No specialty available';
+        $this->registerArgument('instructorId', 'int', 'Instructor UID', true);
     }
 
-    /**
-     * Get the specialty of the instructor
-     *
-     * @param int $instructorId
-     * @return string|null
-     */
+    public function render(): string
+    {
+        $instructorId = (int)$this->arguments['instructorId'];
+        $specialty = $this->getInstructorSpecialty($instructorId);
+
+        return $specialty
+            ?? LocalizationUtility::translate('instructor.no_specialty', 'equed_lms')
+            ?? 'No specialty available';
+    }
+
     protected function getInstructorSpecialty(int $instructorId): ?string
     {
-        $repository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Equed\EquedLms\Domain\Repository\InstructorRepository::class);
+        /** @var InstructorRepository $repository */
+        $repository = GeneralUtility::makeInstance(InstructorRepository::class);
         $instructor = $repository->findByUid($instructorId);
-        return $instructor ? $instructor->getSpecialty() : null;
+
+        return $instructor?->getSpecialty();
     }
 }

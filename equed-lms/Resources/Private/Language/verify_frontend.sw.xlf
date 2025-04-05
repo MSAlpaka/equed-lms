@@ -1,10 +1,25 @@
-<?xml version='1.0' encoding='utf-8'?>
-<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-  <file source-language="en" datatype="plaintext" original="messages" target-language="sw">
-    <body>
-      <trans-unit id="verify.code"><source>Enter Verification Code</source><target>Weka msimbo wa uthibitisho</target></trans-unit>
-      <trans-unit id="verify.button"><source>Verify</source><target>Thibitisha</target></trans-unit>
-      <trans-unit id="verify.invalid"><source>Invalid code. Please try again.</source><target>Msimbo batili. Tafadhali jaribu tena.</target></trans-unit>
-    </body>
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2">
+  <file source_language="en" target_language="sw">
+    <trans-unit id="verify.title">
+      <source>verify.title</source>
+      <target>Thibitisho</target>
+    </trans-unit>
+    <trans-unit id="verify.description">
+      <source>verify.description</source>
+      <target>Tafadhali thibitisha utambulisho wako ili kuendelea.</target>
+    </trans-unit>
+    <trans-unit id="verify.code">
+      <source>verify.code</source>
+      <target>Kanuni ya uthibitisho</target>
+    </trans-unit>
+    <trans-unit id="verify.submit">
+      <source>verify.submit</source>
+      <target>Wasilisha</target>
+    </trans-unit>
+    <trans-unit id="verify.error">
+      <source>verify.error</source>
+      <target>Thibitisho limekosa. Tafadhali jaribu tena.</target>
+    </trans-unit>
   </file>
 </xliff>

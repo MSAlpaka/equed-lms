@@ -3,29 +3,35 @@
 namespace Equed\EquedLms\ViewHelpers;
 
 use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use Equed\EquedLms\Domain\Repository\LessonRepository;
 
 class LessonStartDateViewHelper extends AbstractViewHelper
 {
-    /**
-     * @param int $lessonId
-     * @return string
-     */
-    public function render(int $lessonId): string
+    public function initializeArguments(): void
     {
-        // Fetch lesson start date
-        $lesson = $this->getLessonById($lessonId);
-        return $lesson ? $lesson->getStartDate()->format('F j, Y') : 'Unknown Date';
+        $this->registerArgument('lessonId', 'int', 'Lesson UID', true);
+        $this->registerArgument('format', 'string', 'Date format', false, 'F j, Y');
     }
 
-    /**
-     * Fetch lesson data by ID
-     *
-     * @param int $lessonId
-     * @return \Equed\EquedLms\Domain\Model\Lesson|null
-     */
+    public function render(): string
+    {
+        $lessonId = (int)$this->arguments['lessonId'];
+        $format = $this->arguments['format'];
+
+        $lesson = $this->getLessonById($lessonId);
+        $startDate = $lesson?->getStartDate();
+
+        return $startDate instanceof \DateTimeInterface
+            ? $startDate->format($format)
+            : LocalizationUtility::translate('lesson.start_date.unknown', 'equed_lms') ?? 'Unknown Date';
+    }
+
     protected function getLessonById(int $lessonId)
     {
-        $lessonRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Equed\EquedLms\Domain\Repository\LessonRepository::class);
-        return $lessonRepository->findByIdentifier($lessonId);
+        /** @var LessonRepository $repo */
+        $repo = GeneralUtility::makeInstance(LessonRepository::class);
+        return $repo->findByIdentifier($lessonId);
     }
 }

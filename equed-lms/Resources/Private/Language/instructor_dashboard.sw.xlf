@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2">
+  <file source_language="en" target_language="sw">
+    <trans-unit id="instructor.dashboard.welcomeMessage">
+      <source>instructor.dashboard.welcomeMessage</source>
+      <target>Karibu kwenye dashibodi yako!</target>
+    </trans-unit>
+    <trans-unit id="instructor.dashboard.notifications">
+      <source>instructor.dashboard.notifications</source>
+      <target>Arifa zako</target>
+    </trans-unit>
+    <trans-unit id="instructor.dashboard.viewCourses">
+      <source>instructor.dashboard.viewCourses</source>
+      <target>Angalia Washiriki wa Kozi</target>
+    </trans-unit>
+    <trans-unit id="instructor.dashboard.viewAssessments">
+      <source>instructor.dashboard.viewAssessments</source>
+      <target>Angalia Tathmini</target>
+    </trans-unit>
+  </file>
+</xliff>

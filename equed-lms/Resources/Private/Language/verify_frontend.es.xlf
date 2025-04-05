@@ -1,10 +1,25 @@
-<?xml version='1.0' encoding='utf-8'?>
-<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-  <file source-language="en" datatype="plaintext" original="messages" target-language="es">
-    <body>
-      <trans-unit id="verify.code"><source>Enter Verification Code</source><target>Introducir código de verificación</target></trans-unit>
-      <trans-unit id="verify.button"><source>Verify</source><target>Verificar</target></trans-unit>
-      <trans-unit id="verify.invalid"><source>Invalid code. Please try again.</source><target>Código inválido. Inténtalo de nuevo.</target></trans-unit>
-    </body>
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2">
+  <file source_language="en" target_language="es">
+    <trans-unit id="verify.title">
+      <source>verify.title</source>
+      <target>Verificación</target>
+    </trans-unit>
+    <trans-unit id="verify.description">
+      <source>verify.description</source>
+      <target>Por favor, confirme su identidad para continuar.</target>
+    </trans-unit>
+    <trans-unit id="verify.code">
+      <source>verify.code</source>
+      <target>Código de confirmación</target>
+    </trans-unit>
+    <trans-unit id="verify.submit">
+      <source>verify.submit</source>
+      <target>Enviar</target>
+    </trans-unit>
+    <trans-unit id="verify.error">
+      <source>verify.error</source>
+      <target>Error en la verificación. Por favor, inténtelo de nuevo.</target>
+    </trans-unit>
   </file>
 </xliff>

@@ -3,31 +3,30 @@
 namespace Equed\EquedLms\ViewHelpers;
 
 use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 class CertificateUrlViewHelper extends AbstractViewHelper
 {
-    /**
-     * @param int $userId
-     * @param int $courseId
-     * @return string
-     */
-    public function render(int $userId, int $courseId): string
+    public function initializeArguments(): void
     {
-        // Generate the URL for the certificate
-        $certificateUrl = $this->generateCertificateUrl($userId, $courseId);
-        return $certificateUrl ? $certificateUrl : 'Certificate not available';
+        $this->registerArgument('userId', 'int', 'User ID', true);
+        $this->registerArgument('courseId', 'int', 'Course ID', true);
     }
 
-    /**
-     * Generate the URL for the user’s certificate
-     *
-     * @param int $userId
-     * @param int $courseId
-     * @return string|null
-     */
+    public function render(): string
+    {
+        $userId = (int)$this->arguments['userId'];
+        $courseId = (int)$this->arguments['courseId'];
+
+        $certificateUrl = $this->generateCertificateUrl($userId, $courseId);
+
+        return $certificateUrl
+            ?? (LocalizationUtility::translate('certificate.not_available', 'equed_lms') ?? 'Certificate not available');
+    }
+
     protected function generateCertificateUrl(int $userId, int $courseId): ?string
     {
-        // Logic to generate the certificate URL
+        // TODO: Später dynamisch auf Basis gespeicherter Datei generieren
         return 'https://example.com/certificates/' . $userId . '/' . $courseId . '.pdf';
     }
 }

@@ -1,10 +1,25 @@
-<?xml version='1.0' encoding='utf-8'?>
-<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-  <file source-language="en" datatype="plaintext" original="messages" target-language="en">
-    <body>
-      <trans-unit id="booking.course"><source>Book Course</source><target>Book Course</target></trans-unit>
-      <trans-unit id="booking.instructor"><source>Your Instructor</source><target>Your Instructor</target></trans-unit>
-      <trans-unit id="booking.location"><source>Course location</source><target>Course location</target></trans-unit>
-    </body>
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2">
+  <file source_language="en" target_language="en">
+    <trans-unit id="coursebooking.title">
+      <source>coursebooking.title</source>
+      <target>Course Booking</target>
+    </trans-unit>
+    <trans-unit id="coursebooking.description">
+      <source>coursebooking.description</source>
+      <target>Select the course you want to book.</target>
+    </trans-unit>
+    <trans-unit id="coursebooking.date">
+      <source>coursebooking.date</source>
+      <target>Date</target>
+    </trans-unit>
+    <trans-unit id="coursebooking.time">
+      <source>coursebooking.time</source>
+      <target>Time</target>
+    </trans-unit>
+    <trans-unit id="coursebooking.bookNow">
+      <source>coursebooking.bookNow</source>
+      <target>Book Now</target>
+    </trans-unit>
   </file>
 </xliff>

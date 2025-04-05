@@ -1,11 +1,21 @@
-<?xml version='1.0' encoding='utf-8'?>
-<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-  <file source-language="en" datatype="plaintext" original="messages" target-language="sw">
-    <body>
-      <trans-unit id="admin.edit"><source>Edit Entry</source><target>Hariri kipengele</target></trans-unit>
-      <trans-unit id="admin.save"><source>Save</source><target>Hifadhi</target></trans-unit>
-      <trans-unit id="admin.delete"><source>Delete</source><target>Futa</target></trans-unit>
-      <trans-unit id="admin.noPermission"><source>You do not have permission to perform this action.</source><target>Huna ruhusa ya kufanya hatua hii.</target></trans-unit>
-    </body>
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2">
+  <file source_language="en" target_language="sw">
+    <trans-unit id="admin.dashboard.title">
+      <source>admin.dashboard.title</source>
+      <target>Dashibodi ya Msimamizi</target>
+    </trans-unit>
+    <trans-unit id="admin.dashboard.welcome">
+      <source>admin.dashboard.welcome</source>
+      <target>Karibu kwenye dashibodi ya msimamizi</target>
+    </trans-unit>
+    <trans-unit id="admin.notifications.header">
+      <source>admin.notifications.header</source>
+      <target>Arifa</target>
+    </trans-unit>
+    <trans-unit id="admin.logout.button">
+      <source>admin.logout.button</source>
+      <target>Ondoka</target>
+    </trans-unit>
   </file>
 </xliff>

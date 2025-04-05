@@ -1,2 +1,21 @@
-<?xml version='1.0' encoding='utf-8'?>
-<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2"><file source-language="en" datatype="plaintext" original="messages"><body><trans-unit id="tt_content.CType.equed_lms_course"><source>tt_content.CType.equed_lms_course</source><target /></trans-unit></body></file></xliff>
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2">
+  <file source_language="en" target_language="sw">
+    <trans-unit id="module.dashboard.title">
+      <source>module.dashboard.title</source>
+      <target>Dashibodi ya Moduli</target>
+    </trans-unit>
+    <trans-unit id="module.dashboard.welcome">
+      <source>module.dashboard.welcome</source>
+      <target>Karibu kwenye dashibodi ya moduli</target>
+    </trans-unit>
+    <trans-unit id="module.settings">
+      <source>module.settings</source>
+      <target>Mipangilio ya moduli</target>
+    </trans-unit>
+    <trans-unit id="module.logout.button">
+      <source>module.logout.button</source>
+      <target>Ondoka</target>
+    </trans-unit>
+  </file>
+</xliff>

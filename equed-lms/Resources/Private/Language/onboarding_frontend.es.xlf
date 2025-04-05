@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2">
+  <file source_language="en" target_language="es">
+    <trans-unit id="onboarding.title">
+      <source>onboarding.title</source>
+      <target>Incorporación</target>
+    </trans-unit>
+    <trans-unit id="onboarding.welcome">
+      <source>onboarding.welcome</source>
+      <target>Bienvenido al proceso de incorporación</target>
+    </trans-unit>
+    <trans-unit id="onboarding.step1">
+      <source>onboarding.step1</source>
+      <target>Paso 1: Introducir información</target>
+    </trans-unit>
+    <trans-unit id="onboarding.step2">
+      <source>onboarding.step2</source>
+      <target>Paso 2: Seleccionar curso</target>
+    </trans-unit>
+    <trans-unit id="onboarding.step3">
+      <source>onboarding.step3</source>
+      <target>Paso 3: Confirmación</target>
+    </trans-unit>
+    <trans-unit id="onboarding.complete">
+      <source>onboarding.complete</source>
+      <target>Incorporación completada</target>
+    </trans-unit>
+  </file>
+</xliff>

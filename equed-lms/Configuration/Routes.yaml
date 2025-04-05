@@ -1,68 +1,10 @@
-# ================================
-# Routen-Konfiguration für EquEd LMS
-# ================================
-
-routes:
-  # Route für die Kursübersicht
-  course_list:
-    path: /courses
-    controller: CourseController
-    action: list
-    title: 'Available Courses'
-    defaults:
-      _controller: 'Equed\\EquedLms\\Controller\\CourseController::listAction'
-
-  # Route für die Kursdetails
-  course_show:
-    path: /course/{courseId}
-    controller: CourseController
-    action: show
-    title: 'Course Details'
-    defaults:
-      _controller: 'Equed\\EquedLms\\Controller\\CourseController::showAction'
-    requirements:
-      courseId: \d+
-
-  # Route für die Einreichung von Aufgaben
-  submission_form:
-    path: /submit-assignment/{assignmentId}
-    controller: SubmissionController
-    action: showForm
-    title: 'Submit Assignment'
-    defaults:
-      _controller: 'Equed\\EquedLms\\Controller\\SubmissionController::showFormAction'
-    requirements:
-      assignmentId: \d+
-
-  # Route für die Benutzerprofil-Seite
-  user_profile:
-    path: /profile/{userId}
-    controller: UserController
-    action: show
-    title: 'User Profile'
-    defaults:
-      _controller: 'Equed\\EquedLms\\Controller\\UserController::showAction'
-    requirements:
-      userId: \d+
-
-  # Route für die Zertifikatsanzeige
-  certificate_display:
-    path: /certificate/{certificateId}
-    controller: CertificateController
-    action: show
-    title: 'Certificate Display'
-    defaults:
-      _controller: 'Equed\\EquedLms\\Controller\\CertificateController::showAction'
-    requirements:
-      certificateId: \d+
-
-  # Route für die Einreichungsüberprüfung durch Instruktoren
-  submission_review:
-    path: /submission-review/{submissionId}
-    controller: InstructorController
-    action: reviewSubmission
-    title: 'Submission Review'
-    defaults:
-      _controller: 'Equed\\EquedLms\\Controller\\InstructorController::reviewSubmissionAction'
-    requirements:
-      submissionId: \d+
+#
+# Routing configuration for Equed.LMS
+#
+# Custom route for certificate display by record ID
+-
+  route: '/certificate/{record}'
+  defaults:
+    _controller: 'Equed\\EquedLms\\Controller\\CertificateController::showCardAction'
+  requirements:
+    record: '\\d+'

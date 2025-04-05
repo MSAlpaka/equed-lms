@@ -1,2 +1,33 @@
-<?xml version='1.0' encoding='utf-8'?>
-<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2"><file source-language="en" datatype="plaintext" original="messages"><body><trans-unit id="tx_equedlms_domain_model_quizanswer.answer_text"><source>tx_equedlms_domain_model_quizanswer.answer_text</source><target /></trans-unit><trans-unit id="tx_equedlms_domain_model_quizanswer.is_correct"><source>tx_equedlms_domain_model_quizanswer.is_correct</source><target /></trans-unit><trans-unit id="tx_equedlms_domain_model_quizanswer.question"><source>tx_equedlms_domain_model_quizanswer.question</source><target /></trans-unit><trans-unit id="tx_equedlms_domain_model_quizquestion.answers"><source>tx_equedlms_domain_model_quizquestion.answers</source><target /></trans-unit><trans-unit id="tx_equedlms_domain_model_quizquestion.lesson"><source>tx_equedlms_domain_model_quizquestion.lesson</source><target /></trans-unit><trans-unit id="tx_equedlms_domain_model_quizquestion.question_text"><source>tx_equedlms_domain_model_quizquestion.question_text</source><target /></trans-unit><trans-unit id="tx_equedlms_domain_model_userlessonprogress.completed"><source>tx_equedlms_domain_model_userlessonprogress.completed</source><target /></trans-unit><trans-unit id="tx_equedlms_domain_model_userlessonprogress.completion_date"><source>tx_equedlms_domain_model_userlessonprogress.completion_date</source><target /></trans-unit><trans-unit id="tx_equedlms_domain_model_userlessonprogress.fe_user"><source>tx_equedlms_domain_model_userlessonprogress.fe_user</source><target /></trans-unit><trans-unit id="tx_equedlms_domain_model_userlessonprogress.lesson"><source>tx_equedlms_domain_model_userlessonprogress.lesson</source><target /></trans-unit><trans-unit id="tx_equedlms_domain_model_usersubmission.comment"><source>tx_equedlms_domain_model_usersubmission.comment</source><target /></trans-unit><trans-unit id="tx_equedlms_domain_model_usersubmission.course"><source>tx_equedlms_domain_model_usersubmission.course</source><target /></trans-unit><trans-unit id="tx_equedlms_domain_model_usersubmission.document"><source>tx_equedlms_domain_model_usersubmission.document</source><target /></trans-unit><trans-unit id="tx_equedlms_domain_model_usersubmission.fe_user"><source>tx_equedlms_domain_model_usersubmission.fe_user</source><target /></trans-unit><trans-unit id="tx_equedlms_domain_model_usersubmission.submitted_at"><source>tx_equedlms_domain_model_usersubmission.submitted_at</source><target /></trans-unit><trans-unit id="tx_equedlms_domain_model_usersubmission.type"><source>tx_equedlms_domain_model_usersubmission.type</source><target /></trans-unit></body></file></xliff>
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2">
+  <file source_language="en" target_language="en">
+    <trans-unit id="instructor.evaluate.save">
+      <source>instructor.evaluate.save</source>
+      <target>Save</target>
+    </trans-unit>
+    <trans-unit id="instructor.validation.saveAttempt">
+      <source>instructor.validation.saveAttempt</source>
+      <target>Save attempt</target>
+    </trans-unit>
+    <trans-unit id="quiz.submit">
+      <source>quiz.submit</source>
+      <target>Submit</target>
+    </trans-unit>
+    <trans-unit id="certificate.userPhoto">
+      <source>certificate.userPhoto</source>
+      <target>User Photo</target>
+    </trans-unit>
+    <trans-unit id="onboarding.button.complete">
+      <source>onboarding.button.complete</source>
+      <target>Complete</target>
+    </trans-unit>
+    <trans-unit id="certifier.validation.reject">
+      <source>certifier.validation.reject</source>
+      <target>Reject</target>
+    </trans-unit>
+    <trans-unit id="certifier.validation.confirm">
+      <source>certifier.validation.confirm</source>
+      <target>Confirm</target>
+    </trans-unit>
+  </file>
+</xliff>

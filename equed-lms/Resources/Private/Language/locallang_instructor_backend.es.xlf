@@ -1,2 +1,21 @@
-<?xml version='1.0' encoding='utf-8'?>
-<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2"><file source-language="en" datatype="plaintext" original="messages"><body><trans-unit id="submission.comment"><source>submission.comment</source><target /></trans-unit><trans-unit id="submission.course"><source>submission.course</source><target /></trans-unit><trans-unit id="submission.date"><source>submission.date</source><target /></trans-unit><trans-unit id="submission.download"><source>submission.download</source><target /></trans-unit><trans-unit id="submission.file"><source>submission.file</source><target /></trans-unit><trans-unit id="submission.loginRequired"><source>submission.loginRequired</source><target /></trans-unit><trans-unit id="submission.mySubmissions"><source>submission.mySubmissions</source><target /></trans-unit><trans-unit id="submission.noSubmissions"><source>submission.noSubmissions</source><target /></trans-unit><trans-unit id="submission.status"><source>submission.status</source><target /></trans-unit><trans-unit id="submission.type"><source>submission.type</source><target /></trans-unit></body></file></xliff>
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2">
+  <file source_language="en" target_language="es">
+    <trans-unit id="instructor.dashboard.title">
+      <source>instructor.dashboard.title</source>
+      <target>Panel del Instructor</target>
+    </trans-unit>
+    <trans-unit id="instructor.dashboard.welcome">
+      <source>instructor.dashboard.welcome</source>
+      <target>Bienvenido al panel del instructor</target>
+    </trans-unit>
+    <trans-unit id="instructor.dashboard.courseManagement">
+      <source>instructor.dashboard.courseManagement</source>
+      <target>Gestión de cursos</target>
+    </trans-unit>
+    <trans-unit id="instructor.logout.button">
+      <source>instructor.logout.button</source>
+      <target>Cerrar sesión</target>
+    </trans-unit>
+  </file>
+</xliff>

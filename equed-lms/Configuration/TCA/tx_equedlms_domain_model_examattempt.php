@@ -49,7 +49,7 @@ return [
             'label' => 'Timestamp',
             'config' => [
                 'type' => 'input',
-                'renderType' => 'inputDateTime',
+                'type' => 'datetime',
                 'eval' => 'datetime',
                 'default' => null,
             ],

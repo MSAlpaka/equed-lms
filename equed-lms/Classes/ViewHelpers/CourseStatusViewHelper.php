@@ -3,47 +3,39 @@
 namespace Equed\EquedLms\ViewHelpers;
 
 use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use Equed\EquedLms\Domain\Repository\CourseRepository;
 
 class CourseStatusViewHelper extends AbstractViewHelper
 {
-    /**
-     * @param int $courseId
-     * @return string
-     */
-    public function render(int $courseId): string
+    public function initializeArguments(): void
     {
-        // Fetch the course status
-        $course = $this->getCourseById($courseId);
-        return $course ? $this->getStatusText($course->getStatus()) : 'Status Unknown';
+        $this->registerArgument('courseId', 'int', 'Course ID', true);
     }
 
-    /**
-     * Fetch course data by ID
-     *
-     * @param int $courseId
-     * @return \Equed\EquedLms\Domain\Model\Course|null
-     */
+    public function render(): string
+    {
+        $courseId = (int)$this->arguments['courseId'];
+        $course = $this->getCourseById($courseId);
+
+        $status = $course?->getStatus();
+        return $this->getStatusText((int)$status);
+    }
+
     protected function getCourseById(int $courseId)
     {
-        $courseRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Equed\EquedLms\Domain\Repository\CourseRepository::class);
+        /** @var CourseRepository $courseRepository */
+        $courseRepository = GeneralUtility::makeInstance(CourseRepository::class);
         return $courseRepository->findByIdentifier($courseId);
     }
 
-    /**
-     * Get readable status text based on status code
-     *
-     * @param int $status
-     * @return string
-     */
     protected function getStatusText(int $status): string
     {
-        switch ($status) {
-            case 1:
-                return 'Active';
-            case 0:
-                return 'Inactive';
-            default:
-                return 'Unknown Status';
-        }
+        return match ($status) {
+            1 => LocalizationUtility::translate('course.status.active', 'equed_lms') ?? 'Active',
+            0 => LocalizationUtility::translate('course.status.inactive', 'equed_lms') ?? 'Inactive',
+            default => LocalizationUtility::translate('course.status.unknown', 'equed_lms') ?? 'Unknown Status',
+        };
     }
 }

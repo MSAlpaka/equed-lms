@@ -1,10 +1,29 @@
-<?xml version='1.0' encoding='utf-8'?>
-<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-  <file source-language="en" datatype="plaintext" original="messages" target-language="en">
-    <body>
-      <trans-unit id="submission.send"><source>Submit Report</source><target>Submit Report</target></trans-unit>
-      <trans-unit id="submission.comment"><source>Comment</source><target>Comment</target></trans-unit>
-      <trans-unit id="submission.status.reviewed"><source>Reviewed</source><target>Reviewed</target></trans-unit>
-    </body>
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2">
+  <file source_language="en" target_language="en">
+    <trans-unit id="submission.title">
+      <source>submission.title</source>
+      <target>Submission</target>
+    </trans-unit>
+    <trans-unit id="submission.description">
+      <source>submission.description</source>
+      <target>Please submit your documents here.</target>
+    </trans-unit>
+    <trans-unit id="submission.file">
+      <source>submission.file</source>
+      <target>Upload File</target>
+    </trans-unit>
+    <trans-unit id="submission.submit">
+      <source>submission.submit</source>
+      <target>Submit</target>
+    </trans-unit>
+    <trans-unit id="submission.success">
+      <source>submission.success</source>
+      <target>Your submission was successful.</target>
+    </trans-unit>
+    <trans-unit id="submission.error">
+      <source>submission.error</source>
+      <target>Error submitting. Please try again.</target>
+    </trans-unit>
   </file>
 </xliff>

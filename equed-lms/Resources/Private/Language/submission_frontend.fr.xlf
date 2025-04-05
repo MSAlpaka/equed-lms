@@ -1,10 +1,29 @@
-<?xml version='1.0' encoding='utf-8'?>
-<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-  <file source-language="en" datatype="plaintext" original="messages" target-language="fr">
-    <body>
-      <trans-unit id="submission.send"><source>Submit Report</source><target>Soumettre le rapport</target></trans-unit>
-      <trans-unit id="submission.comment"><source>Comment</source><target>Commentaire</target></trans-unit>
-      <trans-unit id="submission.status.reviewed"><source>Reviewed</source><target>Révisé</target></trans-unit>
-    </body>
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2">
+  <file source_language="en" target_language="fr">
+    <trans-unit id="submission.title">
+      <source>submission.title</source>
+      <target>Soumission</target>
+    </trans-unit>
+    <trans-unit id="submission.description">
+      <source>submission.description</source>
+      <target>Veuillez soumettre vos documents ici.</target>
+    </trans-unit>
+    <trans-unit id="submission.file">
+      <source>submission.file</source>
+      <target>Télécharger le fichier</target>
+    </trans-unit>
+    <trans-unit id="submission.submit">
+      <source>submission.submit</source>
+      <target>Soumettre</target>
+    </trans-unit>
+    <trans-unit id="submission.success">
+      <source>submission.success</source>
+      <target>Votre soumission a été réussie.</target>
+    </trans-unit>
+    <trans-unit id="submission.error">
+      <source>submission.error</source>
+      <target>Erreur de soumission. Veuillez réessayer.</target>
+    </trans-unit>
   </file>
 </xliff>

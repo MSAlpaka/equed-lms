@@ -1,15 +1,21 @@
-<?xml version='1.0' encoding='utf-8'?>
-<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-  <file source-language="en" datatype="plaintext" original="messages" target-language="sw">
-    <body>
-      <trans-unit id="button.submit"><source>Submit</source><target>Tuma</target></trans-unit>
-      <trans-unit id="button.cancel"><source>Cancel</source><target>Ghairi</target></trans-unit>
-      <trans-unit id="nav.dashboard"><source>Dashboard</source><target>Dashibodi</target></trans-unit>
-      <trans-unit id="nav.my_courses"><source>My Courses</source><target>Kozi Zangu</target></trans-unit>
-      <trans-unit id="message.loading"><source>Loading...</source><target>Inapakia...</target></trans-unit>
-      <trans-unit id="message.error"><source>An error occurred.</source><target>Hitilafu imetokea.</target></trans-unit>
-      <trans-unit id="message.no_courses"><source>No courses available.</source><target>Hakuna kozi zilizopo.</target></trans-unit>
-      <trans-unit id="message.login_required"><source>You need to be logged in.</source><target>Unahitaji kuingia kwenye akaunti.</target></trans-unit>
-    </body>
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2">
+  <file source_language="en" target_language="sw">
+    <trans-unit id="general.dashboard.title">
+      <source>general.dashboard.title</source>
+      <target>Dashibodi ya Jumla</target>
+    </trans-unit>
+    <trans-unit id="general.dashboard.welcome">
+      <source>general.dashboard.welcome</source>
+      <target>Karibu kwenye dashibodi ya jumla</target>
+    </trans-unit>
+    <trans-unit id="general.notifications.header">
+      <source>general.notifications.header</source>
+      <target>Arifa</target>
+    </trans-unit>
+    <trans-unit id="general.logout.button">
+      <source>general.logout.button</source>
+      <target>Ondoka</target>
+    </trans-unit>
   </file>
 </xliff>

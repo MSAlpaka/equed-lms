@@ -3,40 +3,35 @@
 namespace Equed\EquedLms\ViewHelpers;
 
 use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use Equed\EquedLms\Domain\Repository\CourseRepository;
 
 class CourseStartDateViewHelper extends AbstractViewHelper
 {
-    /**
-     * @param int $courseId
-     * @return string
-     */
-    public function render(int $courseId): string
+    public function initializeArguments(): void
     {
-        // Fetch the course start date
+        $this->registerArgument('courseId', 'int', 'Course ID', true);
+        $this->registerArgument('format', 'string', 'Date format', false, 'F j, Y');
+    }
+
+    public function render(): string
+    {
+        $courseId = (int)$this->arguments['courseId'];
+        $format = $this->arguments['format'];
+
         $course = $this->getCourseById($courseId);
-        return $course ? $this->formatDate($course->getStartDate()) : 'Unknown Start Date';
+        $date = $course?->getStartDate();
+
+        return $date instanceof \DateTime
+            ? $date->format($format)
+            : LocalizationUtility::translate('course.start.unknown', 'equed_lms') ?? 'Unknown Start Date';
     }
 
-    /**
-     * Format the date to a human-readable format
-     *
-     * @param \DateTime $date
-     * @return string
-     */
-    protected function formatDate(\DateTime $date): string
-    {
-        return $date->format('F j, Y');
-    }
-
-    /**
-     * Fetch course data by ID
-     *
-     * @param int $courseId
-     * @return \Equed\EquedLms\Domain\Model\Course|null
-     */
     protected function getCourseById(int $courseId)
     {
-        $courseRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Equed\EquedLms\Domain\Repository\CourseRepository::class);
+        /** @var CourseRepository $courseRepository */
+        $courseRepository = GeneralUtility::makeInstance(CourseRepository::class);
         return $courseRepository->findByIdentifier($courseId);
     }
 }

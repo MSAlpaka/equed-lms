@@ -12,6 +12,9 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Exception\AccessDeniedException;
 
+/**
+ * Controller handling administrative functions like dashboard and management tasks.
+ */
 class AdminController extends ActionController
 {
     protected FrontendUserRepository $frontendUserRepository;
@@ -28,6 +31,9 @@ class AdminController extends ActionController
         $this->courseInstanceRepository = $courseInstanceRepository;
     }
 
+    /**
+     * Displays the admin dashboard with an overview of active courses and users.
+     */
     public function indexAction(): void
     {
         $dashboardData = [
@@ -43,6 +49,12 @@ class AdminController extends ActionController
         $this->view->assign('adminDashboardData', $dashboardData);
     }
 
+    /**
+     * Provides management functions for users and courses.
+     * Access restricted to admin users only.
+     *
+     * @throws AccessDeniedException
+     */
     public function manageAction(): void
     {
         $context = GeneralUtility::makeInstance(Context::class);

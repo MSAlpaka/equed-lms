@@ -1,2 +1,21 @@
-<?xml version='1.0' encoding='utf-8'?>
-<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2"><file source-language="en" datatype="plaintext" original="messages"><body><trans-unit id="submission.comment"><source>Comment</source><target /></trans-unit><trans-unit id="submission.course"><source>Course</source><target /></trans-unit><trans-unit id="submission.date"><source>Submitted</source><target /></trans-unit><trans-unit id="submission.download"><source>Download</source><target /></trans-unit><trans-unit id="submission.file"><source>File</source><target /></trans-unit><trans-unit id="submission.loginRequired"><source>Please log in to view your submissions.</source><target /></trans-unit><trans-unit id="submission.mySubmissions"><source>My Submissions</source><target /></trans-unit><trans-unit id="submission.noSubmissions"><source>You have not submitted anything yet.</source><target /></trans-unit><trans-unit id="submission.status"><source>Status</source><target /></trans-unit><trans-unit id="submission.type"><source>Type</source><target /></trans-unit></body></file></xliff>
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2">
+  <file source_language="en" target_language="en">
+    <trans-unit id="instructor.dashboard.title">
+      <source>instructor.dashboard.title</source>
+      <target>Instructor Dashboard</target>
+    </trans-unit>
+    <trans-unit id="instructor.dashboard.welcome">
+      <source>instructor.dashboard.welcome</source>
+      <target>Welcome to the Instructor Dashboard</target>
+    </trans-unit>
+    <trans-unit id="instructor.dashboard.courseManagement">
+      <source>instructor.dashboard.courseManagement</source>
+      <target>Course Management</target>
+    </trans-unit>
+    <trans-unit id="instructor.logout.button">
+      <source>instructor.logout.button</source>
+      <target>Log Out</target>
+    </trans-unit>
+  </file>
+</xliff>

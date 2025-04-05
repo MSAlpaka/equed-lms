@@ -3,38 +3,38 @@
 namespace Equed\EquedLms\ViewHelpers;
 
 use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use Equed\EquedLms\Domain\Repository\UserCourseRecordRepository;
 
 class UserCompletionProgressViewHelper extends AbstractViewHelper
 {
-    /**
-     * @param int $userId
-     * @param int $courseId
-     * @return string
-     */
-    public function render(int $userId, int $courseId): string
+    public function initializeArguments(): void
     {
-        // Calculate completion percentage based on the user and course
-        $completion = $this->getUserCourseCompletion($userId, $courseId);
-        return "$completion% Completed";
+        $this->registerArgument('userId', 'int', 'User ID', true);
+        $this->registerArgument('courseId', 'int', 'Course ID', true);
     }
 
-    /**
-     * Get user course completion percentage
-     *
-     * @param int $userId
-     * @param int $courseId
-     * @return int
-     */
+    public function render(): string
+    {
+        $userId = (int)$this->arguments['userId'];
+        $courseId = (int)$this->arguments['courseId'];
+
+        $completion = $this->getUserCourseCompletion($userId, $courseId);
+        $label = LocalizationUtility::translate('course.completed', 'equed_lms') ?? 'Completed';
+
+        return sprintf('%d%% %s', $completion, $label);
+    }
+
     protected function getUserCourseCompletion(int $userId, int $courseId): int
     {
-        // Logic to calculate the completion percentage
-        // (can involve querying the UserCourseRecordRepository)
-        $userCourseRecordRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Equed\EquedLms\Domain\Repository\UserCourseRecordRepository::class);
-        $records = $userCourseRecordRepository->findByUserAndCourse($userId, $courseId);
-        $completedLessons = count(array_filter($records, function($record) {
-            return $record->getCompleted() === true;
-        }));
+        /** @var UserCourseRecordRepository $repository */
+        $repository = GeneralUtility::makeInstance(UserCourseRecordRepository::class);
+        $records = $repository->findByUserAndCourse($userId, $courseId);
+
+        $completedLessons = count(array_filter($records, fn($record) => $record->getCompleted() === true));
         $totalLessons = count($records);
-        return ($totalLessons > 0) ? ($completedLessons / $totalLessons) * 100 : 0;
+
+        return ($totalLessons > 0) ? (int)(($completedLessons / $totalLessons) * 100) : 0;
     }
 }

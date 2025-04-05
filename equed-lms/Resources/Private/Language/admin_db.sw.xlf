@@ -1,2 +1,33 @@
-<?xml version='1.0' encoding='utf-8'?>
-<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2"><file source-language="en" datatype="plaintext" original="messages"><body><trans-unit id="course.center"><source>course.center</source><target /></trans-unit><trans-unit id="tx_equedlms_domain_model_auditlog.action"><source>tx_equedlms_domain_model_auditlog.action</source><target /></trans-unit><trans-unit id="tx_equedlms_domain_model_auditlog.comment"><source>tx_equedlms_domain_model_auditlog.comment</source><target /></trans-unit><trans-unit id="tx_equedlms_domain_model_auditlog.fe_user"><source>tx_equedlms_domain_model_auditlog.fe_user</source><target /></trans-unit><trans-unit id="tx_equedlms_domain_model_auditlog.related_id"><source>tx_equedlms_domain_model_auditlog.related_id</source><target /></trans-unit><trans-unit id="tx_equedlms_domain_model_auditlog.related_type"><source>tx_equedlms_domain_model_auditlog.related_type</source><target /></trans-unit><trans-unit id="tx_equedlms_domain_model_auditlog.timestamp"><source>tx_equedlms_domain_model_auditlog.timestamp</source><target /></trans-unit><trans-unit id="tx_equedlms_domain_model_center.active"><source>tx_equedlms_domain_model_center.active</source><target /></trans-unit><trans-unit id="tx_equedlms_domain_model_center.contact_email"><source>tx_equedlms_domain_model_center.contact_email</source><target /></trans-unit><trans-unit id="tx_equedlms_domain_model_center.location"><source>tx_equedlms_domain_model_center.location</source><target /></trans-unit><trans-unit id="tx_equedlms_domain_model_center.name"><source>tx_equedlms_domain_model_center.name</source><target /></trans-unit></body></file></xliff>
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2">
+  <file source_language="en" target_language="sw">
+    <trans-unit id="instructor.evaluate.save">
+      <source>instructor.evaluate.save</source>
+      <target>Hifadhi</target>
+    </trans-unit>
+    <trans-unit id="instructor.validation.saveAttempt">
+      <source>instructor.validation.saveAttempt</source>
+      <target>Hifadhi jaribio</target>
+    </trans-unit>
+    <trans-unit id="quiz.submit">
+      <source>quiz.submit</source>
+      <target>Wasilisha</target>
+    </trans-unit>
+    <trans-unit id="certificate.userPhoto">
+      <source>certificate.userPhoto</source>
+      <target>Picha ya mtumiaji</target>
+    </trans-unit>
+    <trans-unit id="onboarding.button.complete">
+      <source>onboarding.button.complete</source>
+      <target>Kamili</target>
+    </trans-unit>
+    <trans-unit id="certifier.validation.reject">
+      <source>certifier.validation.reject</source>
+      <target>Kataa</target>
+    </trans-unit>
+    <trans-unit id="certifier.validation.confirm">
+      <source>certifier.validation.confirm</source>
+      <target>Thibitisha</target>
+    </trans-unit>
+  </file>
+</xliff>

@@ -1,8 +1,25 @@
-<?xml version="1.0" encoding="utf-8"?>
-<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-  <file source-language="en" datatype="plaintext" original="messages" target-language="de">
-    <body>
-      <trans-unit id="certificate.userPhoto"><source>User Photo</source><target>Benutzerfoto</target></trans-unit>
-    </body>
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2">
+  <file source_language="en" target_language="de">
+    <trans-unit id="certificate.title">
+      <source>certificate.title</source>
+      <target>Zertifikat</target>
+    </trans-unit>
+    <trans-unit id="certificate.issueDate">
+      <source>certificate.issueDate</source>
+      <target>Ausstellungsdatum</target>
+    </trans-unit>
+    <trans-unit id="certificate.validUntil">
+      <source>certificate.validUntil</source>
+      <target>Gültig bis</target>
+    </trans-unit>
+    <trans-unit id="certificate.certificateNumber">
+      <source>certificate.certificateNumber</source>
+      <target>Zertifikatsnummer</target>
+    </trans-unit>
+    <trans-unit id="certificate.signature">
+      <source>certificate.signature</source>
+      <target>Unterschrift</target>
+    </trans-unit>
   </file>
 </xliff>

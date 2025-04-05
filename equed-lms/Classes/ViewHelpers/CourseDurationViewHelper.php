@@ -3,42 +3,44 @@
 namespace Equed\EquedLms\ViewHelpers;
 
 use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use Equed\EquedLms\Domain\Repository\CourseRepository;
 
 class CourseDurationViewHelper extends AbstractViewHelper
 {
-    /**
-     * @param int $courseId
-     * @return string
-     */
-    public function render(int $courseId): string
+    public function initializeArguments(): void
     {
-        // Fetch course duration
-        $course = $this->getCourseById($courseId);
-        return $course ? $this->formatDuration($course->getDuration()) : 'Duration not available';
+        $this->registerArgument('courseId', 'int', 'Course ID', true);
     }
 
-    /**
-     * Format the course duration to a human-readable format
-     *
-     * @param int $duration
-     * @return string
-     */
+    public function render(): string
+    {
+        $courseId = (int)$this->arguments['courseId'];
+        $course = $this->getCourseById($courseId);
+
+        if (!$course) {
+            return LocalizationUtility::translate('course.duration_unavailable', 'equed_lms') ?? 'Duration not available';
+        }
+
+        return $this->formatDuration($course->getDuration());
+    }
+
     protected function formatDuration(int $duration): string
     {
         $hours = floor($duration / 60);
         $minutes = $duration % 60;
-        return "$hours hours $minutes minutes";
+
+        $hoursLabel = LocalizationUtility::translate('course.hours', 'equed_lms') ?? 'hours';
+        $minutesLabel = LocalizationUtility::translate('course.minutes', 'equed_lms') ?? 'minutes';
+
+        return sprintf('%d %s %d %s', $hours, $hoursLabel, $minutes, $minutesLabel);
     }
 
-    /**
-     * Fetch course data by ID
-     *
-     * @param int $courseId
-     * @return \Equed\EquedLms\Domain\Model\Course|null
-     */
     protected function getCourseById(int $courseId)
     {
-        $courseRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Equed\EquedLms\Domain\Repository\CourseRepository::class);
+        /** @var CourseRepository $courseRepository */
+        $courseRepository = GeneralUtility::makeInstance(CourseRepository::class);
         return $courseRepository->findByIdentifier($courseId);
     }
 }

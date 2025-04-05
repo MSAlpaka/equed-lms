@@ -1,2 +1,21 @@
-<?xml version='1.0' encoding='utf-8'?>
-<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2"><file source-language="en" datatype="plaintext" original="messages"><body /></file></xliff>
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2">
+  <file source_language="en" target_language="de">
+    <trans-unit id="certifier.validation.confirm">
+      <source>certifier.validation.confirm</source>
+      <target>Bestätigen</target>
+    </trans-unit>
+    <trans-unit id="certifier.validation.reject">
+      <source>certifier.validation.reject</source>
+      <target>Abgelehnt</target>
+    </trans-unit>
+    <trans-unit id="certifier.validation.comment">
+      <source>certifier.validation.comment</source>
+      <target>Kommentar zur Validierung</target>
+    </trans-unit>
+    <trans-unit id="certifier.validation.save">
+      <source>certifier.validation.save</source>
+      <target>Speichern</target>
+    </trans-unit>
+  </file>
+</xliff>

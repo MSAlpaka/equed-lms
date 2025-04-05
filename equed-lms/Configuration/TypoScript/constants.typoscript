@@ -1,0 +1,51 @@
+#############################################
+# EquEd.LMS - TypoScript-Konstanten
+# Datei: EXT:equed_lms/Configuration/TypoScript/constants.typoscript
+#############################################
+
+# === Pfade ===
+plugin.tx_equedlms.view {
+  templateRootPath = EXT:equed_lms/Resources/Private/Templates/
+  partialRootPath  = EXT:equed_lms/Resources/Private/Partials/
+  layoutRootPath   = EXT:equed_lms/Resources/Private/Layouts/
+  languageFile     = EXT:equed_lms/Resources/Private/Language/locallang.xlf
+}
+
+# === Feature-Einstellungen ===
+plugin.tx_equedlms.settings {
+  courseListLimit = 10
+  enableCertificates = 1
+  enableSubmissionUpload = 1
+  enableInstructorDashboard = 1
+  enableTailwind = 1
+  enableDarkmode = 1
+}
+
+# === Standard-Assets ===
+plugin.tx_equedlms.settings {
+  defaultCourseImage = EXT:equed_lms/Resources/Public/Images/default_course.jpg
+  defaultUserAvatar  = EXT:equed_lms/Resources/Public/Images/default_user.png
+}
+
+# === Branding ===
+plugin.tx_equedlms.branding {
+  primaryColor = #0055a5
+  primaryColorDark = #003f7d
+  accentColor = #1e90ff
+  textColor = #222
+  backgroundColor = #f3f3f3
+}
+
+# === Zertifikats-Konfiguration ===
+plugin.tx_equedlms.assets {
+  certificateTemplatePath = fileadmin/user_upload/certificates/template.pdf
+  certificateFontPath     = fileadmin/user_upload/fonts/EquEdFont-Regular.ttf
+  logoPath                = EXT:equed_lms/Resources/Public/Images/logo.svg
+}
+
+# === API-Endpunkte (vorbereitet) ===
+plugin.tx_equedlms.apis {
+  authServerUrl      = https://auth.equed.eu
+  dropShippingUrl    = https://shop.equed.eu/api/
+  analyticsEndpoint  = https://lms.equed.eu/tracking/
+}

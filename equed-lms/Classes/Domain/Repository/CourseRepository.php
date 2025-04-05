@@ -62,4 +62,36 @@ class CourseRepository extends Repository
             ->execute()
             ->getFirst();
     }
+
+    /**
+     * Find all courses for a specific instructor
+     *
+     * @param \Equed\EquedLms\Domain\Model\User $instructor
+     * @return Course[]
+     */
+    public function findAssignedCoursesByInstructor($instructor): array
+    {
+        return $this->createQuery()
+            ->matching(
+                $this->createQuery()->equals('instructor', $instructor)
+            )
+            ->execute()
+            ->toArray();
+    }
+
+    /**
+     * Find all courses that require external validation
+     *
+     * @return Course[]
+     */
+    public function findCoursesRequiringValidation(): array
+    {
+        return $this->createQuery()
+            ->matching(
+                $this->createQuery()->equals('requiresExternalValidation', true)
+            )
+            ->execute()
+            ->toArray();
+    }
 }
+?>

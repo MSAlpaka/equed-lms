@@ -1,8 +1,21 @@
-<?xml version="1.0" encoding="utf-8"?>
-<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-  <file source-language="en" datatype="plaintext" original="messages" target-language="es">
-    <body>
-      <trans-unit id="backend.list.delete.confirm"><source>Are you sure you want to delete this entry?</source><target>¿Estás seguro de que deseas eliminar este elemento?</target></trans-unit>
-    </body>
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2">
+  <file source_language="en" target_language="es">
+    <trans-unit id="backend.dashboard.title">
+      <source>backend.dashboard.title</source>
+      <target>Panel de administración</target>
+    </trans-unit>
+    <trans-unit id="backend.dashboard.welcome">
+      <source>backend.dashboard.welcome</source>
+      <target>Bienvenido al panel de administración</target>
+    </trans-unit>
+    <trans-unit id="backend.notifications.header">
+      <source>backend.notifications.header</source>
+      <target>Notificaciones</target>
+    </trans-unit>
+    <trans-unit id="backend.logout.button">
+      <source>backend.logout.button</source>
+      <target>Cerrar sesión</target>
+    </trans-unit>
   </file>
 </xliff>

@@ -1,0 +1,17 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  # Middleware für rollenbasierten Zugriff
+  Equed\EquedLms\Middleware\RoleAccessMiddleware:
+    tags:
+      - name: middleware
+        priority: 80
+        before: routing
+
+  # Automatisches Routing für alle Controller
+  Equed\EquedLms\Controller\:
+    resource: '../Classes/Controller/*'
+    public: true

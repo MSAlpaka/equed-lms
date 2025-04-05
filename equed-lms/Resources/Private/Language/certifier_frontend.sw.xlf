@@ -1,9 +1,21 @@
-<?xml version="1.0" encoding="utf-8"?>
-<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-  <file source-language="en" datatype="plaintext" original="messages" target-language="sw">
-    <body>
-      <trans-unit id="certifier.validation.confirm"><source>Confirm Record</source><target>Thibitisha rekodi</target></trans-unit>
-      <trans-unit id="certifier.validation.reject"><source>Reject Record</source><target>Kataa rekodi</target></trans-unit>
-    </body>
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2">
+  <file source_language="en" target_language="sw">
+    <trans-unit id="certifier.dashboard.title">
+      <source>certifier.dashboard.title</source>
+      <target>Dashibodi ya Certifier</target>
+    </trans-unit>
+    <trans-unit id="certifier.dashboard.welcome">
+      <source>certifier.dashboard.welcome</source>
+      <target>Karibu kwenye dashibodi ya certifier</target>
+    </trans-unit>
+    <trans-unit id="certifier.notifications.header">
+      <source>certifier.notifications.header</source>
+      <target>Arifa</target>
+    </trans-unit>
+    <trans-unit id="certifier.logout.button">
+      <source>certifier.logout.button</source>
+      <target>Ondoka</target>
+    </trans-unit>
   </file>
 </xliff>

@@ -1,100 +1,68 @@
-# ============================
-# Konfiguration der Seite und Backend
-# ============================
+# ===================================
+# TYPO3 PageTSConfig für equed_lms
+# ===================================
 
 # -------------------------
-# Seitenmodul und Layouts
+# Sichtbare Tabellen im Seitenmodul
 # -------------------------
 mod.web_list {
-    # Benutzerdefinierte Backend-Layouts für die Seitenübersicht
     tables {
         tx_equedlms_domain_model_course
         tx_equedlms_domain_model_instructor
         tx_equedlms_domain_model_feedback
     }
+
+    # Benutzerrechte auf Domain-Modelle
+    tx_equedlms_domain_model_course.access = user,group
+    tx_equedlms_domain_model_feedback.access = user,group
+
+    # Optionale Zusatzfunktion im Kontextmenü
+    customFunction {
+        type = input
+        size = 30
+        label = Benutzerdefinierte Funktionen
+        eval = required
+    }
 }
 
-# Backend Layouts (z. B. Kursübersicht, Lektionen)
+# -------------------------
+# Layoutvorgaben für das Seitenmodul
+# -------------------------
 mod.web_list.layout {
     1 = Kursübersicht
     2 = Lektionen anzeigen
 }
 
 # -------------------------
-# Seitenfelder und Metadaten
+# Formularanpassungen für Seiten (pages)
 # -------------------------
 TCEFORM.pages {
-    # Felder wie 'title', 'description' können hier angepasst werden
-    title {
-        label = Kursname
-        config {
-            type = input
-            size = 30
-            eval = required
-        }
+    title.label = Kursname
+    title.config {
+        type = input
+        size = 30
+        eval = required
     }
 
-    # Metadaten für die Seite
-    description {
-        label = Kursbeschreibung
-        config {
-            type = text
-            rows = 4
-            cols = 40
-            eval = trim
-        }
+    description.label = Kursbeschreibung
+    description.config {
+        type = text
+        rows = 4
+        cols = 40
+        eval = trim
     }
 }
 
 # -------------------------
-# Zugriffsrechte für Inhalte
-# -------------------------
-mod.web_list.permissions {
-    # Sicherstellen, dass nur Administratoren und Prüfungszertifizierer zugreifen können
-    access = user, group
-}
-
-# -------------------------
-# Custom Admin-Menü
-# -------------------------
-mod {
-    web_list {
-        # Benutzerspezifische Funktionen hinzufügen
-        customFunction {
-            type = input
-            size = 30
-            label = Benutzerdefinierte Funktionen
-            eval = required
-        }
-    }
-}
-
-# -------------------------
-# Optimierte Benutzeroberfläche
-# -------------------------
-# Benutzeroberfläche zur Verwaltung von Kursen und Zertifikaten
-mod.web_list.tx_equedlms_domain_model_course {
-    hideTable = 1
-}
-
-mod.web_list.tx_equedlms_domain_model_instructor {
-    hideTable = 1
-}
-
-# -------------------------
-# Metadatenfelder für Kurse
+# Felder in tx_equedlms_domain_model_course
 # -------------------------
 TCEFORM.tx_equedlms_domain_model_course {
-    title {
-        label = Kursname
-    }
-    course_description {
-        label = Kursbeschreibung
-    }
+    title.label = Kursname
+    course_description.label = Kursbeschreibung
 }
 
 # -------------------------
-# Vereinfachte Handhabung von Prüfungsunterlagen
+# Felder in tx_equedlms_domain_model_feedback
 # -------------------------
 TCEFORM.tx_equedlms_domain_model_feedback {
     user_feedback {
@@ -109,22 +77,8 @@ TCEFORM.tx_equedlms_domain_model_feedback {
 }
 
 # -------------------------
-# Sichtbarkeit der Prüfungsunterlagen
+# Tabellen im Seitenmodul ein-/ausblenden
 # -------------------------
-mod.web_list.tx_equedlms_domain_model_feedback {
-    hideTable = 0
-}
-
-# -------------------------
-# Benutzerrechte für das LMS-Backend
-# -------------------------
-mod {
-    web_list {
-        tx_equedlms_domain_model_course {
-            access = user, group
-        }
-        tx_equedlms_domain_model_feedback {
-            access = user, group
-        }
-    }
-}
+mod.web_list.tx_equedlms_domain_model_course.hideTable = 1
+mod.web_list.tx_equedlms_domain_model_instructor.hideTable = 1
+mod.web_list.tx_equedlms_domain_model_feedback.hideTable = 0

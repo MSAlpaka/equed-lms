@@ -1,112 +1,84 @@
-# ================================
-# Aktuelle Konfiguration und Optimierungen
-# ================================
+#############################################
+# EquEd.LMS - Setup (Tailwind integriert)
+# Datei: EXT:equed_lms/Configuration/TypoScript/setup.typoscript
+#############################################
 
-# Zentral definierte Template-Pfade für alle Content-Elemente
-plugin.tx_equedlms.view {
+# === CSS einbinden ===
+page {
+  includeCSS {
+    # Zentrales Stylesheet, das alle anderen Styles integriert
+    main = EXT:equed_lms/Resources/Public/Css/main.tailwind.css
+    main.external = 0
+  }
+
+  # Optional: Alpine.js oder andere interaktive JavaScript-Dateien
+  # includeJSFooter {
+  #   alpine = EXT:equed_lms/Resources/Public/Js/alpine.min.js
+  # }
+}
+
+# === Plugin-Konfiguration ===
+plugin.tx_equedlms {
+  view {
+    # Pfade zu den Fluid-Templates
     templateRootPath = EXT:equed_lms/Resources/Private/Templates/
-    partialRootPath = EXT:equed_lms/Resources/Private/Partials/
-    layoutRootPath = EXT:equed_lms/Resources/Private/Layouts/
+    partialRootPath  = EXT:equed_lms/Resources/Private/Partials/
+    layoutRootPath   = EXT:equed_lms/Resources/Private/Layouts/
+    # Sprachdatei (lokale Sprachübersetzungen)
+    languageFile     = EXT:equed_lms/Resources/Private/Language/locallang.xlf
+  }
+
+  settings {
+    # Anzahl Kurse pro Seite
+    courseList = TEXT
+    courseList.value = 10
+
+    # Platzhalter für Nutzerdaten (z. B. für Profildaten)
+    userData = TEXT
+    userData.value = {$userData.someField}
+  }
 }
 
-# -------------------------
-# Kursübersicht (Course List)
-# -------------------------
-tt_content.equed_course_list =< lib.contentElement
-tt_content.equed_course_list {
-    templateName = CourseList
+# ==========================
+# Inhaltselemente (CType)
+# ==========================
+tt_content {
+  equed_course_list =< lib.contentElement
+  equed_course_list.templateName = CourseList
+
+  equed_lesson_show =< lib.contentElement
+  equed_lesson_show.templateName = LessonShow
+
+  equed_submission_form =< lib.contentElement
+  equed_submission_form.templateName = SubmissionForm
+
+  equed_usersubmission_review =< lib.contentElement
+  equed_usersubmission_review.templateName = UserSubmissionReview
+
+  equed_usercourserecord_summary =< lib.contentElement
+  equed_usercourserecord_summary.templateName = UserCourseRecordSummary
+
+  equed_certificate_display =< lib.contentElement
+  equed_certificate_display.templateName = CertificateDisplay
 }
 
-# -------------------------
-# Lektion anzeigen (Lesson Show)
-# -------------------------
-tt_content.equed_lesson_show =< lib.contentElement
-tt_content.equed_lesson_show {
-    templateName = LessonShow
-}
-
-# -------------------------
-# Einreichungsformular (Submission Form)
-# -------------------------
-tt_content.equed_submission_form =< lib.contentElement
-tt_content.equed_submission_form {
-    templateName = SubmissionForm
-}
-
-# -------------------------
-# Benutzerüberprüfung von Einreichungen (User Submission Review)
-# -------------------------
-tt_content.equed_usersubmission_review =< lib.contentElement
-tt_content.equed_usersubmission_review {
-    templateName = UserSubmissionReview
-}
-
-# -------------------------
-# Benutzer-Kurs-Zusammenfassung (User Course Record Summary)
-# -------------------------
-tt_content.equed_usercourserecord_summary =< lib.contentElement
-tt_content.equed_usercourserecord_summary {
-    templateName = UserCourseRecordSummary
-}
-
-# -------------------------
-# Zertifikatsanzeige (Certificate Display)
-# -------------------------
-tt_content.equed_certificate_display =< lib.contentElement
-tt_content.equed_certificate_display {
-    templateName = CertificateDisplay
-}
-
-# -------------------------
-# Caching für Kursinhalte und Benutzer-Daten
-# -------------------------
+# ==========================
+# Context Caching optimieren
+# ==========================
 [globalVar = GP:tx_equedlms_pi1|controller = Course]
-    config.cache_period = 3600
-    config.no_cache = 0
+  config.cache_period = 3600
+  config.no_cache = 0
 [global]
 
-# -------------------------
-# Typoscript-Variablen für dynamische Kurs- und Benutzerdaten
-# -------------------------
-plugin.tx_equedlms.settings.courseList = TEXT
-plugin.tx_equedlms.settings.courseList.value = 10
-
-plugin.tx_equedlms.settings.userData = TEXT
-plugin.tx_equedlms.settings.userData.value = {$userData.someField}
-
-# -------------------------
-# Frontend-Spezifische Konfigurationen für die Anzeige von Kursen
-# -------------------------
+# ==========================
+# Seitenrendering mit Fluid
+# ==========================
 page = PAGE
 page.typeNum = 0
 page.10 = FLUIDTEMPLATE
 page.10 {
-    file = EXT:equed_lms/Resources/Private/Templates/Main.html
-    layoutRootPath = EXT:equed_lms/Resources/Private/Layouts/
-    partialRootPath = EXT:equed_lms/Resources/Private/Partials/
-    templateRootPath = EXT:equed_lms/Resources/Private/Templates/
+  # Haupttemplate-Datei für die Seite
+  file = EXT:equed_lms/Resources/Private/Templates/Main.html
+  templateRootPath = EXT:equed_lms/Resources/Private/Templates/
+  layoutRootPath   = EXT:equed_lms/Resources/Private/Layouts/
 }
-
-# -------------------------
-# Frontend-Integration von CSS und JavaScript
-# -------------------------
-page.includeCSS {
-    file1 = EXT:equed_lms/Resources/Public/Css/styles.css
-}
-
-page.includeJSFooter {
-    file1 = EXT:equed_lms/Resources/Public/JavaScript/scripts.js
-}
-
-# -------------------------
-# Cache-Konfiguration für spezifische Frontend-Elemente
-# -------------------------
-[globalVar = GP:tx_equedlms_pi1|controller = Course]
-    config.cache_period = 3600
-    config.no_cache = 0
-[global]
-
-# -------------------------
-# Mehrsprachige Unterstützung (optional)
-# -------------------------
-plugin.tx_equedlms.view.languageFile = EXT:equed_lms/Resources/Private/Language/locallang.xlf

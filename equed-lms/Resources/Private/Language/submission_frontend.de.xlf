@@ -1,10 +1,29 @@
-<?xml version='1.0' encoding='utf-8'?>
-<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-  <file source-language="en" datatype="plaintext" original="messages" target-language="de">
-    <body>
-      <trans-unit id="submission.send"><source>Submit Report</source><target>Bericht einreichen</target></trans-unit>
-      <trans-unit id="submission.comment"><source>Comment</source><target>Kommentar</target></trans-unit>
-      <trans-unit id="submission.status.reviewed"><source>Reviewed</source><target>Geprüft</target></trans-unit>
-    </body>
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2">
+  <file source_language="en" target_language="de">
+    <trans-unit id="submission.title">
+      <source>submission.title</source>
+      <target>Einreichung</target>
+    </trans-unit>
+    <trans-unit id="submission.description">
+      <source>submission.description</source>
+      <target>Bitte reichen Sie Ihre Unterlagen hier ein.</target>
+    </trans-unit>
+    <trans-unit id="submission.file">
+      <source>submission.file</source>
+      <target>Datei hochladen</target>
+    </trans-unit>
+    <trans-unit id="submission.submit">
+      <source>submission.submit</source>
+      <target>Einreichen</target>
+    </trans-unit>
+    <trans-unit id="submission.success">
+      <source>submission.success</source>
+      <target>Die Einreichung war erfolgreich.</target>
+    </trans-unit>
+    <trans-unit id="submission.error">
+      <source>submission.error</source>
+      <target>Fehler bei der Einreichung. Bitte versuchen Sie es erneut.</target>
+    </trans-unit>
   </file>
 </xliff>
