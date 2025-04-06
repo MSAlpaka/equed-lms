@@ -2,22 +2,28 @@
 
 return [
     'ctrl' => [
-        'title' => 'Audit Log',
+        'title' => 'Audit Log Entry',
         'label' => 'action',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
-        'delete' => 'deleted',
-        'iconfile' => 'EXT:equed_lms/Resources/Public/Icons/auditlog.svg',
+        'cruser_id' => 'cruser_id',
+        'hideTable' => false,
+        'iconfile' => 'EXT:equed_lms/Resources/Public/Icons/tx_equedlms_domain_model_auditlog.svg',
+    ],
+    'types' => [
+        '0' => ['showitem' => '
+            --div--;General,
+                fe_user, action, related_id, related_type, comment, timestamp
+        '],
     ],
     'columns' => [
         'fe_user' => [
-            'label' => 'User',
+            'label' => 'Frontend User',
             'config' => [
                 'type' => 'group',
                 'internal_type' => 'db',
                 'allowed' => 'fe_users',
-                'foreign_table' => 'fe_users',
-                'minitems' => 0,
+                'size' => 1,
                 'maxitems' => 1,
             ],
         ],
@@ -31,8 +37,7 @@ return [
         'related_id' => [
             'label' => 'Related ID',
             'config' => [
-                'type' => 'input',
-                'eval' => 'int',
+                'type' => 'number',
             ],
         ],
         'related_type' => [
@@ -45,20 +50,14 @@ return [
             'label' => 'Comment',
             'config' => [
                 'type' => 'text',
-                'enableRichtext' => false,
+                'rows' => 3,
             ],
         ],
         'timestamp' => [
             'label' => 'Timestamp',
             'config' => [
-                'type' => 'input',
                 'type' => 'datetime',
-                'eval' => 'datetime',
-                'default' => null,
             ],
         ],
-    ],
-    'types' => [
-        '0' => ['showitem' => 'fe_user, action, related_id, related_type, comment, timestamp'],
     ],
 ];

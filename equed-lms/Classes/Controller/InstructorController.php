@@ -1,55 +1,67 @@
 <?php
-// InstructorController.php
 
-namespace Vendor\EquedLms\Controller;
+declare(strict_types=1);
 
+namespace EquedLms\Controller;
+
+use EquedLms\Domain\Model\Course;
+use EquedLms\Domain\Repository\CourseRepository;
+use Psr\Log\LoggerInterface;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
-use Vendor\EquedLms\Domain\Model\Course;
-use Vendor\EquedLms\Domain\Repository\CourseRepository;
+use TYPO3\CMS\Core\Messaging\AbstractMessage;
+use TYPO3\CMS\Core\Exception\AccessDeniedException;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 class InstructorController extends ActionController
 {
-    /**
-     * @var CourseRepository
-     */
-    protected $courseRepository;
+    public function __construct(
+        protected readonly CourseRepository $courseRepository,
+        protected readonly LoggerInterface $logger
+    ) {}
 
     /**
-     * @param CourseRepository $courseRepository
+     * Bewertet einen Kurs (nur zugewiesene Kurse).
      */
-    public function injectCourseRepository(CourseRepository $courseRepository)
-    {
-        $this->courseRepository = $courseRepository;
-    }
-
-    /**
-     * Evaluate action (only for assigned courses)
-     */
-    public function evaluateAction($courseId)
+    public function evaluateAction(int $courseId): void
     {
         $user = $this->getAuthenticatedUser();
         $course = $this->courseRepository->findByUid($courseId);
 
         // Ensure the course is assigned to the current user (Instructor)
         if ($course && $course->getInstructor() === $user) {
-            // Submit feedback for the course
-            $this->courseRepository->submitFeedback($courseId, $user, $this->request->getArgument('feedback'));
-            $this->addFlashMessage(
-                $this->translate('feedback_submitted')
-            );
+            $feedback = $this->request->getArgument('feedback');
+            if ($feedback) {
+                // Submit feedback for the course
+                $this->courseRepository->submitFeedback($courseId, $user, $feedback);
+                $this->addFlashMessage(
+                    LocalizationUtility::translate('flashMessages.feedbackSubmitted', 'EquedLms') ?? 'Feedback erfolgreich abgegeben.',
+                    '',
+                    AbstractMessage::OK
+                );
+                $this->logger->info('Feedback submitted for course', [
+                    'courseId' => $course->getUid(),
+                    'instructorId' => $user->getUid()
+                ]);
+            } else {
+                $this->addFlashMessage(
+                    LocalizationUtility::translate('flashMessages.feedbackMissing', 'EquedLms') ?? 'Bitte gib dein Feedback ab.',
+                    '',
+                    AbstractMessage::ERROR
+                );
+            }
         } else {
             $this->addFlashMessage(
-                $this->translate('error_not_assigned_or_completed'),
+                LocalizationUtility::translate('flashMessages.errorNotAssigned', 'EquedLms') ?? 'Du bist diesem Kurs nicht zugewiesen.',
                 '',
-                \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR
+                AbstractMessage::ERROR
             );
         }
     }
 
     /**
-     * Mark course as completed (only for assigned courses)
+     * Markiert den Kurs als abgeschlossen (nur zugewiesene Kurse).
      */
-    public function markCompleteAction($courseId)
+    public function markCompleteAction(int $courseId): void
     {
         $user = $this->getAuthenticatedUser();
         $course = $this->courseRepository->findByUid($courseId);
@@ -58,33 +70,30 @@ class InstructorController extends ActionController
             // Mark the course as completed
             $course->setStatus('completed');
             $this->courseRepository->update($course);
+
             $this->addFlashMessage(
-                $this->translate('course_completed')
+                LocalizationUtility::translate('flashMessages.courseCompleted', 'EquedLms') ?? 'Kurs erfolgreich abgeschlossen.',
+                '',
+                AbstractMessage::OK
             );
+            $this->logger->info('Course marked as completed', [
+                'courseId' => $course->getUid(),
+                'instructorId' => $user->getUid()
+            ]);
         } else {
             $this->addFlashMessage(
-                $this->translate('error_not_assigned_to_course'),
+                LocalizationUtility::translate('flashMessages.errorNotAssignedToCourse', 'EquedLms') ?? 'Du bist diesem Kurs nicht zugewiesen.',
                 '',
-                \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR
+                AbstractMessage::ERROR
             );
         }
     }
 
     /**
-     * Helper function to get the authenticated user
+     * Helper function to get the authenticated user.
      */
     protected function getAuthenticatedUser()
     {
-        // Assuming we have a method to retrieve the logged-in user
-        return $this->getUser();
-    }
-
-    /**
-     * Helper function for translation
-     */
-    protected function translate($key)
-    {
-        return $this->getLocalizationService()->getLocalizedString($key);
+        return $GLOBALS['TSFE']->fe_user->user;
     }
 }
-?>

@@ -1,32 +1,28 @@
-<!-- Optimized Default.html -->
 <!DOCTYPE html>
-<html lang="de">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="{description}">
-    <meta name="robots" content="index, follow"> <!-- Optimized for SEO -->
-    <title>{title}</title>
-    <link rel="stylesheet" href="{stylesheet}">
+    <meta charset="utf-8" />
+    <title><f:render section="title" optional="true" /> - EquEd LMS</title>
+    <f:asset.css identifier="equed-lms-style" href="EXT:equed-lms/Resources/Public/Css/styles.css" />
 </head>
 <body>
     <header>
+        <h1><f:translate key="app.title" default="EquEd LMS" /></h1>
         <nav>
-            <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/courses">Courses</a></li>
-                <li><a href="/profile">Profile</a></li>
-            </ul>
+            <a href="/"><f:translate key="menu.home" default="Home" /></a>
+            <a href="/courses"><f:translate key="menu.courses" default="Courses" /></a>
+            <a href="/dashboard"><f:translate key="menu.dashboard" default="Dashboard" /></a>
         </nav>
-        <h1>{title}</h1>
     </header>
 
     <main>
-        {content}
+        <f:flashMessages />
+        <f:render section="main" />
     </main>
 
     <footer>
-        <p>&copy; {year} EquEd LMS. All rights reserved.</p>
+        <p>&copy; <f:format.date format="Y" date="{f:format.date(date: 'now')}" /> EquEd.eu</p>
     </footer>
 </body>
 </html>

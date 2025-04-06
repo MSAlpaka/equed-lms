@@ -1,5 +1,4 @@
 <?php
-defined('TYPO3_MODE') or die();
 
 return [
     'ctrl' => [
@@ -8,49 +7,85 @@ return [
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
         'cruser_id' => 'cruser_id',
-        'default_sortby' => 'ORDER BY title',
-        'enablecolumns' => [
-            'disabled' => 'hidden',
-            'starttime' => 'starttime',
-            'endtime' => 'endtime',
-        ],
-        'dividers2tabs' => TRUE,
-        'searchFields' => 'title,description',
-    ],
-    'interface' => [
-        'showRecordFieldList' => 'title, description, course',
+        'hideTable' => false,
+        'iconfile' => 'EXT:equed_lms/Resources/Public/Icons/tx_equedlms_domain_model_lesson.svg',
     ],
     'types' => [
-        '1' => ['showitem' => 'title, description, course'],
+        '0' => ['showitem' => '
+            --div--;General,
+                title, slug, description, position, durationInMinutes, isRequired, course, contentPages, quizQuestions
+        '],
     ],
     'columns' => [
         'title' => [
-            'exclude' => 0,
             'label' => 'Title',
             'config' => [
                 'type' => 'input',
-                'size' => 30,
-                'eval' => 'trim,required',
-            ]
+                'required' => true,
+            ],
+        ],
+        'slug' => [
+            'label' => 'Slug',
+            'config' => [
+                'type' => 'input',
+            ],
         ],
         'description' => [
-            'exclude' => 0,
             'label' => 'Description',
             'config' => [
                 'type' => 'text',
-                'cols' => 40,
-                'rows' => 15,
-            ]
+                'rows' => 5,
+            ],
+        ],
+        'position' => [
+            'label' => 'Position',
+            'config' => [
+                'type' => 'input',
+                'eval' => 'int',
+            ],
+        ],
+        'durationInMinutes' => [
+            'label' => 'Duration (in minutes)',
+            'config' => [
+                'type' => 'input',
+                'eval' => 'int',
+            ],
+        ],
+        'isRequired' => [
+            'label' => 'Is Required',
+            'config' => [
+                'type' => 'check',
+            ],
         ],
         'course' => [
-            'exclude' => 0,
             'label' => 'Course',
             'config' => [
-                'type' => 'select',
-                'foreign_table' => 'tx_equedlms_domain_model_course',
-                'minitems' => 0,
+                'type' => 'group',
+                'internal_type' => 'db',
+                'allowed' => 'tx_equedlms_domain_model_course',
+                'size' => 1,
                 'maxitems' => 1,
-            ]
+            ],
+        ],
+        'contentPages' => [
+            'label' => 'Content Pages',
+            'config' => [
+                'type' => 'group',
+                'internal_type' => 'db',
+                'allowed' => 'tx_equedlms_domain_model_contentpage',
+                'size' => 10,
+                'maxitems' => 50,
+            ],
+        ],
+        'quizQuestions' => [
+            'label' => 'Quiz Questions',
+            'config' => [
+                'type' => 'group',
+                'internal_type' => 'db',
+                'allowed' => 'tx_equedlms_domain_model_quizquestion',
+                'size' => 10,
+                'maxitems' => 50,
+            ],
         ],
     ],
 ];

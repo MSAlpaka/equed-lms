@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Equed\EquedLms\Domain\Model;
 
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
-use TYPO3\CMS\Extbase\Annotation\ORM;
+use TYPO3\CMS\Extbase\Annotation\ORM as Extbase;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
+use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
 
 /**
  * Represents a badge earned by a participant for completing specific actions or achievements.
@@ -29,22 +30,22 @@ class Badge extends AbstractEntity
     protected string $assignmentType = 'manual';
 
     /**
-     * Badge is linked to this course (optional)
+     * @Extbase\Lazy
      */
     protected ?Course $relatedCourse = null;
 
     /**
-     * Badge is linked to this lesson (optional)
+     * @Extbase\Lazy
      */
     protected ?Lesson $relatedLesson = null;
 
     /**
-     * Users who have received this badge
-     *
-     * @var ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\FrontendUser>
-     * @ORM\Lazy
+     * @var ObjectStorage<FrontendUser>
+     * @Extbase\Lazy
      */
     protected ObjectStorage $recipients;
+
+    protected int $pid = 0;
 
     public function __construct()
     {
@@ -86,9 +87,9 @@ class Badge extends AbstractEntity
         return $this->relatedCourse;
     }
 
-    public function setRelatedCourse(?Course $course): void
+    public function setRelatedCourse(?Course $relatedCourse): void
     {
-        $this->relatedCourse = $course;
+        $this->relatedCourse = $relatedCourse;
     }
 
     public function getRelatedLesson(): ?Lesson
@@ -96,13 +97,13 @@ class Badge extends AbstractEntity
         return $this->relatedLesson;
     }
 
-    public function setRelatedLesson(?Lesson $lesson): void
+    public function setRelatedLesson(?Lesson $relatedLesson): void
     {
-        $this->relatedLesson = $lesson;
+        $this->relatedLesson = $relatedLesson;
     }
 
     /**
-     * @return ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\FrontendUser>
+     * @return ObjectStorage<FrontendUser>
      */
     public function getRecipients(): ObjectStorage
     {
@@ -117,5 +118,20 @@ class Badge extends AbstractEntity
     public function removeRecipient(FrontendUser $user): void
     {
         $this->recipients->detach($user);
+    }
+
+    public function setRecipients(ObjectStorage $recipients): void
+    {
+        $this->recipients = $recipients;
+    }
+
+    public function getPid(): int
+    {
+        return $this->pid;
+    }
+
+    public function setPid(int $pid): void
+    {
+        $this->pid = $pid;
     }
 }

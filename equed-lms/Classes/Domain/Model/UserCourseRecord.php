@@ -7,100 +7,119 @@ namespace Equed\EquedLms\Domain\Model;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Annotation\ORM\Cascade;
 use TYPO3\CMS\Extbase\Annotation\ORM\Lazy;
+use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
 
+/**
+ * UserCourseRecord
+ */
 class UserCourseRecord extends AbstractEntity
 {
     /**
-     * @var \Equed\EquedLms\Domain\Model\CourseInstance
-     * @Lazy
+     * @var int
      */
-    protected $courseInstance;
+    protected int $pid = 0;
 
     /**
-     * @var \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
+     * @var CourseInstance
      * @Lazy
      */
-    protected $user;
+    protected CourseInstance $courseInstance;
 
     /**
-     * @var \Equed\EquedLms\Domain\Model\FrontendUser|null
+     * @var FrontendUser
      * @Lazy
      */
-    protected $instructor;
+    protected FrontendUser $user;
+
+    /**
+     * @var FrontendUser|null
+     * @Lazy
+     */
+    protected ?FrontendUser $instructor = null;
 
     /**
      * @var \DateTime|null
      */
-    protected $startedAt;
+    protected ?\DateTime $startedAt = null;
 
     /**
      * @var \DateTime|null
      */
-    protected $completedAt;
+    protected ?\DateTime $completedAt = null;
 
     /**
      * @var bool
      */
-    protected $instructorConfirmed = false;
+    protected bool $instructorConfirmed = false;
 
     /**
      * @var bool
      */
-    protected $certifierValidated = false;
+    protected bool $certifierValidated = false;
 
     /**
      * @var bool
      */
-    protected $adminApproved = false;
+    protected bool $adminApproved = false;
 
     /**
      * @var string
      */
-    protected $certificateCode = '';
+    protected string $certificateCode = '';
 
     /**
      * @var \DateTime|null
      */
-    protected $certificateIssuedAt;
+    protected ?\DateTime $certificateIssuedAt = null;
 
     /**
      * @var string
      */
-    protected $status = 'in_progress'; // z. B. in_progress, failed, passed, validated
+    protected string $status = 'in_progress';
 
     /**
      * @var string
      */
-    protected $metaJson = ''; // Optionales Zusatzfeld für spätere Daten
+    protected string $metaJson = '';
 
-    // --- GETTER & SETTER ---
+    // --- Getter & Setter ---
 
-    public function getCourseInstance(): ?CourseInstance
+    public function getPid(): int
+    {
+        return $this->pid;
+    }
+
+    public function setPid(int $pid): void
+    {
+        $this->pid = $pid;
+    }
+
+    public function getCourseInstance(): CourseInstance
     {
         return $this->courseInstance;
     }
 
-    public function setCourseInstance(?CourseInstance $courseInstance): void
+    public function setCourseInstance(CourseInstance $courseInstance): void
     {
         $this->courseInstance = $courseInstance;
     }
 
-    public function getUser(): ?\TYPO3\CMS\Extbase\Domain\Model\FrontendUser
+    public function getUser(): FrontendUser
     {
         return $this->user;
     }
 
-    public function setUser(?\TYPO3\CMS\Extbase\Domain\Model\FrontendUser $user): void
+    public function setUser(FrontendUser $user): void
     {
         $this->user = $user;
     }
 
-    public function getInstructor(): ?\Equed\EquedLms\Domain\Model\FrontendUser
+    public function getInstructor(): ?FrontendUser
     {
         return $this->instructor;
     }
 
-    public function setInstructor(?\Equed\EquedLms\Domain\Model\FrontendUser $instructor): void
+    public function setInstructor(?FrontendUser $instructor): void
     {
         $this->instructor = $instructor;
     }
@@ -130,9 +149,9 @@ class UserCourseRecord extends AbstractEntity
         return $this->instructorConfirmed;
     }
 
-    public function setInstructorConfirmed(bool $instructorConfirmed): void
+    public function setInstructorConfirmed(bool $confirmed): void
     {
-        $this->instructorConfirmed = $instructorConfirmed;
+        $this->instructorConfirmed = $confirmed;
     }
 
     public function isCertifierValidated(): bool
@@ -140,9 +159,9 @@ class UserCourseRecord extends AbstractEntity
         return $this->certifierValidated;
     }
 
-    public function setCertifierValidated(bool $certifierValidated): void
+    public function setCertifierValidated(bool $validated): void
     {
-        $this->certifierValidated = $certifierValidated;
+        $this->certifierValidated = $validated;
     }
 
     public function isAdminApproved(): bool
@@ -150,9 +169,9 @@ class UserCourseRecord extends AbstractEntity
         return $this->adminApproved;
     }
 
-    public function setAdminApproved(bool $adminApproved): void
+    public function setAdminApproved(bool $approved): void
     {
-        $this->adminApproved = $adminApproved;
+        $this->adminApproved = $approved;
     }
 
     public function getCertificateCode(): string
@@ -160,9 +179,9 @@ class UserCourseRecord extends AbstractEntity
         return $this->certificateCode;
     }
 
-    public function setCertificateCode(string $certificateCode): void
+    public function setCertificateCode(string $code): void
     {
-        $this->certificateCode = $certificateCode;
+        $this->certificateCode = $code;
     }
 
     public function getCertificateIssuedAt(): ?\DateTime
@@ -170,9 +189,9 @@ class UserCourseRecord extends AbstractEntity
         return $this->certificateIssuedAt;
     }
 
-    public function setCertificateIssuedAt(?\DateTime $certificateIssuedAt): void
+    public function setCertificateIssuedAt(?\DateTime $issuedAt): void
     {
-        $this->certificateIssuedAt = $certificateIssuedAt;
+        $this->certificateIssuedAt = $issuedAt;
     }
 
     public function getStatus(): string
@@ -190,8 +209,8 @@ class UserCourseRecord extends AbstractEntity
         return $this->metaJson;
     }
 
-    public function setMetaJson(string $metaJson): void
+    public function setMetaJson(string $meta): void
     {
-        $this->metaJson = $metaJson;
+        $this->metaJson = $meta;
     }
 }

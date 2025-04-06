@@ -6,8 +6,15 @@ return [
         'label' => 'title',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
-        'delete' => 'deleted',
-        'iconfile' => 'EXT:equed_lms/Resources/Public/Icons/contentpage.svg',
+        'cruser_id' => 'cruser_id',
+        'hideTable' => false,
+        'iconfile' => 'EXT:equed_lms/Resources/Public/Icons/tx_equedlms_domain_model_contentpage.svg',
+    ],
+    'types' => [
+        '0' => ['showitem' => '
+            --div--;General,
+                title, text, position, lesson, isRequired, quizQuestion, media, downloads
+        '],
     ],
     'columns' => [
         'title' => [
@@ -17,70 +24,73 @@ return [
                 'required' => true,
             ],
         ],
-        'content' => [
-            'label' => 'Content',
+        'text' => [
+            'label' => 'Text',
             'config' => [
                 'type' => 'text',
-                'enableRichtext' => true,
+                'rows' => 5,
             ],
         ],
-        'course' => [
-            'label' => 'Course (optional)',
-            'config' => [
-                'type' => 'select',
-                'renderType' => 'selectSingle',
-                'foreign_table' => 'tx_equedlms_domain_model_course',
-                'minitems' => 0,
-                'maxitems' => 1,
-            ],
-        ],
-        'lesson' => [
-            'label' => 'Lesson (optional)',
-            'config' => [
-                'type' => 'select',
-                'renderType' => 'selectSingle',
-                'foreign_table' => 'tx_equedlms_domain_model_lesson',
-                'minitems' => 0,
-                'maxitems' => 1,
-            ],
-        ],
-        'sorting' => [
-            'label' => 'Sorting',
+        'position' => [
+            'label' => 'Position',
             'config' => [
                 'type' => 'input',
                 'eval' => 'int',
             ],
         ],
-        'visible' => [
-            'label' => 'Visible',
+        'lesson' => [
+            'label' => 'Lesson',
+            'config' => [
+                'type' => 'group',
+                'internal_type' => 'db',
+                'allowed' => 'tx_equedlms_domain_model_lesson',
+                'size' => 1,
+                'maxitems' => 1,
+            ],
+        ],
+        'isRequired' => [
+            'label' => 'Is Required',
             'config' => [
                 'type' => 'check',
-                'default' => 1,
             ],
         ],
-        'attachments' => [
-            'label' => 'Attachments',
+        'quizQuestion' => [
+            'label' => 'Quiz Question',
+            'config' => [
+                'type' => 'group',
+                'internal_type' => 'db',
+                'allowed' => 'tx_equedlms_domain_model_quizquestion',
+                'size' => 1,
+                'maxitems' => 1,
+            ],
+        ],
+        'media' => [
+            'label' => 'Media',
             'config' => [
                 'type' => 'inline',
-                'foreign_table' => 'sys_file_reference',
-                'foreign_field' => 'uid_foreign',
-                'foreign_sortby' => 'sorting_foreign',
-                'foreign_table_field' => 'tablenames',
-                'foreign_match_fields' => [
-                    'fieldname' => 'attachments',
-                ],
+                'foreign_table' => 'sys_file',
+                'foreign_field' => 'uid',
+                'maxitems' => 10,
                 'appearance' => [
-                    'createNewRelationLinkTitle' => 'Add Attachment',
-                    'showPossibleLocalizationRecords' => true,
-                    'showRemovedLocalizationRecords' => false,
-                    'showAllLocalizationLink' => true,
-                    'showSynchronizationLink' => true,
+                    'useSortable' => true,
+                    'showPossible' => true,
+                    'showAll' => true,
                 ],
             ],
         ],
-    ],
-    'types' => [
-        '0' => ['showitem' =>
-            'title, content, course, lesson, sorting, visible, attachments'],
+        'downloads' => [
+            'label' => 'Downloads',
+            'config' => [
+                'type' => 'inline',
+                'foreign_table' => 'sys_file',
+                'foreign_field' => 'uid',
+                'maxitems' => 10,
+                'appearance' => [
+                    'useSortable' => true,
+                    'showPossible' => true,
+                    'showAll' => true,
+                ],
+            ],
+        ],
     ],
 ];

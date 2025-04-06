@@ -1,0 +1,22 @@
+<f:layout name="Default" />
+
+<f:section name="main">
+  <h1>All Course Programs</h1>
+
+  <ul class="course-program-list">
+    <f:for each="{coursePrograms}" as="program">
+      <li style="margin-bottom: 1em;">
+        <f:link.action action="show" arguments="{courseProgram: program}">
+          <f:if condition="{program.icon}">
+            <img src="{program.icon}" alt="{program.title}" style="height: 40px; float: left; margin-right: 10px;" />
+          </f:if>
+          <strong>{program.title}</strong>
+          <f:if condition="{program.level}"> – {program.level}</f:if><br />
+          <f:if condition="{program.description}">
+            <span>{program.description -> f:format.crop(maxCharacters:120, append:'…')}</span>
+          </f:if>
+        </f:link.action>
+      </li>
+    </f:for>
+  </ul>
+</f:section>

@@ -1,0 +1,63 @@
+<f:layout name="Default" />
+
+<f:section name="main">
+  <h1>{courseProgram.title}</h1>
+
+  <f:if condition="{courseProgram.icon}">
+    <img src="{courseProgram.icon}" alt="{courseProgram.title}" style="max-width: 200px;" />
+  </f:if>
+
+  <dl>
+    <dt>Slug</dt>
+    <dd>{courseProgram.slug}</dd>
+
+    <f:if condition="{courseProgram.level}">
+      <dt>Level</dt>
+      <dd>{courseProgram.level}</dd>
+    </f:if>
+
+    <f:if condition="{courseProgram.duration}">
+      <dt>Duration</dt>
+      <dd>{courseProgram.duration} hours</dd>
+    </f:if>
+
+    <f:if condition="{courseProgram.certification}">
+      <dt>Certification</dt>
+      <dd>{courseProgram.certification}</dd>
+    </f:if>
+
+    <f:if condition="{courseProgram.targetAudience}">
+      <dt>Target Audience</dt>
+      <dd>{courseProgram.targetAudience}</dd>
+    </f:if>
+
+    <f:if condition="{courseProgram.requirements}">
+      <dt>Requirements</dt>
+      <dd>{courseProgram.requirements}</dd>
+    </f:if>
+
+    <f:if condition="{courseProgram.goals}">
+      <dt>Goals</dt>
+      <dd>{courseProgram.goals}</dd>
+    </f:if>
+  </dl>
+
+  <f:if condition="{courseProgram.description}">
+    <h2>Description</h2>
+    <p>{courseProgram.description}</p>
+  </f:if>
+
+  <f:if condition="{courseProgram.instances}">
+    <h2>Available Course Instances</h2>
+    <ul>
+      <f:for each="{courseProgram.instances}" as="instance">
+        <li>
+          <strong>{instance.center.name}</strong><br />
+          {instance.startDate -> f:format.date(format:'Y-m-d')}
+        </li>
+      </f:for>
+    </ul>
+  </f:if>
+
+  <f:link.action action="list">Back to list</f:link.action>
+</f:section>

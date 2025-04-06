@@ -1,0 +1,19 @@
+<f:layout name="Default" />
+
+<f:section name="main">
+  <h1>{courseInstance.program.title}</h1>
+
+  <p><strong>Center:</strong> {courseInstance.center.name}</p>
+  <p><strong>Start Date:</strong> {courseInstance.startDate -> f:format.date(format:'Y-m-d')}</p>
+  <p><strong>End Date:</strong> {courseInstance.endDate -> f:format.date(format:'Y-m-d')}</p>
+  
+  <f:if condition="{courseInstance.maxParticipants}">
+    <p><strong>Max Participants:</strong> {courseInstance.maxParticipants}</p>
+  </f:if>
+
+  <f:if condition="{courseInstance.isPublic}">
+    <p><strong>Status:</strong> Public</p>
+  </f:if>
+
+  <f:link.action action="list">Back to list</f:link.action>
+</f:section>

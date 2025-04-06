@@ -1,186 +1,257 @@
+-- Optimierte ext_tables.sql mit vollständigen TYPO3-Systemfeldern
 
--- ================================================
--- Optimierte Tabellenstruktur für equed-lms
--- ================================================
-
--- Tabelle: UserProfile
 CREATE TABLE tx_equedlms_userprofile (
-    uid INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    pid INT UNSIGNED NOT NULL DEFAULT 0,
-    user_id INT UNSIGNED NOT NULL,
-    preferences TEXT,
-    progress_summary TEXT,
+    cruser_id INT(11) DEFAULT 0 NOT NULL,
+    crdate INT(11) DEFAULT 0 NOT NULL,
+    tstamp INT(11) DEFAULT 0 NOT NULL,
+
+    uid INT(11) NOT NULL AUTO_INCREMENT,
+    pid INT(11) DEFAULT 0 NOT NULL,
+    user_id INT(11) NOT NULL,  -- Verweis auf fe_users
+    preferences TEXT,  -- Zum Beispiel Kurspräferenzen
+    progress_summary TEXT,  -- Allgemeine Zusammenfassung des Fortschritts
     PRIMARY KEY (uid),
     KEY user_id (user_id),
-    CONSTRAINT fk_userprofile_user FOREIGN KEY (user_id) REFERENCES fe_users(uid)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+    FOREIGN KEY (user_id) REFERENCES fe_users (uid)
+,
+    deleted TINYINT(1) DEFAULT 0 NOT NULL,
+    hidden TINYINT(1) DEFAULT 0 NOT NULL
+);
 
--- Tabelle: Kurskategorien
 CREATE TABLE tx_equedlms_course_category (
-    uid INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    pid INT UNSIGNED NOT NULL DEFAULT 0,
+    cruser_id INT(11) DEFAULT 0 NOT NULL,
+    crdate INT(11) DEFAULT 0 NOT NULL,
+    tstamp INT(11) DEFAULT 0 NOT NULL,
+
+    uid INT(11) NOT NULL AUTO_INCREMENT,
+    pid INT(11) DEFAULT 0 NOT NULL,
     title VARCHAR(255) NOT NULL,
     description TEXT,
     PRIMARY KEY (uid)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+,
+    deleted TINYINT(1) DEFAULT 0 NOT NULL,
+    hidden TINYINT(1) DEFAULT 0 NOT NULL
+);
 
--- Tabelle: Kurse
 CREATE TABLE tx_equedlms_domain_model_course (
-    uid INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    pid INT UNSIGNED NOT NULL DEFAULT 0,
+    cruser_id INT(11) DEFAULT 0 NOT NULL,
+    crdate INT(11) DEFAULT 0 NOT NULL,
+    tstamp INT(11) DEFAULT 0 NOT NULL,
+
+    uid INT(11) NOT NULL AUTO_INCREMENT,
+    pid INT(11) DEFAULT 0 NOT NULL,
     title VARCHAR(255) NOT NULL,
     description TEXT,
-    difficulty_level INT DEFAULT 0,
-    provider VARCHAR(255),
-    category INT UNSIGNED,
-    start_date DATETIME NULL,
-    end_date DATETIME NULL,
+    difficulty_level INT(11) DEFAULT 0 NOT NULL,  -- Schwierigkeitsgrad
+    provider VARCHAR(255),  -- Anbieter des Kurses
+    category INT(11),  -- Fremdschlüssel zu einer Kategorietabelle
+    startDate DATETIME NULL,  -- Neues Feld für Kursstart
+    endDate DATETIME NULL,  -- Neues Feld für Kursende
     PRIMARY KEY (uid),
     KEY category (category),
-    CONSTRAINT fk_course_category FOREIGN KEY (category) REFERENCES tx_equedlms_course_category(uid)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+    FOREIGN KEY (category) REFERENCES tx_equedlms_course_category (uid)
+,
+    deleted TINYINT(1) DEFAULT 0 NOT NULL,
+    hidden TINYINT(1) DEFAULT 0 NOT NULL
+);
 
--- Tabelle: Lektionen
-CREATE TABLE tx_equedlms_domain_model_lesson (
-    uid INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    pid INT UNSIGNED NOT NULL DEFAULT 0,
-    title VARCHAR(255) NOT NULL,
-    slug VARCHAR(255) NOT NULL,
-    position INT DEFAULT 0,
-    course INT UNSIGNED NOT NULL,
-    PRIMARY KEY (uid),
-    KEY course (course),
-    CONSTRAINT fk_lesson_course FOREIGN KEY (course) REFERENCES tx_equedlms_domain_model_course(uid)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- Tabelle: Prüfungen
 CREATE TABLE tx_equedlms_domain_model_exam (
-    uid INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    pid INT UNSIGNED NOT NULL DEFAULT 0,
-    course_id INT UNSIGNED NOT NULL,
+    cruser_id INT(11) DEFAULT 0 NOT NULL,
+    crdate INT(11) DEFAULT 0 NOT NULL,
+    tstamp INT(11) DEFAULT 0 NOT NULL,
+
+    uid INT(11) NOT NULL AUTO_INCREMENT,
+    pid INT(11) DEFAULT 0 NOT NULL,
+    course_id INT(11) NOT NULL,  -- Verweis auf den Kurs
     exam_date DATETIME NOT NULL,
-    exam_type VARCHAR(255) NOT NULL,
+    exam_type VARCHAR(255) NOT NULL, -- Theorie, Praxis
     PRIMARY KEY (uid),
-    CONSTRAINT fk_exam_course FOREIGN KEY (course_id) REFERENCES tx_equedlms_domain_model_course(uid)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+    FOREIGN KEY (course_id) REFERENCES tx_equedlms_domain_model_course (uid)
+,
+    deleted TINYINT(1) DEFAULT 0 NOT NULL,
+    hidden TINYINT(1) DEFAULT 0 NOT NULL
+);
 
--- Tabelle: Zertifikate
 CREATE TABLE tx_equedlms_domain_model_certificate (
-    uid INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    pid INT UNSIGNED NOT NULL DEFAULT 0,
-    user_id INT UNSIGNED NOT NULL,
-    exam_id INT UNSIGNED NOT NULL,
-    certificate_code VARCHAR(255) NOT NULL,
-    PRIMARY KEY (uid),
-    CONSTRAINT fk_certificate_user FOREIGN KEY (user_id) REFERENCES fe_users(uid),
-    CONSTRAINT fk_certificate_exam FOREIGN KEY (exam_id) REFERENCES tx_equedlms_domain_model_exam(uid)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+    cruser_id INT(11) DEFAULT 0 NOT NULL,
+    crdate INT(11) DEFAULT 0 NOT NULL,
+    tstamp INT(11) DEFAULT 0 NOT NULL,
 
--- Tabelle: Audit Log
+    uid INT(11) NOT NULL AUTO_INCREMENT,
+    pid INT(11) DEFAULT 0 NOT NULL,
+    user_id INT(11) NOT NULL,  -- Verweis auf den Benutzer
+    exam_id INT(11) NOT NULL,  -- Verweis auf die Prüfung
+    certificate_code VARCHAR(255) NOT NULL, -- Zertifikatscode
+    PRIMARY KEY (uid),
+    FOREIGN KEY (user_id) REFERENCES fe_users (uid),
+    FOREIGN KEY (exam_id) REFERENCES tx_equedlms_domain_model_exam (uid)
+,
+    deleted TINYINT(1) DEFAULT 0 NOT NULL,
+    hidden TINYINT(1) DEFAULT 0 NOT NULL
+);
+
 CREATE TABLE tx_equedlms_domain_model_auditlog (
-    uid INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    pid INT UNSIGNED NOT NULL DEFAULT 0,
-    fe_user INT UNSIGNED NOT NULL,
+    cruser_id INT(11) DEFAULT 0 NOT NULL,
+    crdate INT(11) DEFAULT 0 NOT NULL,
+    tstamp INT(11) DEFAULT 0 NOT NULL,
+
+    uid INT(11) NOT NULL AUTO_INCREMENT,
+    pid INT(11) DEFAULT 0 NOT NULL,
+    fe_user INT(11) NOT NULL,  -- Verweis auf fe_users
     action VARCHAR(255) NOT NULL,
     related_type VARCHAR(255),
-    related_id INT,
-    timestamp INT UNSIGNED NOT NULL,
+    related_id INT(11),
+    timestamp INT(11) NOT NULL,
     comment TEXT,
     PRIMARY KEY (uid),
-    CONSTRAINT fk_auditlog_user FOREIGN KEY (fe_user) REFERENCES fe_users(uid)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+    FOREIGN KEY (fe_user) REFERENCES fe_users (uid)
+,
+    deleted TINYINT(1) DEFAULT 0 NOT NULL,
+    hidden TINYINT(1) DEFAULT 0 NOT NULL
+);
 
-
--- Tabelle: Benutzerfortschritt in Lektionen
 CREATE TABLE tx_equedlms_domain_model_userlessonprogress (
-    uid INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    pid INT UNSIGNED NOT NULL DEFAULT 0,
-    fe_user INT UNSIGNED NOT NULL,
-    lesson INT UNSIGNED NOT NULL,
-    progress INT DEFAULT 0,
-    confirmed TINYINT(1) DEFAULT 0 NOT NULL,
-    quiz_score DOUBLE DEFAULT 0,
-    completed TINYINT(1) DEFAULT 0 NOT NULL,
-    PRIMARY KEY (uid),
-    KEY fe_user (fe_user),
-    KEY lesson (lesson),
-    CONSTRAINT fk_progress_user FOREIGN KEY (fe_user) REFERENCES fe_users(uid),
-    CONSTRAINT fk_progress_lesson FOREIGN KEY (lesson) REFERENCES tx_equedlms_domain_model_lesson(uid)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+    cruser_id INT(11) DEFAULT 0 NOT NULL,
+    crdate INT(11) DEFAULT 0 NOT NULL,
+    tstamp INT(11) DEFAULT 0 NOT NULL,
 
--- Tabelle: UserCourseRecord
-CREATE TABLE tx_equedlms_domain_model_usercourserecord (
-    uid INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    pid INT UNSIGNED NOT NULL DEFAULT 0,
-    fe_user INT UNSIGNED NOT NULL,
-    course INT UNSIGNED NOT NULL,
-    completed TINYINT(1) DEFAULT 0 NOT NULL,
-    validated TINYINT(1) DEFAULT 0 NOT NULL,
-    certificate_code VARCHAR(255) DEFAULT '',
-    completion_date INT DEFAULT 0,
-    participant_postal_code VARCHAR(255) DEFAULT '',
-    matching_status VARCHAR(255) DEFAULT '',
-    instructor INT UNSIGNED DEFAULT 0,
-    center INT UNSIGNED DEFAULT 0,
+    uid INT(11) NOT NULL AUTO_INCREMENT,
+    pid INT(11) DEFAULT 0 NOT NULL,
+    fe_user INT(11) NOT NULL,  -- Verweis auf fe_users
+    lesson INT(11) NOT NULL,  -- Verweis auf Lektion
+    progress INT(11) DEFAULT 0,  -- Fortschritt in der Lektion
     PRIMARY KEY (uid),
-    KEY fe_user (fe_user),
-    KEY course (course),
-    CONSTRAINT fk_usercourserecord_user FOREIGN KEY (fe_user) REFERENCES fe_users(uid),
-    CONSTRAINT fk_usercourserecord_course FOREIGN KEY (course) REFERENCES tx_equedlms_domain_model_course(uid)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+    FOREIGN KEY (fe_user) REFERENCES fe_users (uid),
+    FOREIGN KEY (lesson) REFERENCES tx_equedlms_domain_model_lesson (uid)
+);
 
--- Tabelle: ExamAttempt
-CREATE TABLE tx_equedlms_domain_model_examattempt (
-    uid INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    pid INT UNSIGNED NOT NULL DEFAULT 0,
-    type VARCHAR(255) NOT NULL,
-    passed TINYINT(1) DEFAULT 0 NOT NULL,
-    feedback TEXT,
-    user_course_record INT UNSIGNED NOT NULL,
-    lesson INT UNSIGNED DEFAULT 0,
-    examiner INT UNSIGNED DEFAULT 0,
-    PRIMARY KEY (uid),
-    CONSTRAINT fk_examattempt_userrecord FOREIGN KEY (user_course_record) REFERENCES tx_equedlms_domain_model_usercourserecord(uid),
-    CONSTRAINT fk_examattempt_lesson FOREIGN KEY (lesson) REFERENCES tx_equedlms_domain_model_lesson(uid)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+-- Tabelle für Benutzereinreichungen (z.B. Prüfungsversuche,
+    deleted TINYINT(1) DEFAULT 0 NOT NULL,
+    hidden TINYINT(1) DEFAULT 0 NOT NULL
+);
 
--- Tabelle: UserSubmission
 CREATE TABLE tx_equedlms_domain_model_usersubmission (
-    uid INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    pid INT UNSIGNED NOT NULL DEFAULT 0,
-    fe_user INT UNSIGNED NOT NULL,
-    user_course_record INT UNSIGNED NOT NULL,
-    lesson INT UNSIGNED,
-    type VARCHAR(255) NOT NULL,
-    status VARCHAR(255) DEFAULT '',
-    grade VARCHAR(255) DEFAULT '',
+    cruser_id INT(11) DEFAULT 0 NOT NULL,
+    crdate INT(11) DEFAULT 0 NOT NULL,
+    tstamp INT(11) DEFAULT 0 NOT NULL,
+
+    uid INT(11) NOT NULL AUTO_INCREMENT,
+    pid INT(11) DEFAULT 0 NOT NULL,
+    type VARCHAR(255) NOT NULL,  -- Art der Einreichung (z.B. Fallstudie, Theorie, Praxis)
     comment TEXT,
-    exam_attempt INT UNSIGNED DEFAULT NULL,
+    fe_user INT(11) NOT NULL,  -- Verweis auf fe_users
+    lesson INT(11) NOT NULL,  -- Verweis auf Lektion
+    exam_attempt INT(11),  -- Verweis auf den Prüfungsversuch
     PRIMARY KEY (uid),
-    KEY fe_user (fe_user),
-    KEY lesson (lesson),
-    CONSTRAINT fk_submission_user FOREIGN KEY (fe_user) REFERENCES fe_users(uid),
-    CONSTRAINT fk_submission_usercourserecord FOREIGN KEY (user_course_record) REFERENCES tx_equedlms_domain_model_usercourserecord(uid),
-    CONSTRAINT fk_submission_lesson FOREIGN KEY (lesson) REFERENCES tx_equedlms_domain_model_lesson(uid),
-    CONSTRAINT fk_submission_attempt FOREIGN KEY (exam_attempt) REFERENCES tx_equedlms_domain_model_examattempt(uid)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+    FOREIGN KEY (fe_user) REFERENCES fe_users (uid),
+    FOREIGN KEY (lesson) REFERENCES tx_equedlms_domain_model_lesson (uid),
+    FOREIGN KEY (exam_attempt) REFERENCES tx_equedlms_domain_model_examattempt (uid)
+);
 
--- Tabelle: Instructor
-CREATE TABLE tx_equedlms_domain_model_instructor (
-    uid INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    pid INT UNSIGNED NOT NULL DEFAULT 0,
-    fe_user INT UNSIGNED NOT NULL,
-    name VARCHAR(255) NOT NULL,
-    email VARCHAR(255) DEFAULT '',
-    is_available TINYINT(1) DEFAULT 1 NOT NULL,
-    region_postal_codes TEXT,
-    center INT UNSIGNED DEFAULT 0,
-    PRIMARY KEY (uid),
-    CONSTRAINT fk_instructor_user FOREIGN KEY (fe_user) REFERENCES fe_users(uid)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- Zusätzliche Felder im fe_users für Onboarding
+-- Neue Felder für das Onboarding im `fe_users`
 ALTER TABLE fe_users 
-ADD COLUMN step1_complete TINYINT(1) UNSIGNED DEFAULT 0,
-ADD COLUMN step2_complete TINYINT(1) UNSIGNED DEFAULT 0,
-ADD COLUMN step3_complete TINYINT(1) UNSIGNED DEFAULT 0;
+ADD COLUMN step1_complete TINYINT(1) UNSIGNED DEFAULT '0',
+ADD COLUMN step2_complete TINYINT(1) UNSIGNED DEFAULT '0',
+ADD COLUMN step3_complete TINYINT(1,
+    deleted TINYINT(1) DEFAULT 0 NOT NULL,
+    hidden TINYINT(1) DEFAULT 0 NOT NULL
+);
+
+CREATE TABLE tx_equedlms_domain_model_lesson (
+    cruser_id INT(11) DEFAULT 0 NOT NULL,
+    crdate INT(11) DEFAULT 0 NOT NULL,
+    tstamp INT(11) DEFAULT 0 NOT NULL,
+
+    title varchar(255) DEFAULT '' NOT NULL,
+    slug varchar(255) DEFAULT '' NOT NULL,
+    position int(11) DEFAULT 0 NOT NULL,
+    course int(11) DEFAULT 0 NOT NULL
+,
+    deleted TINYINT(1) DEFAULT 0 NOT NULL,
+    hidden TINYINT(1) DEFAULT 0 NOT NULL
+);
+
+CREATE TABLE tx_equedlms_domain_model_userlessonprogress (
+    cruser_id INT(11) DEFAULT 0 NOT NULL,
+    crdate INT(11) DEFAULT 0 NOT NULL,
+    tstamp INT(11) DEFAULT 0 NOT NULL,
+
+    fe_user int(11) DEFAULT 0 NOT NULL,
+    confirmed tinyint(1) DEFAULT 0 NOT NULL,
+    quiz_score double DEFAULT 0,
+    completed tinyint(1) DEFAULT 0 NOT NULL,
+    lesson int(11) DEFAULT 0 NOT NULL
+,
+    deleted TINYINT(1) DEFAULT 0 NOT NULL,
+    hidden TINYINT(1) DEFAULT 0 NOT NULL
+);
+
+CREATE TABLE tx_equedlms_domain_model_usersubmission (
+    cruser_id INT(11) DEFAULT 0 NOT NULL,
+    crdate INT(11) DEFAULT 0 NOT NULL,
+    tstamp INT(11) DEFAULT 0 NOT NULL,
+
+    fe_user int(11) DEFAULT 0 NOT NULL,
+    user_course_record int(11) DEFAULT 0 NOT NULL,
+    lesson int(11) DEFAULT 0,
+    type varchar(255) DEFAULT '' NOT NULL,
+    status varchar(255) DEFAULT '',
+    grade varchar(255) DEFAULT '',
+    comment text
+,
+    deleted TINYINT(1) DEFAULT 0 NOT NULL,
+    hidden TINYINT(1) DEFAULT 0 NOT NULL
+);
+
+CREATE TABLE tx_equedlms_domain_model_usercourserecord (
+    cruser_id INT(11) DEFAULT 0 NOT NULL,
+    crdate INT(11) DEFAULT 0 NOT NULL,
+    tstamp INT(11) DEFAULT 0 NOT NULL,
+
+    fe_user int(11) DEFAULT 0 NOT NULL,
+    course int(11) DEFAULT 0 NOT NULL,
+    completed tinyint(1) DEFAULT 0 NOT NULL,
+    validated tinyint(1) DEFAULT 0 NOT NULL,
+    certificate_code varchar(255) DEFAULT '',
+    completion_date int(11) DEFAULT 0,
+    participant_postal_code varchar(255) DEFAULT '',
+    matching_status varchar(255) DEFAULT '',
+    instructor int(11) DEFAULT 0,
+    center int(11) DEFAULT 0
+,
+    deleted TINYINT(1) DEFAULT 0 NOT NULL,
+    hidden TINYINT(1) DEFAULT 0 NOT NULL
+);
+
+CREATE TABLE tx_equedlms_domain_model_examattempt (
+    cruser_id INT(11) DEFAULT 0 NOT NULL,
+    crdate INT(11) DEFAULT 0 NOT NULL,
+    tstamp INT(11) DEFAULT 0 NOT NULL,
+
+    type varchar(255) DEFAULT '' NOT NULL,
+    passed tinyint(1) DEFAULT 0 NOT NULL,
+    feedback text,
+    user_course_record int(11) DEFAULT 0 NOT NULL,
+    lesson int(11) DEFAULT 0,
+    examiner int(11) DEFAULT 0
+,
+    deleted TINYINT(1) DEFAULT 0 NOT NULL,
+    hidden TINYINT(1) DEFAULT 0 NOT NULL
+);
+
+CREATE TABLE tx_equedlms_domain_model_instructor (
+    cruser_id INT(11) DEFAULT 0 NOT NULL,
+    crdate INT(11) DEFAULT 0 NOT NULL,
+    tstamp INT(11) DEFAULT 0 NOT NULL,
+
+    fe_user int(11) DEFAULT 0 NOT NULL,
+    name varchar(255) DEFAULT '' NOT NULL,
+    email varchar(255) DEFAULT '',
+    is_available tinyint(1) DEFAULT 1 NOT NULL,
+    region_postal_codes text,
+    center int(11) DEFAULT 0
+,
+    deleted TINYINT(1) DEFAULT 0 NOT NULL,
+    hidden TINYINT(1) DEFAULT 0 NOT NULL
+);
+

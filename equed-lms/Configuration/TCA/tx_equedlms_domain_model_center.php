@@ -2,63 +2,108 @@
 
 return [
     'ctrl' => [
-        'title' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:tx_equedlms_domain_model_center.title',
+        'title' => 'Center',
         'label' => 'name',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
         'cruser_id' => 'cruser_id',
-        'iconfile' => 'EXT:equed_lms/Resources/Public/Icons/center.svg'
+        'hideTable' => false,
+        'iconfile' => 'EXT:equed_lms/Resources/Public/Icons/tx_equedlms_domain_model_center.svg',
+    ],
+    'types' => [
+        '0' => ['showitem' => '
+            --div--;General,
+                name, street, zip, city, country, region, website, centerId, logo, status, latitude, longitude
+        '],
     ],
     'columns' => [
         'name' => [
-            'label' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:tx_equedlms_domain_model_center.name',
+            'label' => 'Name',
             'config' => [
                 'type' => 'input',
-                'required' => true
-            ]
+                'required' => true,
+            ],
         ],
         'street' => [
-            'label' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:tx_equedlms_domain_model_center.street',
-            'config' => ['type' => 'input']
+            'label' => 'Street',
+            'config' => [
+                'type' => 'input',
+            ],
         ],
         'zip' => [
-            'label' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:tx_equedlms_domain_model_center.zip',
-            'config' => ['type' => 'input']
+            'label' => 'ZIP',
+            'config' => [
+                'type' => 'input',
+            ],
         ],
         'city' => [
-            'label' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:tx_equedlms_domain_model_center.city',
-            'config' => ['type' => 'input']
+            'label' => 'City',
+            'config' => [
+                'type' => 'input',
+            ],
+        ],
+        'country' => [
+            'label' => 'Country',
+            'config' => [
+                'type' => 'input',
+            ],
+        ],
+        'region' => [
+            'label' => 'Region',
+            'config' => [
+                'type' => 'input',
+            ],
         ],
         'website' => [
-            'label' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:tx_equedlms_domain_model_center.website',
-            'config' => ['type' => 'input']
+            'label' => 'Website',
+            'config' => [
+                'type' => 'input',
+            ],
         ],
-        'center_id' => [
-            'label' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:tx_equedlms_domain_model_center.center_id',
-            'config' => ['type' => 'input']
+        'centerId' => [
+            'label' => 'Center ID',
+            'config' => [
+                'type' => 'input',
+            ],
         ],
         'logo' => [
-            'label' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:tx_equedlms_domain_model_center.logo',
+            'label' => 'Logo',
             'config' => [
-                'type' => 'file',
-                'appearance' => [
-                    'createNewRelationLinkTitle' => 'LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:cm.createNewRelation'
-                ],
-                'allowed' => 'jpg,jpeg,png,svg',
-                'maxitems' => 1
-            ]
-        ],
-        'certifier' => [
-            'label' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:tx_equedlms_domain_model_center.certifier',
-            'config' => [
-                'type' => 'group',
-                'internal_type' => 'db',
-                'allowed' => 'fe_users',
+                'type' => 'inline',
+                'foreign_table' => 'sys_file',
+                'foreign_field' => 'uid',
                 'maxitems' => 1,
-            ]
+                'appearance' => [
+                    'useSortable' => true,
+                    'showPossible' => true,
+                    'showAll' => true,
+                ],
+            ],
         ],
-    ],
-    'types' => [
-        '1' => ['showitem' => 'name, street, zip, city, website, center_id, logo, certifier'],
+        'status' => [
+            'label' => 'Status',
+            'config' => [
+                'type' => 'select',
+                'items' => [
+                    ['Active', 'active'],
+                    ['Suspended', 'suspended'],
+                    ['Under Review', 'under_review'],
+                ],
+            ],
+        ],
+        'latitude' => [
+            'label' => 'Latitude',
+            'config' => [
+                'type' => 'input',
+                'eval' => 'double2',
+            ],
+        ],
+        'longitude' => [
+            'label' => 'Longitude',
+            'config' => [
+                'type' => 'input',
+                'eval' => 'double2',
+            ],
+        ],
     ],
 ];

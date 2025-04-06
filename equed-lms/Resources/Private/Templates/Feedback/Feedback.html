@@ -1,16 +1,10 @@
 <f:layout name="Default" />
 
 <f:section name="main">
-    <h1>Feedback zum Kurs</h1>
+    <h1>{f:translate(key: 'feedback.title')}</h1>
 
-    <f:form action="submitFeedback" controller="Feedback">
-        <div class="form-group" style="margin-bottom: 1em;">
-            <label for="feedback">Dein Feedback</label><br>
-            <f:form.textarea name="feedback" id="feedback" rows="6" cols="60" required="required" />
-        </div>
-
-        <div class="form-group">
-            <f:form.submit value="Absenden" class="btn btn-primary" />
-        </div>
+    <f:form action="submitFeedback" controller="InstructorDashboard" method="post">
+        <f:form.textarea name="feedback" placeholder="{f:translate(key: 'feedback.enterFeedback')}" required="true" />
+        <f:form.submit value="{f:translate(key: 'feedback.submit')}" class="btn" />
     </f:form>
 </f:section>

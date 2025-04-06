@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<T3DataStructure>
+    <database>
+        <!-- CourseProgram -->
+        <table name="tx_equedlms_domain_model_courseprogram">
+            <row>
+                <uid>1</uid>
+                <title>Advanced HoofCare</title>
+                <slug>advanced-hoofcare</slug>
+                <description>Advanced training for hoof care specialists.</description>
+            </row>
+        </table>
+
+        <!-- Center -->
+        <table name="tx_equedlms_domain_model_center">
+            <row>
+                <uid>1</uid>
+                <name>Equine Care Center</name>
+                <address>123 Horse St, Equestrian City</address>
+            </row>
+        </table>
+
+        <!-- CourseInstance -->
+        <table name="tx_equedlms_domain_model_courseinstance">
+            <row>
+                <uid>1</uid>
+                <program>1</program> <!-- Reference to CourseProgram UID -->
+                <center>1</center>   <!-- Reference to Center UID -->
+                <start_date>2025-06-01 09:00:00</start_date>
+                <end_date>2025-06-02 17:00:00</end_date>
+                <is_public>1</is_public>
+                <max_participants>20</max_participants>
+                <auto_assign_instructor>1</auto_assign_instructor>
+            </row>
+            <row>
+                <uid>2</uid>
+                <program>1</program> <!-- Reference to CourseProgram UID -->
+                <center>1</center>   <!-- Reference to Center UID -->
+                <start_date>2025-07-01 09:00:00</start_date>
+                <end_date>2025-07-02 17:00:00</end_date>
+                <is_public>1</is_public>
+                <max_participants>15</max_participants>
+                <auto_assign_instructor>0</auto_assign_instructor>
+            </row>
+        </table>
+    </database>
+</T3DataStructure>

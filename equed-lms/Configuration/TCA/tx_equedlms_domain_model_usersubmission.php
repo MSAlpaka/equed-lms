@@ -3,82 +3,101 @@
 return [
     'ctrl' => [
         'title' => 'User Submission',
-        'label' => 'user',
+        'label' => 'status',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
-        'delete' => 'deleted',
-        'iconfile' => 'EXT:equed_lms/Resources/Public/Icons/usersubmission.svg',
+        'cruser_id' => 'cruser_id',
+        'hideTable' => false,
+        'iconfile' => 'EXT:equed_lms/Resources/Public/Icons/tx_equedlms_domain_model_usersubmission.svg',
+    ],
+    'types' => [
+        '0' => ['showitem' => '
+            --div--;General,
+                feUser, userCourseRecord, lesson, type, status, comment, feedback, files
+        '],
     ],
     'columns' => [
-        'user' => [
-            'label' => 'User',
+        'feUser' => [
+            'label' => 'Frontend User',
             'config' => [
                 'type' => 'group',
                 'internal_type' => 'db',
                 'allowed' => 'fe_users',
-                'foreign_table' => 'fe_users',
-                'minitems' => 1,
+                'size' => 1,
                 'maxitems' => 1,
             ],
         ],
-        'course' => [
-            'label' => 'Course',
+        'userCourseRecord' => [
+            'label' => 'User Course Record',
+            'config' => [
+                'type' => 'group',
+                'internal_type' => 'db',
+                'allowed' => 'tx_equedlms_domain_model_usercourserecord',
+                'size' => 1,
+                'maxitems' => 1,
+            ],
+        ],
+        'lesson' => [
+            'label' => 'Lesson',
+            'config' => [
+                'type' => 'group',
+                'internal_type' => 'db',
+                'allowed' => 'tx_equedlms_domain_model_lesson',
+                'size' => 1,
+                'maxitems' => 1,
+            ],
+        ],
+        'type' => [
+            'label' => 'Type',
             'config' => [
                 'type' => 'select',
-                'renderType' => 'selectSingle',
-                'foreign_table' => 'tx_equedlms_domain_model_course',
-                'minitems' => 1,
-                'maxitems' => 1,
-            ],
-        ],
-        'file' => [
-            'label' => 'File Upload',
-            'config' => [
-                'type' => 'inline',
-                'foreign_table' => 'sys_file_reference',
-                'foreign_field' => 'uid_foreign',
-                'foreign_sortby' => 'sorting_foreign',
-                'foreign_table_field' => 'tablenames',
-                'foreign_match_fields' => [
-                    'fieldname' => 'file',
+                'items' => [
+                    ['Theory Test', 'theory_test'],
+                    ['Report', 'report'],
+                    ['Practical Case', 'practical_case'],
                 ],
-                'appearance' => [
-                    'createNewRelationLinkTitle' => 'Add File',
-                ],
-            ],
-        ],
-        'comment' => [
-            'label' => 'Instructor Comment',
-            'config' => [
-                'type' => 'text',
-                'enableRichtext' => false,
             ],
         ],
         'status' => [
             'label' => 'Status',
             'config' => [
                 'type' => 'select',
-                'renderType' => 'selectSingle',
                 'items' => [
                     ['Submitted', 'submitted'],
-                    ['Reviewed', 'reviewed'],
                     ['Approved', 'approved'],
                     ['Rejected', 'rejected'],
+                    ['Revision', 'revision'],
+                    ['Flagged', 'flagged'],
                 ],
-                'default' => 'submitted',
             ],
         ],
-        'submitted_at' => [
-            'label' => 'Submission Date',
+        'comment' => [
+            'label' => 'Comment',
             'config' => [
-                'type' => 'input',
-                'type' => 'datetime',
-                'eval' => 'datetime',
-                'default' => null,
+                'type' => 'text',
+                'rows' => 3,
             ],
         ],
-    ],
-    'types' => [
-        '0' => ['showitem' => 'user, course, file, status, comment, submitted_at'],
+        'feedback' => [
+            'label' => 'Feedback',
+            'config' => [
+                'type' => 'text',
+                'rows' => 3,
+            ],
+        ],
+        'files' => [
+            'label' => 'Files',
+            'config' => [
+                'type' => 'inline',
+                'foreign_table' => 'sys_file',
+                'foreign_field' => 'uid',
+                'maxitems' => 5,
+                'appearance' => [
+                    'useSortable' => true,
+                    'showPossible' => true,
+                    'showAll' => true,
+                ],
+            ],
+        ],
     ],
 ];

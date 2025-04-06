@@ -3,11 +3,18 @@
 return [
     'ctrl' => [
         'title' => 'Exam Attempt',
-        'label' => 'user',
+        'label' => 'quizQuestion',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
-        'delete' => 'deleted',
-        'iconfile' => 'EXT:equed_lms/Resources/Public/Icons/examattempt.svg',
+        'cruser_id' => 'cruser_id',
+        'hideTable' => false,
+        'iconfile' => 'EXT:equed_lms/Resources/Public/Icons/tx_equedlms_domain_model_examattempt.svg',
+    ],
+    'types' => [
+        '0' => ['showitem' => '
+            --div--;General,
+                user, quizQuestion, givenAnswer, correct, timestamp, attemptNumber, mode, feedback
+        '],
     ],
     'columns' => [
         'user' => [
@@ -16,46 +23,62 @@ return [
                 'type' => 'group',
                 'internal_type' => 'db',
                 'allowed' => 'fe_users',
-                'foreign_table' => 'fe_users',
-                'minitems' => 1,
+                'size' => 1,
                 'maxitems' => 1,
             ],
         ],
-        'quiz_question' => [
+        'quizQuestion' => [
             'label' => 'Quiz Question',
             'config' => [
-                'type' => 'select',
-                'renderType' => 'selectSingle',
-                'foreign_table' => 'tx_equedlms_domain_model_quizquestion',
-                'minitems' => 1,
+                'type' => 'group',
+                'internal_type' => 'db',
+                'allowed' => 'tx_equedlms_domain_model_quizquestion',
+                'size' => 1,
                 'maxitems' => 1,
             ],
         ],
-        'given_answer' => [
+        'givenAnswer' => [
             'label' => 'Given Answer',
             'config' => [
-                'type' => 'input',
-                'eval' => 'trim',
+                'type' => 'text',
+                'rows' => 3,
             ],
         ],
         'correct' => [
-            'label' => 'Correct?',
+            'label' => 'Correct',
             'config' => [
                 'type' => 'check',
-                'default' => 0,
             ],
         ],
         'timestamp' => [
             'label' => 'Timestamp',
             'config' => [
-                'type' => 'input',
                 'type' => 'datetime',
-                'eval' => 'datetime',
-                'default' => null,
             ],
         ],
-    ],
-    'types' => [
-        '0' => ['showitem' => 'user, quiz_question, given_answer, correct, timestamp'],
+        'attemptNumber' => [
+            'label' => 'Attempt Number',
+            'config' => [
+                'type' => 'input',
+                'eval' => 'int',
+            ],
+        ],
+        'mode' => [
+            'label' => 'Mode',
+            'config' => [
+                'type' => 'select',
+                'items' => [
+                    ['Practice', 'practice'],
+                    ['Final', 'final'],
+                ],
+            ],
+        ],
+        'feedback' => [
+            'label' => 'Feedback',
+            'config' => [
+                'type' => 'text',
+                'rows' => 3,
+            ],
+        ],
     ],
 ];

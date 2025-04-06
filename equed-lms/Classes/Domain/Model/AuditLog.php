@@ -6,10 +6,11 @@ namespace Equed\EquedLms\Domain\Model;
 
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
+use TYPO3\CMS\Extbase\Annotation\ORM as Extbase;
 
 /**
  * This model logs significant user actions in the LMS for audit and QMS purposes.
- * 
+ *
  * Examples:
  * - Course completion
  * - Exam attempt
@@ -18,17 +19,41 @@ use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
  */
 class AuditLog extends AbstractEntity
 {
+    /**
+     * @var FrontendUser|null
+     * @Extbase\Lazy
+     */
     protected ?FrontendUser $feUser = null;
 
+    /**
+     * @var string
+     */
     protected string $action = '';
 
+    /**
+     * @var int
+     */
     protected int $relatedId = 0;
 
+    /**
+     * @var string
+     */
     protected string $relatedType = '';
 
+    /**
+     * @var string
+     */
     protected string $comment = '';
 
-    protected ?\DateTime $timestamp = null;
+    /**
+     * @var \DateTimeInterface|null
+     */
+    protected ?\DateTimeInterface $timestamp = null;
+
+    /**
+     * @var int
+     */
+    protected int $pid = 0;
 
     public function getFeUser(): ?FrontendUser
     {
@@ -80,13 +105,23 @@ class AuditLog extends AbstractEntity
         $this->comment = $comment;
     }
 
-    public function getTimestamp(): ?\DateTime
+    public function getTimestamp(): ?\DateTimeInterface
     {
         return $this->timestamp;
     }
 
-    public function setTimestamp(?\DateTime $timestamp): void
+    public function setTimestamp(?\DateTimeInterface $timestamp): void
     {
         $this->timestamp = $timestamp;
+    }
+
+    public function getPid(): int
+    {
+        return $this->pid;
+    }
+
+    public function setPid(int $pid): void
+    {
+        $this->pid = $pid;
     }
 }

@@ -2,7 +2,7 @@
   "name": "equed/equed-lms",
   "type": "typo3-cms-extension",
   "description": "Learning Management System (LMS) for Equine Education Europe",
-  "version": "1.1.0",
+  "version": "1.0.1",
   "license": "GPL-2.0-or-later",
   "authors": [
     {
@@ -20,7 +20,8 @@
     "php": "^8.1 || ^8.2",
     "typo3/cms-core": "^13.4",
     "typo3/cms-extbase": "^13.4",
-    "typo3/cms-fluid": "^13.4"
+    "typo3/cms-fluid": "^13.4",
+    "mpdf/mpdf": "^8.0"
   },
   "autoload": {
     "psr-4": {

@@ -1,67 +1,73 @@
 <?php
 
-namespace Equed\EquedLms\Controller;
+declare(strict_types=1);
 
+namespace EquedLms\Controller;
+
+use EquedLms\Domain\Model\Course;
+use EquedLms\Domain\Repository\CourseRepository;
+use Psr\Log\LoggerInterface;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
-use Equed\EquedLms\Domain\Repository\CourseRepository;
-use Equed\EquedLms\Domain\Model\Course;
-use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use Psr\Log\LoggerAwareInterface;
-use Psr\Log\LoggerAwareTrait;
-use Psr\Log\LoggerInterface;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
-class CourseController extends ActionController implements LoggerAwareInterface
+class CourseController extends ActionController
 {
-    use LoggerAwareTrait;
-
     public function __construct(
         protected readonly CourseRepository $courseRepository,
-        LoggerInterface $logger = null
-    ) {
-        if ($logger === null) {
-            $this->logger = GeneralUtility::makeInstance(LoggerInterface::class);
-        } else {
-            $this->setLogger($logger);
-        }
-    }
+        protected readonly LoggerInterface $logger
+    ) {}
 
+    /**
+     * Zeigt eine Liste sichtbarer Kurse.
+     */
     public function indexAction(): void
     {
         $courses = $this->courseRepository->findAllVisible();
         $this->view->assign('courses', $courses);
-        $this->logger->info('Displayed course list with ' . count($courses) . ' entries.');
+
+        $this->logger->info('Kursliste angezeigt', [
+            'count' => count($courses),
+        ]);
     }
 
+    /**
+     * Zeigt Details zu einem einzelnen Kurs.
+     */
     public function showAction(int $courseId): void
     {
         $course = $this->courseRepository->findByUid($courseId);
 
         if (!$course instanceof Course) {
-            $this->logger->warning("Course with UID $courseId not found.");
+            $this->logger->warning('Kurs nicht gefunden', ['uid' => $courseId]);
+
             $this->addFlashMessage(
-                $this->translate('course.notFound.message'),
-                $this->translate('course.notFound.title'),
+                $this->translate('course.notFound.message') ?? 'Der angeforderte Kurs wurde nicht gefunden.',
+                $this->translate('course.notFound.title') ?? 'Kurs nicht gefunden',
                 AbstractMessage::ERROR
             );
+
             $this->redirect('index');
         }
 
         $this->view->assign('course', $course);
-        $this->logger->info("Displayed course with UID $courseId: " . $course->getTitle());
+
+        $this->logger->info('Kurs angezeigt', [
+            'uid' => $course->getUid(),
+            'title' => $course->getTitle(),
+        ]);
     }
 
-    protected function translate(string $key, array $arguments = []): string
+    /**
+     * Übersetzungsfunktion mit modernem Fallback.
+     */
+    protected function translate(string $key, array $arguments = []): ?string
     {
-        return $this->getLanguageService()->sL(
-            'LLL:EXT:equed_lms/Resources/Private/Language/locallang.xlf:' . $key,
+        return LocalizationUtility::translate(
+            $key,
+            'equed_lms',
             $arguments
-        ) ?? $key;
-    }
-
-    protected function getLanguageService(): LanguageService
-    {
-        return GeneralUtility::makeInstance(LanguageService::class);
+        ) ?? null;
     }
 }

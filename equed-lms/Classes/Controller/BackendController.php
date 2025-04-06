@@ -19,13 +19,14 @@ class BackendController extends ActionController
         CourseInstanceRepository $courseInstanceRepository,
         FrontendUserRepository $frontendUserRepository
     ) {
-        parent::__construct();
         $this->courseInstanceRepository = $courseInstanceRepository;
         $this->frontendUserRepository = $frontendUserRepository;
     }
 
     /**
-     * Admin-Dashboard: Übersicht über Kurse, Nutzende etc.
+     * Admin-Dashboard: Übersicht über Kurse, aktive Nutzende etc.
+     *
+     * @throws AccessDeniedException
      */
     public function indexAction(): void
     {
@@ -35,7 +36,6 @@ class BackendController extends ActionController
             'courseCount' => $this->courseInstanceRepository->countAll(),
             'activeUserCount' => $this->frontendUserRepository->countActiveUsers(),
             'completedCourses' => $this->courseInstanceRepository->countCompletedCourses(),
-            // Weitere Metriken wie ausstehende Prüfungen könnten hier eingebaut werden
         ];
 
         $this->view->assignMultiple([
@@ -44,7 +44,9 @@ class BackendController extends ActionController
     }
 
     /**
-     * Verwaltungsansicht: Platzhalter für spätere Adminfunktionen
+     * Verwaltungsansicht: Platzhalter für spätere Adminfunktionen.
+     *
+     * @throws AccessDeniedException
      */
     public function manageAction(): void
     {
@@ -52,21 +54,22 @@ class BackendController extends ActionController
 
         $this->view->assignMultiple([
             'managementData' => [
-                'pendingValidations' => [], // Hier können noch dynamische Daten hinzugefügt werden
+                'pendingValidations' => [], // hier kann später dynamisch ergänzt werden
                 'openReports' => [],
-            ]
+            ],
         ]);
     }
 
     /**
-     * Zugriffsschutz: Nur Haupt-Admin darf auf Backend-Module zugreifen
+     * Zugriffsschutz: Nur Haupt-Admin darf auf Backend-Module zugreifen.
+     *
+     * @throws AccessDeniedException
      */
     protected function checkAccess(): void
     {
         /** @var BackendUserAuthentication|null $backendUser */
         $backendUser = $GLOBALS['BE_USER'] ?? null;
 
-        // Dynamische Adminprüfung statt harter Kodierung einer UID
         if (!$backendUser instanceof BackendUserAuthentication || !$backendUser->isAdmin()) {
             throw new AccessDeniedException('Access denied: Only the main admin may access this section.', 1670000051);
         }

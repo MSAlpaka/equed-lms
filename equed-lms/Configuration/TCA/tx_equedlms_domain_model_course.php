@@ -1,5 +1,4 @@
 <?php
-defined('TYPO3_MODE') or die();
 
 return [
     'ctrl' => [
@@ -8,55 +7,71 @@ return [
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
         'cruser_id' => 'cruser_id',
-        'default_sortby' => 'ORDER BY title',
-        'enablecolumns' => [
-            'disabled' => 'hidden',
-            'starttime' => 'starttime',
-            'endtime' => 'endtime',
-        ],
-        'dividers2tabs' => TRUE,
-        'searchFields' => 'title,description',
-    ],
-    'interface' => [
-        'showRecordFieldList' => 'title, description, lessons',
+        'hideTable' => false,
+        'iconfile' => 'EXT:equed_lms/Resources/Public/Icons/tx_equedlms_domain_model_course.svg',
     ],
     'types' => [
-        '1' => ['showitem' => 'title, description, lessons'],
+        '0' => ['showitem' => '
+            --div--;General,
+                title, description, category, finishGoal, prerequisites, image, center
+        '],
     ],
     'columns' => [
         'title' => [
-            'exclude' => 0,
             'label' => 'Title',
             'config' => [
                 'type' => 'input',
-                'size' => 30,
-                'eval' => 'trim,required',
-            ]
+                'required' => true,
+            ],
         ],
         'description' => [
-            'exclude' => 0,
             'label' => 'Description',
             'config' => [
                 'type' => 'text',
-                'cols' => 40,
-                'rows' => 15,
-            ]
+                'rows' => 5,
+            ],
         ],
-        'lessons' => [
-            'exclude' => 0,
-            'label' => 'Lessons',
+        'category' => [
+            'label' => 'Category',
+            'config' => [
+                'type' => 'input',
+            ],
+        ],
+        'finishGoal' => [
+            'label' => 'Finish Goal',
+            'config' => [
+                'type' => 'input',
+            ],
+        ],
+        'prerequisites' => [
+            'label' => 'Prerequisites',
+            'config' => [
+                'type' => 'input',
+                'eval' => 'trim',
+            ],
+        ],
+        'image' => [
+            'label' => 'Image',
             'config' => [
                 'type' => 'inline',
-                'foreign_table' => 'tx_equedlms_domain_model_lesson',
-                'foreign_field' => 'course',
-                'maxitems' => 9999,
+                'foreign_table' => 'sys_file',
+                'foreign_field' => 'uid',
+                'maxitems' => 1,
                 'appearance' => [
-                    'collapseAll' => 1,
-                    'levelLinksPosition' => 'top',
-                    'showSynchronizationLink' => 1,
-                    'showPossibleLocalizationRecords' => 1,
-                    'showAllLocalizationLink' => 1
+                    'useSortable' => true,
+                    'showPossible' => true,
+                    'showAll' => true,
                 ],
+            ],
+        ],
+        'center' => [
+            'label' => 'Center',
+            'config' => [
+                'type' => 'group',
+                'internal_type' => 'db',
+                'allowed' => 'tx_equedlms_domain_model_center',
+                'size' => 1,
+                'maxitems' => 1,
             ],
         ],
     ],

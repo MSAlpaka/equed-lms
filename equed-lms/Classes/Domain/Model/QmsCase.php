@@ -4,25 +4,36 @@ declare(strict_types=1);
 
 namespace Equed\EquedLms\Domain\Model;
 
+use DateTimeInterface;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
+use TYPO3\CMS\Extbase\Annotation\ORM as Extbase;
 
 /**
- * QMS Case entity
+ * QMS Case entity – opened when an audit log entry leads to quality concerns.
  */
 class QmsCase extends AbstractEntity
 {
-    private int $auditLogId;
-    private string $status;
-    private \DateTimeImmutable $createdAt;
+    /**
+     * @Extbase\Lazy
+     */
+    protected ?AuditLog $auditLog = null;
 
-    public function getAuditLogId(): int
+    protected string $status = 'open'; // open, in_review, resolved, closed
+    protected ?DateTimeInterface $createdAt = null;
+
+    protected string $description = '';
+    protected string $feedback = '';
+
+    protected int $pid = 0;
+
+    public function getAuditLog(): ?AuditLog
     {
-        return $this->auditLogId;
+        return $this->auditLog;
     }
 
-    public function setAuditLogId(int $auditLogId): void
+    public function setAuditLog(?AuditLog $auditLog): void
     {
-        $this->auditLogId = $auditLogId;
+        $this->auditLog = $auditLog;
     }
 
     public function getStatus(): string
@@ -35,13 +46,43 @@ class QmsCase extends AbstractEntity
         $this->status = $status;
     }
 
-    public function getCreatedAt(): \DateTimeImmutable
+    public function getCreatedAt(): ?DateTimeInterface
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): void
+    public function setCreatedAt(?DateTimeInterface $createdAt): void
     {
         $this->createdAt = $createdAt;
+    }
+
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): void
+    {
+        $this->description = $description;
+    }
+
+    public function getFeedback(): string
+    {
+        return $this->feedback;
+    }
+
+    public function setFeedback(string $feedback): void
+    {
+        $this->feedback = $feedback;
+    }
+
+    public function getPid(): int
+    {
+        return $this->pid;
+    }
+
+    public function setPid(int $pid): void
+    {
+        $this->pid = $pid;
     }
 }

@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace EquedLms\Domain\Model;
@@ -9,14 +8,50 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 class CourseInstance extends AbstractEntity
 {
-    protected ?CourseProgram $program = null;
-    protected ?Center $center = null;
+    /**
+     * @var string
+     */
+    protected string $title;
 
-    protected ?\DateTime $startDate = null;
-    protected ?\DateTime $endDate = null;
+    /**
+     * @var \DateTime
+     */
+    protected \DateTime $startDate;
 
-    protected bool $isPublic = true;
-    protected int $maxParticipants = 0;
+    /**
+     * @var \DateTime
+     */
+    protected \DateTime $endDate;
+
+    /**
+     * @var bool
+     */
+    protected bool $isPublic = false;
+
+    /**
+     * @var int
+     */
+    protected int $maxParticipants;
+
+    /**
+     * @var ObjectStorage<CourseExam>
+     * @TYPO3\CMS\Extbase\Annotation\Cascade("remove")
+     */
+    protected ObjectStorage $exams;
+
+    /**
+     * @var CourseProgram
+     */
+    protected CourseProgram $program;
+
+    /**
+     * @var Center
+     */
+    protected Center $center;
+
+    /**
+     * @var bool
+     */
     protected bool $autoAssignInstructor = false;
 
     /**
@@ -31,51 +66,42 @@ class CourseInstance extends AbstractEntity
 
     public function __construct()
     {
+        $this->exams = new ObjectStorage();
         $this->instructors = new ObjectStorage();
         $this->userCourseRecords = new ObjectStorage();
     }
 
-    public function getProgram(): ?CourseProgram
+    public function getTitle(): string
     {
-        return $this->program;
+        return $this->title;
     }
 
-    public function setProgram(?CourseProgram $program): void
+    public function setTitle(string $title): void
     {
-        $this->program = $program;
+        $this->title = $title;
     }
 
-    public function getCenter(): ?Center
-    {
-        return $this->center;
-    }
-
-    public function setCenter(?Center $center): void
-    {
-        $this->center = $center;
-    }
-
-    public function getStartDate(): ?\DateTime
+    public function getStartDate(): \DateTime
     {
         return $this->startDate;
     }
 
-    public function setStartDate(?\DateTime $startDate): void
+    public function setStartDate(\DateTime $startDate): void
     {
         $this->startDate = $startDate;
     }
 
-    public function getEndDate(): ?\DateTime
+    public function getEndDate(): \DateTime
     {
         return $this->endDate;
     }
 
-    public function setEndDate(?\DateTime $endDate): void
+    public function setEndDate(\DateTime $endDate): void
     {
         $this->endDate = $endDate;
     }
 
-    public function isPublic(): bool
+    public function getIsPublic(): bool
     {
         return $this->isPublic;
     }
@@ -95,7 +121,45 @@ class CourseInstance extends AbstractEntity
         $this->maxParticipants = $maxParticipants;
     }
 
-    public function isAutoAssignInstructor(): bool
+    /**
+     * @return ObjectStorage<CourseExam>
+     */
+    public function getExams(): ObjectStorage
+    {
+        return $this->exams;
+    }
+
+    public function addExam(CourseExam $exam): void
+    {
+        $this->exams->attach($exam);
+    }
+
+    public function removeExam(CourseExam $exam): void
+    {
+        $this->exams->detach($exam);
+    }
+
+    public function getProgram(): CourseProgram
+    {
+        return $this->program;
+    }
+
+    public function setProgram(CourseProgram $program): void
+    {
+        $this->program = $program;
+    }
+
+    public function getCenter(): Center
+    {
+        return $this->center;
+    }
+
+    public function setCenter(Center $center): void
+    {
+        $this->center = $center;
+    }
+
+    public function getAutoAssignInstructor(): bool
     {
         return $this->autoAssignInstructor;
     }
@@ -131,13 +195,28 @@ class CourseInstance extends AbstractEntity
         return $this->userCourseRecords;
     }
 
-    public function addUserCourseRecord(UserCourseRecord $record): void
+    public function addUserCourseRecord(UserCourseRecord $userCourseRecord): void
     {
-        $this->userCourseRecords->attach($record);
+        $this->userCourseRecords->attach($userCourseRecord);
     }
 
-    public function removeUserCourseRecord(UserCourseRecord $record): void
+    public function removeUserCourseRecord(UserCourseRecord $userCourseRecord): void
     {
-        $this->userCourseRecords->detach($record);
+        $this->userCourseRecords->detach($userCourseRecord);
+    }
+
+    /**
+     * Prüft, ob alle Prüfungen in dieser Kursinstanz bestanden wurden.
+     *
+     * @return bool
+     */
+    public function isCourseCompleted(): bool
+    {
+        foreach ($this->getExams() as $exam) {
+            if ($exam->getStatus() !== 'Passed') {
+                return false; // Eine Prüfung wurde nicht bestanden
+            }
+        }
+        return true; // Alle Prüfungen bestanden
     }
 }

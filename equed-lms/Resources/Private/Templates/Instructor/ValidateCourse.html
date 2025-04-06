@@ -1,78 +1,12 @@
 <f:layout name="Default" />
 
 <f:section name="main">
+    <h1>{f:translate(key: 'instructor.validateCourse.title')}</h1>
 
-<h2><f:translate key="instructor.validation.courseTitle" />: {record.course.title}</h2>
-<p>
-    <strong><f:translate key="instructor.validation.participant" />:</strong> {record.user.fullName}<br />
-    <strong><f:translate key="instructor.validation.center" />:</strong> {record.center.name}<br />
-    <strong><f:translate key="instructor.validation.status" />:</strong>
-    <f:if condition="{record.completionConfirmed}">
-        ✅ <f:translate key="instructor.validation.status.confirmed" />
+    <f:if condition="{course.requiresExternalValidation}">
+        <p>{f:translate(key: 'instructor.validateCourse.validationRequired')}</p>
+        <a href="{f:uri.action(action: 'validate', controller: 'InstructorDashboard', arguments: {courseId: course.uid})}" class="btn">
+            {f:translate(key: 'instructor.validateCourse.validate')}
+        </a>
     </f:if>
-    <f:else>
-        ⏳ <f:translate key="instructor.validation.status.open" />
-    </f:else>
-</p>
-
-<hr />
-
-<h3><f:translate key="instructor.validation.previousAttempts" /></h3>
-
-<f:if condition="{attempts}">
-    <ul>
-        <f:for each="{attempts}" as="attempt">
-            <li>
-                <strong><f:translate key="exam.type.{attempt.type}" /></strong> –
-                <f:if condition="{attempt.passed}">
-                    ✅ <f:translate key="instructor.validation.passed" />
-                </f:if>
-                <f:else>
-                    ❌ <f:translate key="instructor.validation.failed" />
-                </f:else>
-                <br />
-                <small>
-                    <f:translate key="instructor.validation.date" />:
-                    <f:format.date format="d.m.Y">{attempt.attemptDate}</f:format.date>
-                    <f:translate key="instructor.validation.by" /> {attempt.instructor.fullName}
-                </small>
-                <br />
-                <f:translate key="instructor.validation.feedback" />: <em>{attempt.feedback}</em>
-            </li>
-        </f:for>
-    </ul>
-<f:else>
-    <p><f:translate key="instructor.validation.noAttempts" /></p>
-</f:if>
-
-<hr />
-
-<h3><f:translate key="instructor.validation.newAttempt" /></h3>
-
-<f:form action="createExamAttempt" name="newAttempt" object="{newAttempt}">
-    <f:form.hidden property="record" value="{record.uid}" />
-
-    <div>
-        <label><f:translate key="exam.type.label" /></label><br />
-        <f:form.select property="type" options="{
-            'theory': '{f:translate(key:\'exam.type.theory\')}',
-            'practical': '{f:translate(key:\'exam.type.practical\')}',
-            'case': '{f:translate(key:\'exam.type.case\')}'
-        }" />
-    </div>
-
-    <div>
-        <label><f:translate key="instructor.validation.passedLabel" /></label><br />
-        <f:form.checkbox property="passed" />
-    </div>
-
-    <div>
-        <label><f:translate key="instructor.validation.feedback" /></label><br />
-        <f:form.textarea property="feedback" rows="4" cols="50" />
-    </div>
-
-    <br />
-    <f:form.submit value="{f:translate(key: 'instructor.validation.saveAttempt')}" />
-</f:form>
-
 </f:section>

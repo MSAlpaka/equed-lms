@@ -3,52 +3,90 @@
 return [
     'ctrl' => [
         'title' => 'User Lesson Progress',
-        'label' => 'user',
+        'label' => 'lesson',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
-        'delete' => 'deleted',
-        'iconfile' => 'EXT:equed_lms/Resources/Public/Icons/userlessonprogress.svg',
+        'cruser_id' => 'cruser_id',
+        'hideTable' => false,
+        'iconfile' => 'EXT:equed_lms/Resources/Public/Icons/tx_equedlms_domain_model_userlessonprogress.svg',
+    ],
+    'types' => [
+        '0' => ['showitem' => '
+            --div--;General,
+                feUser, lesson, confirmed, quizScore, completed, progressPercent, startedAt, completedAt, lastVisitedAt, timeSpentInSeconds
+        '],
     ],
     'columns' => [
-        'user' => [
-            'label' => 'User',
+        'feUser' => [
+            'label' => 'Frontend User',
             'config' => [
                 'type' => 'group',
                 'internal_type' => 'db',
                 'allowed' => 'fe_users',
-                'foreign_table' => 'fe_users',
-                'minitems' => 1,
+                'size' => 1,
                 'maxitems' => 1,
             ],
         ],
         'lesson' => [
             'label' => 'Lesson',
             'config' => [
-                'type' => 'select',
-                'renderType' => 'selectSingle',
-                'foreign_table' => 'tx_equedlms_domain_model_lesson',
-                'minitems' => 1,
+                'type' => 'group',
+                'internal_type' => 'db',
+                'allowed' => 'tx_equedlms_domain_model_lesson',
+                'size' => 1,
                 'maxitems' => 1,
+            ],
+        ],
+        'confirmed' => [
+            'label' => 'Confirmed',
+            'config' => [
+                'type' => 'check',
+            ],
+        ],
+        'quizScore' => [
+            'label' => 'Quiz Score',
+            'config' => [
+                'type' => 'input',
+                'eval' => 'double2',
             ],
         ],
         'completed' => [
             'label' => 'Completed',
             'config' => [
                 'type' => 'check',
-                'default' => 0,
             ],
         ],
-        'completion_date' => [
-            'label' => 'Completion Date',
+        'progressPercent' => [
+            'label' => 'Progress Percent',
             'config' => [
                 'type' => 'input',
-                'type' => 'datetime',
-                'eval' => 'datetime',
-                'default' => null,
+                'eval' => 'double2',
             ],
         ],
-    ],
-    'types' => [
-        '0' => ['showitem' => 'user, lesson, completed, completion_date'],
+        'startedAt' => [
+            'label' => 'Started At',
+            'config' => [
+                'type' => 'datetime',
+            ],
+        ],
+        'completedAt' => [
+            'label' => 'Completed At',
+            'config' => [
+                'type' => 'datetime',
+            ],
+        ],
+        'lastVisitedAt' => [
+            'label' => 'Last Visited At',
+            'config' => [
+                'type' => 'datetime',
+            ],
+        ],
+        'timeSpentInSeconds' => [
+            'label' => 'Time Spent (in seconds)',
+            'config' => [
+                'type' => 'input',
+                'eval' => 'int',
+            ],
+        ],
     ],
 ];

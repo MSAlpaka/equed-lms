@@ -1,0 +1,17 @@
+<f:layout name="Default" />
+
+<f:section name="main">
+  <h1><f:translate key="course.instance.list.title" default="Course Instances" /></h1>
+
+  <ul>
+    <f:for each="{courseInstances}" as="instance">
+      <li>
+        <f:link.action action="show" arguments="{courseInstance: instance}">
+          <strong>{instance.program.title}</strong> – 
+          {instance.center.name} – 
+          {instance.startDate -> f:format.date(format:'Y-m-d')}
+        </f:link.action>
+      </li>
+    </f:for>
+  </ul>
+</f:section>

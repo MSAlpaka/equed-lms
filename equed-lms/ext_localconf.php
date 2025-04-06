@@ -87,3 +87,12 @@ ExtensionUtility::configurePlugin(
     [],
     ['noCache' => true]
 );
+
+// Registriere die Middleware im TYPO3
+$GLOBALS['TYPO3_CONF_VARS']['HTTP']['middlewares'][\Vendor\EquedLms\Middleware\JWTAuthMiddleware::class] = [
+    'target' => \Vendor\EquedLms\Middleware\JWTAuthMiddleware::class,
+    'before' => [
+        'TYPO3\CMS\Frontend\Middleware\FrontendLoginMiddleware',
+        'TYPO3\CMS\Frontend\Middleware\HandleRequestMiddleware'
+    ],
+];

@@ -1,0 +1,9 @@
+<f:layout name="Default" />
+
+<f:section name="main">
+    <h1>{f:translate(key: 'error.accessDenied.title', default: 'Access Denied')}</h1>
+    <p>{f:translate(key: 'error.accessDenied.message', default: 'Sorry, you do not have permission to access this page.')}</p>
+    <f:link.action action="index" controller="Home" extensionName="EquedLms" class="btn btn-primary">
+        {f:translate(key: 'error.returnHome', default: 'Return to Homepage')}
+    </f:link.action>
+</f:section>

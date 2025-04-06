@@ -1,37 +1,27 @@
 <f:layout name="Default" />
 
 <f:section name="main">
-    <h1><f:translate key="certifier.dashboard.title" /></h1>
+    <h1>{f:translate(key: 'certifier.dashboard.title')}</h1>
 
-    <f:if condition="{records}">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th><f:translate key="certifier.dashboard.user" /></th>
-                    <th><f:translate key="certifier.dashboard.course" /></th>
-                    <th><f:translate key="certifier.dashboard.completionDate" /></th>
-                    <th><f:translate key="certifier.dashboard.actions" /></th>
-                </tr>
-            </thead>
-            <tbody>
-                <f:for each="{records}" as="record">
-                    <tr>
-                        <td>{record.user.fullName}</td>
-                        <td>{record.course.title}</td>
-                        <td><f:format.date format="d.m.Y">{record.completionDate}</f:format.date></td>
-                        <td>
-                            <f:form action="validateCourse" controller="Certifier" arguments="{record: record}" class="d-inline">
-                                <button type="submit" class="btn btn-success btn-sm">
-                                    <f:translate key="certifier.dashboard.validateButton" />
-                                </button>
-                            </f:form>
-                        </td>
-                    </tr>
-                </f:for>
-            </tbody>
-        </table>
+    <f:if condition="{coursesRequiringValidation}">
+        <div class="course-list">
+            <f:for each="{coursesRequiringValidation}" as="course">
+                <div class="course-item">
+                    <h3>{course.title}</h3>
+                    <p>{course.description}</p>
+                    <p>Status: {course.status}</p>
+
+                    <f:if condition="{course.requiresExternalValidation}">
+                        <a href="{f:uri.action(action: 'validate', controller: 'CertifierDashboard', arguments: {courseId: course.uid})}" class="btn">
+                            {f:translate(key: 'certifier.dashboard.validateCourse')}
+                        </a>
+                    </f:if>
+                </div>
+            </f:for>
+        </div>
     </f:if>
+
     <f:else>
-        <p><f:translate key="certifier.dashboard.noRecords" /></p>
+        <p>{f:translate(key: 'certifier.dashboard.noCourses')}</p>
     </f:else>
 </f:section>

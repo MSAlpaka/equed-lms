@@ -6,8 +6,15 @@ return [
         'label' => 'name',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
-        'delete' => 'deleted',
-        'iconfile' => 'EXT:equed_lms/Resources/Public/Icons/badge.svg',
+        'cruser_id' => 'cruser_id',
+        'hideTable' => false,
+        'iconfile' => 'EXT:equed_lms/Resources/Public/Icons/tx_equedlms_domain_model_badge.svg',
+    ],
+    'types' => [
+        '0' => ['showitem' => '
+            --div--;General,
+                name, description, assignmentType, relatedCourse, relatedLesson, recipients
+        '],
     ],
     'columns' => [
         'name' => [
@@ -21,38 +28,48 @@ return [
             'label' => 'Description',
             'config' => [
                 'type' => 'text',
-                'enableRichtext' => true,
+                'rows' => 3,
             ],
         ],
-        'identifier' => [
-            'label' => 'Identifier (Slug)',
+        'assignmentType' => [
+            'label' => 'Assignment Type',
             'config' => [
-                'type' => 'input',
-                'eval' => 'trim,alphanum_x,unique',
-            ],
-        ],
-        'icon' => [
-            'label' => 'Icon',
-            'config' => [
-                'type' => 'inline',
-                'foreign_table' => 'sys_file_reference',
-                'foreign_field' => 'uid_foreign',
-                'foreign_sortby' => 'sorting_foreign',
-                'foreign_table_field' => 'tablenames',
-                'foreign_match_fields' => [
-                    'fieldname' => 'icon',
-                ],
-                'appearance' => [
-                    'createNewRelationLinkTitle' => 'Add Icon',
-                    'showPossibleLocalizationRecords' => true,
-                    'showRemovedLocalizationRecords' => false,
-                    'showAllLocalizationLink' => true,
-                    'showSynchronizationLink' => true,
+                'type' => 'select',
+                'items' => [
+                    ['manual', 'manual'],
+                    ['automatic', 'automatic'],
                 ],
             ],
         ],
-    ],
-    'types' => [
-        '0' => ['showitem' => 'name, identifier, description, icon'],
+        'relatedCourse' => [
+            'label' => 'Related Course',
+            'config' => [
+                'type' => 'group',
+                'internal_type' => 'db',
+                'allowed' => 'tx_equedlms_domain_model_course',
+                'size' => 1,
+                'maxitems' => 1,
+            ],
+        ],
+        'relatedLesson' => [
+            'label' => 'Related Lesson',
+            'config' => [
+                'type' => 'group',
+                'internal_type' => 'db',
+                'allowed' => 'tx_equedlms_domain_model_lesson',
+                'size' => 1,
+                'maxitems' => 1,
+            ],
+        ],
+        'recipients' => [
+            'label' => 'Recipients',
+            'config' => [
+                'type' => 'group',
+                'internal_type' => 'db',
+                'allowed' => 'fe_users',
+                'size' => 10,
+                'maxitems' => 100,
+            ],
+        ],
     ],
 ];
