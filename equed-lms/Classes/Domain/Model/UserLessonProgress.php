@@ -4,18 +4,23 @@ declare(strict_types=1);
 
 namespace Equed\EquedLms\Domain\Model;
 
-use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
+use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
+use TYPO3\CMS\Extbase\Annotation\ORM\Lazy;
 
 /**
- * Represents the progress of a user in a specific lesson.
+ * Lernfortschritt eines Teilnehmenden in einer bestimmten Lektion.
  *
- * Tracks quiz result, status, timestamps and time spent.
+ * Speichert Start-, Abschlusszeitpunkt, Quiz-Ergebnisse, Dauer und Fortschrittsstatus.
  */
 class UserLessonProgress extends AbstractEntity
 {
+    protected int $pid = 0;
+
+    #[Lazy]
     protected ?FrontendUser $feUser = null;
 
+    #[Lazy]
     protected ?Lesson $lesson = null;
 
     protected bool $confirmed = false;
@@ -24,35 +29,27 @@ class UserLessonProgress extends AbstractEntity
 
     protected bool $completed = false;
 
-    /**
-     * Optional: progress in percent (0–100)
-     */
     protected float $progressPercent = 0.0;
 
-    /**
-     * Timestamp of lesson start
-     */
-    protected ?\DateTime $startedAt = null;
+    protected ?\DateTimeImmutable $startedAt = null;
 
-    /**
-     * Timestamp of lesson completion
-     */
-    protected ?\DateTime $completedAt = null;
+    protected ?\DateTimeImmutable $completedAt = null;
 
-    /**
-     * Timestamp of last interaction with the lesson
-     */
-    protected ?\DateTime $lastVisitedAt = null;
+    protected ?\DateTimeImmutable $lastVisitedAt = null;
 
-    /**
-     * Total time spent in minutes
-     */
     protected int $duration = 0;
 
-    /**
-     * Optional learner note (e.g. private reflection or question)
-     */
     protected string $note = '';
+
+    public function getPid(): int
+    {
+        return $this->pid;
+    }
+
+    public function setPid(int $pid): void
+    {
+        $this->pid = $pid;
+    }
 
     public function getFeUser(): ?FrontendUser
     {
@@ -101,7 +98,7 @@ class UserLessonProgress extends AbstractEntity
 
     public function setCompleted(bool $completed): void
     {
-        $this->completed = $completed;
+        this->completed = $completed;
     }
 
     public function getProgressPercent(): float
@@ -114,32 +111,32 @@ class UserLessonProgress extends AbstractEntity
         $this->progressPercent = $progressPercent;
     }
 
-    public function getStartedAt(): ?\DateTime
+    public function getStartedAt(): ?\DateTimeImmutable
     {
         return $this->startedAt;
     }
 
-    public function setStartedAt(?\DateTime $startedAt): void
+    public function setStartedAt(?\DateTimeImmutable $startedAt): void
     {
         $this->startedAt = $startedAt;
     }
 
-    public function getCompletedAt(): ?\DateTime
+    public function getCompletedAt(): ?\DateTimeImmutable
     {
         return $this->completedAt;
     }
 
-    public function setCompletedAt(?\DateTime $completedAt): void
+    public function setCompletedAt(?\DateTimeImmutable $completedAt): void
     {
         $this->completedAt = $completedAt;
     }
 
-    public function getLastVisitedAt(): ?\DateTime
+    public function getLastVisitedAt(): ?\DateTimeImmutable
     {
         return $this->lastVisitedAt;
     }
 
-    public function setLastVisitedAt(?\DateTime $lastVisitedAt): void
+    public function setLastVisitedAt(?\DateTimeImmutable $lastVisitedAt): void
     {
         $this->lastVisitedAt = $lastVisitedAt;
     }
@@ -162,5 +159,10 @@ class UserLessonProgress extends AbstractEntity
     public function setNote(string $note): void
     {
         $this->note = $note;
+    }
+
+    public function hasNote(): bool
+    {
+        return trim($this->note) !== '';
     }
 }

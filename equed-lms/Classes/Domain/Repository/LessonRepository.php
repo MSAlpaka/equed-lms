@@ -21,13 +21,10 @@ class LessonRepository extends Repository
      */
     public function findByCourse(int $courseId): array
     {
-        return $this->createQuery()
-            ->matching(
-                $this->createQuery()->equals('course', $courseId)
-            )
-            ->setOrderings([
-                'sortOrder' => QueryInterface::ORDER_ASCENDING
-            ])
+        $query = $this->createQuery();
+        return $query
+            ->matching($query->equals('course', $courseId))
+            ->setOrderings(['sortOrder' => QueryInterface::ORDER_ASCENDING])
             ->execute()
             ->toArray();
     }
@@ -40,13 +37,12 @@ class LessonRepository extends Repository
      */
     public function findRequiredLessonsByCourse(int $courseId): array
     {
-        return $this->createQuery()
-            ->matching(
-                $this->createQuery()->logicalAnd([
-                    $this->createQuery()->equals('course', $courseId),
-                    $this->createQuery()->equals('required', true),
-                ])
-            )
+        $query = $this->createQuery();
+        return $query
+            ->matching($query->logicalAnd([
+                $query->equals('course', $courseId),
+                $query->equals('required', true),
+            ]))
             ->execute()
             ->toArray();
     }

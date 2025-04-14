@@ -11,30 +11,22 @@ use EquedLms\Domain\Repository\CourseInstanceRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Exception\AccessDeniedException;
+use Psr\Log\LoggerInterface;
+use Psr\Http\Message\ResponseInterface;
 
-/**
- * Controller handling administrative functions like dashboard and management tasks.
- */
 class AdminController extends ActionController
 {
-    protected FrontendUserRepository $frontendUserRepository;
-    protected CourseProgramRepository $courseProgramRepository;
-    protected CourseInstanceRepository $courseInstanceRepository;
-
     public function __construct(
-        FrontendUserRepository $frontendUserRepository,
-        CourseProgramRepository $courseProgramRepository,
-        CourseInstanceRepository $courseInstanceRepository
-    ) {
-        $this->frontendUserRepository = $frontendUserRepository;
-        $this->courseProgramRepository = $courseProgramRepository;
-        $this->courseInstanceRepository = $courseInstanceRepository;
-    }
+        protected readonly FrontendUserRepository $frontendUserRepository,
+        protected readonly CourseProgramRepository $courseProgramRepository,
+        protected readonly CourseInstanceRepository $courseInstanceRepository,
+        protected readonly LoggerInterface $logger
+    ) {}
 
     /**
-     * Displays the admin dashboard with an overview of active courses and users.
+     * Displays the admin dashboard with stats on courses and users.
      */
-    public function indexAction(): void
+    public function indexAction(): ResponseInterface
     {
         $dashboardData = [
             'activeCourses' => $this->courseInstanceRepository->findUpcoming(),
@@ -47,19 +39,19 @@ class AdminController extends ActionController
         ];
 
         $this->view->assign('adminDashboardData', $dashboardData);
+        $this->logger->info('Admin dashboard loaded');
+        return $this->htmlResponse();
     }
 
     /**
-     * Provides management functions for users and courses.
-     * Access restricted to admin users only.
+     * Provides admin-only access to full course/user management.
      *
      * @throws AccessDeniedException
      */
-    public function manageAction(): void
+    public function manageAction(): ResponseInterface
     {
-        $context = GeneralUtility::makeInstance(Context::class);
-        if (!$context->getPropertyFromAspect('frontend.user', 'isLoggedIn') ||
-            !$context->getPropertyFromAspect('frontend.user', 'isAdmin')) {
+        if (!$this->isAdminUser()) {
+            $this->logger->warning('Access denied in manageAction: non-admin user attempted access.');
             throw new AccessDeniedException('Access denied: Admin only');
         }
 
@@ -70,5 +62,19 @@ class AdminController extends ActionController
         ];
 
         $this->view->assign('manageData', $managementData);
+        $this->logger->info('Admin management data rendered');
+        return $this->htmlResponse();
+    }
+
+    /**
+     * Returns true if the currently logged-in FE user is an admin.
+     */
+    protected function isAdminUser(): bool
+    {
+        $context = GeneralUtility::makeInstance(Context::class);
+        $userGroupIds = $context->getPropertyFromAspect('frontend.user', 'usergroup') ?? [];
+
+        // Adjust based on your actual admin group ID
+        return in_array(1, (array)$userGroupIds, true); // Group ID 1 = Admin
     }
 }

@@ -2,53 +2,60 @@
 
 declare(strict_types=1);
 
-namespace EquedLms\Domain\Repository;
+namespace Equed\EquedLms\Domain\Repository;
 
+use Equed\EquedLms\Domain\Model\UserCourseRecord;
 use TYPO3\CMS\Extbase\Persistence\Repository;
 
 class UserCourseRecordRepository extends Repository
 {
     /**
-     * Finde alle Einträge eines bestimmten Users
+     * @param int $userId
+     * @return UserCourseRecord[]
      */
     public function findByUser(int $userId): array
     {
         $query = $this->createQuery();
-        $query->matching(
-            $query->equals('user', $userId)
-        );
-        return $query->execute()->toArray();
+        return $query
+            ->matching($query->equals('user', $userId))
+            ->execute()
+            ->toArray();
     }
 
     /**
-     * Finde alle Einträge zu einer bestimmten Kursinstanz
+     * @param int $courseInstanceId
+     * @return UserCourseRecord[]
      */
     public function findByCourseInstance(int $courseInstanceId): array
     {
         $query = $this->createQuery();
-        $query->matching(
-            $query->equals('courseInstance', $courseInstanceId)
-        );
-        return $query->execute()->toArray();
+        return $query
+            ->matching($query->equals('courseInstance', $courseInstanceId))
+            ->execute()
+            ->toArray();
     }
 
     /**
-     * Finde ein bestimmtes Kursrecord (z. B. zum Verhindern von Mehrfachbuchung)
+     * @param int $userId
+     * @param int $instanceId
+     * @return UserCourseRecord|null
      */
-    public function findOneByUserAndCourseInstance(int $userId, int $instanceId): ?object
+    public function findOneByUserAndCourseInstance(int $userId, int $instanceId): ?UserCourseRecord
     {
         $query = $this->createQuery();
-        $query->matching(
-            $query->logicalAnd([
+        return $query
+            ->matching($query->logicalAnd([
                 $query->equals('user', $userId),
                 $query->equals('courseInstance', $instanceId),
-            ])
-        );
-        return $query->execute()->getFirst();
+            ]))
+            ->execute()
+            ->getFirst();
     }
 
     /**
-     * Finde Einträge nach Programm (über Umweg: courseInstance.program)
+     * @param int $userId
+     * @param int $programId
+     * @return array
      */
     public function findByUserAndProgram(int $userId, int $programId): array
     {

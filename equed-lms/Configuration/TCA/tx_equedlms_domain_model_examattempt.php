@@ -2,42 +2,43 @@
 
 return [
     'ctrl' => [
-        'title' => 'Exam Attempt',
-        'label' => 'quizQuestion',
+        'title' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:tx_equedlms_domain_model_examattempt',
+        'label' => 'attempt_number',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
         'cruser_id' => 'cruser_id',
-        'hideTable' => false,
         'iconfile' => 'EXT:equed_lms/Resources/Public/Icons/tx_equedlms_domain_model_examattempt.svg',
     ],
     'types' => [
-        '0' => ['showitem' => '
-            --div--;General,
-                user, quizQuestion, givenAnswer, correct, timestamp, attemptNumber, mode, feedback
-        '],
+        '0' => [
+            'showitem' => '
+                --div--;General,
+                    user, quiz_question, given_answer, correct, attempt_number, mode, feedback, timestamp
+            ',
+        ],
     ],
     'columns' => [
         'user' => [
             'label' => 'User',
             'config' => [
-                'type' => 'group',
-                'internal_type' => 'db',
-                'allowed' => 'fe_users',
-                'size' => 1,
+                'type' => 'select',
+                'foreign_table' => 'fe_users',
+                'renderType' => 'selectSingle',
+                'minitems' => 1,
                 'maxitems' => 1,
             ],
         ],
-        'quizQuestion' => [
+        'quiz_question' => [
             'label' => 'Quiz Question',
             'config' => [
-                'type' => 'group',
-                'internal_type' => 'db',
-                'allowed' => 'tx_equedlms_domain_model_quizquestion',
-                'size' => 1,
+                'type' => 'select',
+                'foreign_table' => 'tx_equedlms_domain_model_quizquestion',
+                'renderType' => 'selectSingle',
+                'minitems' => 1,
                 'maxitems' => 1,
             ],
         ],
-        'givenAnswer' => [
+        'given_answer' => [
             'label' => 'Given Answer',
             'config' => [
                 'type' => 'text',
@@ -45,22 +46,17 @@ return [
             ],
         ],
         'correct' => [
-            'label' => 'Correct',
+            'label' => 'Correct?',
             'config' => [
                 'type' => 'check',
+                'default' => 0,
             ],
         ],
-        'timestamp' => [
-            'label' => 'Timestamp',
-            'config' => [
-                'type' => 'datetime',
-            ],
-        ],
-        'attemptNumber' => [
+        'attempt_number' => [
             'label' => 'Attempt Number',
             'config' => [
-                'type' => 'input',
-                'eval' => 'int',
+                'type' => 'number',
+                'default' => 1,
             ],
         ],
         'mode' => [
@@ -68,9 +64,12 @@ return [
             'config' => [
                 'type' => 'select',
                 'items' => [
-                    ['Practice', 'practice'],
-                    ['Final', 'final'],
+                    ['Standard', 'standard'],
+                    ['Review', 'review'],
+                    ['Repeat', 'repeat'],
                 ],
+                'renderType' => 'selectSingle',
+                'default' => 'standard',
             ],
         ],
         'feedback' => [
@@ -78,6 +77,15 @@ return [
             'config' => [
                 'type' => 'text',
                 'rows' => 3,
+            ],
+        ],
+        'timestamp' => [
+            'label' => 'Timestamp',
+            'config' => [
+                'type' => 'input',
+                'renderType' => 'inputDateTime',
+                'eval' => 'datetime',
+                'default' => time(),
             ],
         ],
     ],

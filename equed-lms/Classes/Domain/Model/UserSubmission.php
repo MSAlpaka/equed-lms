@@ -5,77 +5,73 @@ declare(strict_types=1);
 namespace Equed\EquedLms\Domain\Model;
 
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
-use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
+use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
+use TYPO3\CMS\Extbase\Annotation\ORM\Lazy;
 
 /**
- * A learner submission (e.g. report, exam, case).
- * Can be reviewed and connected to a lesson and course record.
+ * Eine eingereichte Prüfungs- oder Lernleistung durch Teilnehmende.
+ *
+ * Kann Berichte, Tests, Fallstudien etc. enthalten. Bewertet durch eine prüfende Person.
  */
 class UserSubmission extends AbstractEntity
 {
+    protected int $pid = 0;
+
+    #[Lazy]
     protected ?FrontendUser $feUser = null;
 
+    #[Lazy]
     protected ?UserCourseRecord $userCourseRecord = null;
 
+    #[Lazy]
     protected ?Lesson $lesson = null;
 
     /**
-     * Submission type (e.g. 'theory_test', 'report', 'practical_case')
+     * Typ der Einreichung (z. B. 'theory_test', 'report', 'practical_case')
      */
     protected string $type = '';
 
     /**
-     * Submission status: submitted, approved, rejected, revision, flagged
+     * Status: submitted, approved, rejected, revision, flagged
      */
     protected string $status = 'submitted';
 
-    /**
-     * Optional free-form comment from learner
-     */
     protected string $comment = '';
 
-    /**
-     * Optional feedback / review note by instructor
-     */
     protected string $reviewComment = '';
 
-    /**
-     * Optional grade or score (e.g. A+, passed, 80%)
-     */
     protected string $grade = '';
 
-    /**
-     * Was a resubmission requested?
-     */
     protected bool $resubmissionRequired = false;
 
-    /**
-     * Date of submission
-     */
-    protected ?\DateTime $submittedAt = null;
+    protected ?\DateTimeImmutable $submittedAt = null;
 
-    /**
-     * Date of review
-     */
-    protected ?\DateTime $reviewedAt = null;
+    protected ?\DateTimeImmutable $reviewedAt = null;
 
-    /**
-     * Instructor or Certifier who reviewed the submission
-     */
+    #[Lazy]
     protected ?FrontendUser $reviewedBy = null;
 
     /**
-     * Uploaded files (PDFs, images, etc.)
-     *
      * @var ObjectStorage<FileReference>
      */
+    #[Lazy]
     protected ObjectStorage $files;
 
     public function __construct()
     {
         $this->files = new ObjectStorage();
+    }
+
+    public function getPid(): int
+    {
+        return $this->pid;
+    }
+
+    public function setPid(int $pid): void
+    {
+        $this->pid = $pid;
     }
 
     public function getFeUser(): ?FrontendUser
@@ -93,9 +89,9 @@ class UserSubmission extends AbstractEntity
         return $this->userCourseRecord;
     }
 
-    public function setUserCourseRecord(?UserCourseRecord $record): void
+    public function setUserCourseRecord(?UserCourseRecord $userCourseRecord): void
     {
-        $this->userCourseRecord = $record;
+        $this->userCourseRecord = $userCourseRecord;
     }
 
     public function getLesson(): ?Lesson
@@ -163,27 +159,27 @@ class UserSubmission extends AbstractEntity
         return $this->resubmissionRequired;
     }
 
-    public function setResubmissionRequired(bool $required): void
+    public function setResubmissionRequired(bool $resubmissionRequired): void
     {
-        $this->resubmissionRequired = $required;
+        $this->resubmissionRequired = $resubmissionRequired;
     }
 
-    public function getSubmittedAt(): ?\DateTime
+    public function getSubmittedAt(): ?\DateTimeImmutable
     {
         return $this->submittedAt;
     }
 
-    public function setSubmittedAt(?\DateTime $submittedAt): void
+    public function setSubmittedAt(?\DateTimeImmutable $submittedAt): void
     {
         $this->submittedAt = $submittedAt;
     }
 
-    public function getReviewedAt(): ?\DateTime
+    public function getReviewedAt(): ?\DateTimeImmutable
     {
         return $this->reviewedAt;
     }
 
-    public function setReviewedAt(?\DateTime $reviewedAt): void
+    public function setReviewedAt(?\DateTimeImmutable $reviewedAt): void
     {
         $this->reviewedAt = $reviewedAt;
     }
@@ -198,9 +194,6 @@ class UserSubmission extends AbstractEntity
         $this->reviewedBy = $reviewedBy;
     }
 
-    /**
-     * @return ObjectStorage<FileReference>
-     */
     public function getFiles(): ObjectStorage
     {
         return $this->files;

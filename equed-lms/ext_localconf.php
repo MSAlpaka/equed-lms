@@ -48,7 +48,7 @@ if ($isTraining) {
     ExtensionUtility::configurePlugin(
         'Equed.EquedLms',
         'Certifier',
-        [CertifierController::class => 'dashboard, validate, confirm'],
+        [CertifierController::class => 'list, approve'],
         [],
         ['noCache' => true]
     );
@@ -56,7 +56,7 @@ if ($isTraining) {
     ExtensionUtility::configurePlugin(
         'Equed.EquedLms',
         'Certificate',
-        [CertificateController::class => 'list, show, download'],
+        [CertificateController::class => 'view, download'],
         [],
         ['noCache' => true]
     );
@@ -64,7 +64,7 @@ if ($isTraining) {
     ExtensionUtility::configurePlugin(
         'Equed.EquedLms',
         'UserSubmission',
-        [UserSubmissionController::class => 'upload, review, update'],
+        [UserSubmissionController::class => 'index, view'],
         [],
         ['noCache' => true]
     );
@@ -72,27 +72,25 @@ if ($isTraining) {
     ExtensionUtility::configurePlugin(
         'Equed.EquedLms',
         'UserCourseRecord',
-        [UserCourseRecordController::class => 'show, confirmCompletion'],
+        [UserCourseRecordController::class => 'list, show'],
+        [],
+        ['noCache' => true]
+    );
+
+    ExtensionUtility::configurePlugin(
+        'Equed.EquedLms',
+        'SsoLogin',
+        [SsoLoginController::class => 'login, logout'],
+        [],
+        ['noCache' => true]
+    );
+
+    // Plugin für Instructor-Dashboard
+    ExtensionUtility::configurePlugin(
+        'Equed.EquedLms',
+        'InstructorDashboard',
+        [\\Equed\\EquedLms\\Controller\\InstructorDashboardController::class => 'index, showParticipants, confirmCompletion'],
         [],
         ['noCache' => true]
     );
 }
-
-// SSO-Login ist in ALLEN Instanzen aktiv
-// SSO login is active in ALL instances
-ExtensionUtility::configurePlugin(
-    'Equed.EquedLms',
-    'SsoLogin',
-    [SsoLoginController::class => 'index'],
-    [],
-    ['noCache' => true]
-);
-
-// Registriere die Middleware im TYPO3
-$GLOBALS['TYPO3_CONF_VARS']['HTTP']['middlewares'][\Vendor\EquedLms\Middleware\JWTAuthMiddleware::class] = [
-    'target' => \Vendor\EquedLms\Middleware\JWTAuthMiddleware::class,
-    'before' => [
-        'TYPO3\CMS\Frontend\Middleware\FrontendLoginMiddleware',
-        'TYPO3\CMS\Frontend\Middleware\HandleRequestMiddleware'
-    ],
-];

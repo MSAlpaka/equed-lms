@@ -4,27 +4,41 @@ declare(strict_types=1);
 
 namespace Equed\EquedLms\Domain\Model;
 
-use DateTimeInterface;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
-use TYPO3\CMS\Extbase\Annotation\ORM as Extbase;
+use TYPO3\CMS\Extbase\Annotation\ORM\Lazy;
 
 /**
- * QMS Case entity – opened when an audit log entry leads to quality concerns.
+ * QMS-Fall: Wird geöffnet, wenn ein Audit-Vorgang zur Qualitätsprüfung führt.
+ *
+ * Dokumentiert Beschreibung, Status, Feedback und Verknüpfung zum Audit-Eintrag.
  */
 class QmsCase extends AbstractEntity
 {
-    /**
-     * @Extbase\Lazy
-     */
+    protected int $pid = 0;
+
+    #[Lazy]
     protected ?AuditLog $auditLog = null;
 
-    protected string $status = 'open'; // open, in_review, resolved, closed
-    protected ?DateTimeInterface $createdAt = null;
+    /**
+     * Mögliche Werte: open, in_review, resolved, closed
+     */
+    protected string $status = 'open';
+
+    protected ?\DateTimeImmutable $createdAt = null;
 
     protected string $description = '';
+
     protected string $feedback = '';
 
-    protected int $pid = 0;
+    public function getPid(): int
+    {
+        return $this->pid;
+    }
+
+    public function setPid(int $pid): void
+    {
+        $this->pid = $pid;
+    }
 
     public function getAuditLog(): ?AuditLog
     {
@@ -46,12 +60,12 @@ class QmsCase extends AbstractEntity
         $this->status = $status;
     }
 
-    public function getCreatedAt(): ?DateTimeInterface
+    public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(?DateTimeInterface $createdAt): void
+    public function setCreatedAt(?\DateTimeImmutable $createdAt): void
     {
         $this->createdAt = $createdAt;
     }
@@ -74,15 +88,5 @@ class QmsCase extends AbstractEntity
     public function setFeedback(string $feedback): void
     {
         $this->feedback = $feedback;
-    }
-
-    public function getPid(): int
-    {
-        return $this->pid;
-    }
-
-    public function setPid(int $pid): void
-    {
-        $this->pid = $pid;
     }
 }

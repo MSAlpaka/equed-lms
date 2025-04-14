@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff version="1.0">
+  <file source-language="en" datatype="plaintext" original="messages" date="2025-04-07T00:00:00Z">
+    <body>
+      <trans-unit id="material.title" xml:space="preserve">
+        <source>Material</source>
+      </trans-unit>
+      <trans-unit id="material.description" xml:space="preserve">
+        <source>Description</source>
+      </trans-unit>
+      <trans-unit id="material.file" xml:space="preserve">
+        <source>File</source>
+      </trans-unit>
+      <trans-unit id="material.lesson" xml:space="preserve">
+        <source>Related Lesson</source>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

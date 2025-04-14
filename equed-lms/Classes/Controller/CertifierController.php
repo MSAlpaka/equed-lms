@@ -2,17 +2,19 @@
 
 declare(strict_types=1);
 
-namespace Equed\EquedLms\Controller;
+namespace EquedLms\Controller;
 
-use Equed\EquedLms\Domain\Model\CourseInstance;
-use Equed\EquedLms\Domain\Repository\CourseInstanceRepository;
-use Psr\Log\LoggerInterface;
-use TYPO3\CMS\Core\Authentication\FrontendUserAuthentication;
-use TYPO3\CMS\Core\Exception\AccessDeniedException;
-use TYPO3\CMS\Core\Messaging\AbstractMessage;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
+use EquedLms\Domain\Model\CourseInstance;
+use EquedLms\Domain\Repository\CourseInstanceRepository;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+use TYPO3\CMS\Core\Messaging\AbstractMessage;
+use TYPO3\CMS\Core\Authentication\FrontendUserAuthentication;
+use TYPO3\CMS\Core\Context\Context;
+use TYPO3\CMS\Core\Exception\AccessDeniedException;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use Psr\Log\LoggerInterface;
+use Psr\Http\Message\ResponseInterface;
 
 class CertifierController extends ActionController
 {
@@ -22,69 +24,71 @@ class CertifierController extends ActionController
     ) {}
 
     /**
-     * Validiert einen Kurs, falls er externe Validierung erfordert.
-     *
-     * @throws AccessDeniedException
+     * Validates a course instance.
      */
-    public function validateAction(int $courseInstanceId): void
+    public function validateAction(int $courseInstanceId): ResponseInterface
     {
         $frontendUser = $this->getFrontendUser();
-        $userId = $frontendUser?->user['uid'] ?? null;
+        $userId = $frontendUser?->user['uid'] ?? 0;
 
         if (!$this->userIsCertifier()) {
-            throw new AccessDeniedException('Zugriff verweigert: Nur Certifier dürfen validieren.');
+            $this->logger->warning('Validation denied: user is not a certifier', ['userId' => $userId]);
+            throw new AccessDeniedException('Access denied: Only certifiers may perform validation.');
         }
 
         $course = $this->courseInstanceRepository->findByUid($courseInstanceId);
 
         if (!$course instanceof CourseInstance) {
-            $this->addFlashMessage('Kurs nicht gefunden.', 'Fehler', AbstractMessage::ERROR);
-            $this->redirect('list', 'CourseInstance');
-            return;
+            $this->addFlashMessage(
+                LocalizationUtility::translate('course_not_found', 'equed_lms') ?? 'Course not found.',
+                '',
+                AbstractMessage::ERROR
+            );
+            return $this->redirect('list', 'CourseInstance');
         }
 
         if (!$course->getRequiresExternalValidation()) {
             $this->addFlashMessage(
                 LocalizationUtility::translate('course_no_validation_needed', 'equed_lms')
-                    ?? 'Dieser Kurs benötigt keine externe Validierung.',
+                    ?? 'This course does not require external validation.',
                 '',
                 AbstractMessage::INFO
             );
-            $this->redirect('show', 'CourseInstance', null, ['courseInstance' => $course->getUid()]);
-            return;
+            $this->logger->info('Validation skipped – not required.', ['courseId' => $course->getUid()]);
+            return $this->redirect('show', 'CourseInstance', null, ['courseInstance' => $course->getUid()]);
         }
 
-        // Markiere Kurs als validiert
         $course->setStatus('validated');
         $this->courseInstanceRepository->update($course);
 
         $this->addFlashMessage(
             LocalizationUtility::translate('course_validated', 'equed_lms')
-                ?? 'Kurs erfolgreich validiert.',
+                ?? 'Course successfully validated.',
             '',
             AbstractMessage::OK
         );
 
-        $this->logger->info('CourseInstance validated by Certifier', [
+        $this->logger->info('CourseInstance validated by certifier', [
             'courseInstanceId' => $course->getUid(),
             'certifierId' => $userId,
         ]);
 
-        $this->redirect('show', 'CourseInstance', null, ['courseInstance' => $course->getUid()]);
+        return $this->redirect('show', 'CourseInstance', null, ['courseInstance' => $course->getUid()]);
     }
 
     /**
-     * Zugriff nur für Benutzer mit Rolle „Certifier“ erlaubt.
+     * Checks if the current user is a certifier.
      */
     protected function userIsCertifier(): bool
     {
-        $user = $this->getFrontendUser();
-        return isset($user->user['usergroup']) && is_array($user->groupData['uid']) && in_array('CERTIFIER_GROUP_UID', $user->groupData['uid']);
-        // TODO: Ersetze 'CERTIFIER_GROUP_UID' durch echte FE-Usergroup UID der Certifier
+        $context = GeneralUtility::makeInstance(Context::class);
+        $groups = $context->getPropertyFromAspect('frontend.user', 'groupIds') ?? [];
+
+        return in_array(123, $groups, true); // TODO: Replace 123 with real certifier group UID
     }
 
     /**
-     * Gibt das aktuelle FE-User-Objekt zurück.
+     * Returns the current FE user object.
      */
     protected function getFrontendUser(): ?FrontendUserAuthentication
     {

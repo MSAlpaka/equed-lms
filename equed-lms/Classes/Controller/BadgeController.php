@@ -10,83 +10,96 @@ use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Exception\AccessDeniedException;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use Psr\Log\LoggerInterface;
+use Psr\Http\Message\ResponseInterface;
 
 class BadgeController extends ActionController
 {
-    protected BadgeRepository $badgeRepository;
-    protected LoggerInterface $logger;
-
     public function __construct(
-        BadgeRepository $badgeRepository,
-        LoggerInterface $logger
-    ) {
-        $this->badgeRepository = $badgeRepository;
-        $this->logger = $logger;
-    }
+        protected readonly BadgeRepository $badgeRepository,
+        protected readonly LoggerInterface $logger
+    ) {}
 
     /**
-     * Listet alle Badges auf.
+     * Lists all badges.
      */
-    public function listAction(): void
+    public function listAction(): ResponseInterface
     {
         $this->ensureBackendAccess();
 
-        $items = $this->badgeRepository->findAll();
-        $this->view->assign('badges', $items);
+        $badges = $this->badgeRepository->findAll();
+        $this->view->assign('badges', $badges);
+
+        $this->logger->info('Badge list displayed', ['count' => count($badges)]);
+        return $this->htmlResponse();
     }
 
     /**
-     * Zeigt ein einzelnes Badge.
+     * Displays a single badge.
      */
-    public function showAction(Badge $badge): void
+    public function showAction(Badge $badge): ResponseInterface
     {
         $this->ensureBackendAccess();
 
         $this->view->assign('badge', $badge);
+        $this->logger->info('Badge details shown', ['id' => $badge->getUid()]);
+        return $this->htmlResponse();
     }
 
     /**
-     * Erstellt ein neues Badge.
+     * Creates a new badge.
      */
-    public function createAction(Badge $badge): void
+    public function createAction(Badge $badge): ResponseInterface
     {
         $this->ensureBackendAccess();
 
         $this->badgeRepository->add($badge);
-        $this->addFlashMessage('Badge wurde erfolgreich erstellt.', 'Erfolg', AbstractMessage::OK);
+        $this->addFlashMessage(
+            LocalizationUtility::translate('flashMessages.badgeCreated', 'EquedLms') ?? 'Badge successfully created.',
+            '',
+            AbstractMessage::OK
+        );
         $this->logger->info('Badge created', ['title' => $badge->getTitle()]);
-        $this->redirect('list');
+        return $this->redirect('list');
     }
 
     /**
-     * Aktualisiert ein vorhandenes Badge.
+     * Updates an existing badge.
      */
-    public function updateAction(Badge $badge): void
+    public function updateAction(Badge $badge): ResponseInterface
     {
         $this->ensureBackendAccess();
 
         $this->badgeRepository->update($badge);
-        $this->addFlashMessage('Badge wurde aktualisiert.', 'Erfolg', AbstractMessage::OK);
+        $this->addFlashMessage(
+            LocalizationUtility::translate('flashMessages.badgeUpdated', 'EquedLms') ?? 'Badge successfully updated.',
+            '',
+            AbstractMessage::OK
+        );
         $this->logger->info('Badge updated', ['id' => $badge->getUid()]);
-        $this->redirect('list');
+        return $this->redirect('list');
     }
 
     /**
-     * Löscht ein Badge.
+     * Deletes a badge.
      */
-    public function deleteAction(Badge $badge): void
+    public function deleteAction(Badge $badge): ResponseInterface
     {
         $this->ensureBackendAccess();
 
         $this->badgeRepository->remove($badge);
-        $this->addFlashMessage('Badge wurde gelöscht.', 'Hinweis', AbstractMessage::WARNING);
+        $this->addFlashMessage(
+            LocalizationUtility::translate('flashMessages.badgeDeleted', 'EquedLms') ?? 'Badge deleted.',
+            '',
+            AbstractMessage::WARNING
+        );
         $this->logger->warning('Badge deleted', ['id' => $badge->getUid()]);
-        $this->redirect('list');
+        return $this->redirect('list');
     }
 
     /**
-     * Zugriff nur für Admins erlaubt.
+     * Ensures access for backend admin users only.
      *
      * @throws AccessDeniedException
      */
@@ -96,7 +109,8 @@ class BadgeController extends ActionController
         $backendUser = $GLOBALS['BE_USER'] ?? null;
 
         if (!$backendUser instanceof BackendUserAuthentication || !$backendUser->isAdmin()) {
-            throw new AccessDeniedException('Access denied: Admin only');
+            $this->logger->warning('Backend access denied (badge section)');
+            throw new AccessDeniedException('Access denied: Only admin may access this section.', 167000101);
         }
     }
 }

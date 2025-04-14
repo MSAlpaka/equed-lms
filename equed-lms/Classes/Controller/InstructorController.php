@@ -11,6 +11,9 @@ use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Exception\AccessDeniedException;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use TYPO3\CMS\Core\Context\Context;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use Psr\Http\Message\ResponseInterface;
 
 class InstructorController extends ActionController
 {
@@ -20,21 +23,20 @@ class InstructorController extends ActionController
     ) {}
 
     /**
-     * Bewertet einen Kurs (nur zugewiesene Kurse).
+     * Submits feedback for an assigned course.
      */
-    public function evaluateAction(int $courseId): void
+    public function evaluateAction(int $courseId): ResponseInterface
     {
         $user = $this->getAuthenticatedUser();
         $course = $this->courseRepository->findByUid($courseId);
 
-        // Ensure the course is assigned to the current user (Instructor)
         if ($course && $course->getInstructor() === $user) {
-            $feedback = $this->request->getArgument('feedback');
+            $feedback = $this->request->hasArgument('feedback') ? $this->request->getArgument('feedback') : null;
+
             if ($feedback) {
-                // Submit feedback for the course
                 $this->courseRepository->submitFeedback($courseId, $user, $feedback);
                 $this->addFlashMessage(
-                    LocalizationUtility::translate('flashMessages.feedbackSubmitted', 'EquedLms') ?? 'Feedback erfolgreich abgegeben.',
+                    LocalizationUtility::translate('flashMessages.feedbackSubmitted', 'EquedLms') ?? 'Feedback submitted successfully.',
                     '',
                     AbstractMessage::OK
                 );
@@ -44,35 +46,36 @@ class InstructorController extends ActionController
                 ]);
             } else {
                 $this->addFlashMessage(
-                    LocalizationUtility::translate('flashMessages.feedbackMissing', 'EquedLms') ?? 'Bitte gib dein Feedback ab.',
+                    LocalizationUtility::translate('flashMessages.feedbackMissing', 'EquedLms') ?? 'Please provide feedback.',
                     '',
                     AbstractMessage::ERROR
                 );
             }
         } else {
             $this->addFlashMessage(
-                LocalizationUtility::translate('flashMessages.errorNotAssigned', 'EquedLms') ?? 'Du bist diesem Kurs nicht zugewiesen.',
+                LocalizationUtility::translate('flashMessages.errorNotAssigned', 'EquedLms') ?? 'You are not assigned to this course.',
                 '',
                 AbstractMessage::ERROR
             );
         }
+
+        return $this->redirect('index', 'Course');
     }
 
     /**
-     * Markiert den Kurs als abgeschlossen (nur zugewiesene Kurse).
+     * Marks the course as completed.
      */
-    public function markCompleteAction(int $courseId): void
+    public function markCompleteAction(int $courseId): ResponseInterface
     {
         $user = $this->getAuthenticatedUser();
         $course = $this->courseRepository->findByUid($courseId);
 
         if ($course && $course->getInstructor() === $user) {
-            // Mark the course as completed
             $course->setStatus('completed');
             $this->courseRepository->update($course);
 
             $this->addFlashMessage(
-                LocalizationUtility::translate('flashMessages.courseCompleted', 'EquedLms') ?? 'Kurs erfolgreich abgeschlossen.',
+                LocalizationUtility::translate('flashMessages.courseCompleted', 'EquedLms') ?? 'Course marked as completed.',
                 '',
                 AbstractMessage::OK
             );
@@ -82,18 +85,21 @@ class InstructorController extends ActionController
             ]);
         } else {
             $this->addFlashMessage(
-                LocalizationUtility::translate('flashMessages.errorNotAssignedToCourse', 'EquedLms') ?? 'Du bist diesem Kurs nicht zugewiesen.',
+                LocalizationUtility::translate('flashMessages.errorNotAssigned', 'EquedLms') ?? 'You are not assigned to this course.',
                 '',
                 AbstractMessage::ERROR
             );
         }
+
+        return $this->redirect('index', 'Course');
     }
 
     /**
-     * Helper function to get the authenticated user.
+     * Returns the currently authenticated frontend user object.
      */
-    protected function getAuthenticatedUser()
+    protected function getAuthenticatedUser(): ?object
     {
-        return $GLOBALS['TSFE']->fe_user->user;
+        $context = GeneralUtility::makeInstance(Context::class);
+        return $context->getPropertyFromAspect('frontend.user', 'user') ?: null;
     }
 }

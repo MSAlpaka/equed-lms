@@ -12,6 +12,7 @@ use Psr\Log\LoggerInterface;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use Psr\Http\Message\ResponseInterface;
 
 class QuestionController extends ActionController
 {
@@ -22,18 +23,28 @@ class QuestionController extends ActionController
     ) {}
 
     /**
-     * Erstellt eine neue Prüfungsfrage mit möglichen Antwortmöglichkeiten.
+     * Lists all questions.
      */
-    public function createAction(): void
+    public function listAction(): ResponseInterface
     {
-        // Frage erstellen
+        $questions = $this->quizQuestionRepository->findAll();
+        $this->view->assign('questions', $questions);
+
+        $this->logger->info('Question list rendered', ['count' => count($questions)]);
+        return $this->htmlResponse();
+    }
+
+    /**
+     * Creates a new quiz question with answers.
+     */
+    public function createAction(): ResponseInterface
+    {
         $question = new QuizQuestion();
         $question->setQuestionText($this->request->getArgument('questionText'));
 
-        // Antworten hinzufügen
         $answer1 = new QuizAnswer();
         $answer1->setAnswerText($this->request->getArgument('answer1Text'));
-        $answer1->setIsCorrect(true); // Beispiel für die richtige Antwort
+        $answer1->setIsCorrect(true);
 
         $answer2 = new QuizAnswer();
         $answer2->setAnswerText($this->request->getArgument('answer2Text'));
@@ -45,67 +56,57 @@ class QuestionController extends ActionController
         $this->quizQuestionRepository->add($question);
 
         $this->addFlashMessage(
-            LocalizationUtility::translate('flashMessages.questionCreated', 'EquedLms') ?? 'Frage erfolgreich erstellt.',
+            LocalizationUtility::translate('flashMessages.questionCreated', 'EquedLms') ?? 'Question successfully created.',
             '',
             AbstractMessage::OK
         );
 
-        $this->logger->info('Neue Prüfungsfrage erstellt', ['questionText' => $question->getQuestionText()]);
-
-        $this->redirect('list');
+        $this->logger->info('Quiz question created', ['text' => $question->getQuestionText()]);
+        return $this->redirect('list');
     }
 
     /**
-     * Bearbeitet eine bestehende Prüfungsfrage und deren Antworten.
+     * Edits an existing quiz question.
      */
-    public function editAction(QuizQuestion $question): void
+    public function editAction(QuizQuestion $question): ResponseInterface
     {
         $this->view->assign('question', $question);
         $this->view->assign('answers', $this->quizAnswerRepository->findByQuestion($question));
+
+        return $this->htmlResponse();
     }
 
     /**
-     * Speichert die Änderungen an einer bestehenden Prüfungsfrage.
+     * Updates an existing quiz question.
      */
-    public function updateAction(QuizQuestion $question): void
+    public function updateAction(QuizQuestion $question): ResponseInterface
     {
         $this->quizQuestionRepository->update($question);
 
         $this->addFlashMessage(
-            LocalizationUtility::translate('flashMessages.questionUpdated', 'EquedLms') ?? 'Frage erfolgreich aktualisiert.',
+            LocalizationUtility::translate('flashMessages.questionUpdated', 'EquedLms') ?? 'Question successfully updated.',
             '',
             AbstractMessage::OK
         );
 
-        $this->logger->info('Prüfungsfrage aktualisiert', ['questionId' => $question->getUid()]);
-
-        $this->redirect('list');
+        $this->logger->info('Quiz question updated', ['questionId' => $question->getUid()]);
+        return $this->redirect('list');
     }
 
     /**
-     * Löscht eine Prüfungsfrage.
+     * Deletes a quiz question.
      */
-    public function deleteAction(QuizQuestion $question): void
+    public function deleteAction(QuizQuestion $question): ResponseInterface
     {
         $this->quizQuestionRepository->remove($question);
 
         $this->addFlashMessage(
-            LocalizationUtility::translate('flashMessages.questionDeleted', 'EquedLms') ?? 'Frage erfolgreich gelöscht.',
+            LocalizationUtility::translate('flashMessages.questionDeleted', 'EquedLms') ?? 'Question deleted.',
             '',
             AbstractMessage::WARNING
         );
 
-        $this->logger->info('Prüfungsfrage gelöscht', ['questionId' => $question->getUid()]);
-
-        $this->redirect('list');
-    }
-
-    /**
-     * Zeigt alle Fragen eines bestimmten Tests oder Quizzes an.
-     */
-    public function listAction(int $quizId): void
-    {
-        $questions = $this->quizQuestionRepository->findByQuiz($quizId);
-        $this->view->assign('questions', $questions);
+        $this->logger->warning('Quiz question deleted', ['questionId' => $question->getUid()]);
+        return $this->redirect('list');
     }
 }

@@ -5,51 +5,56 @@ declare(strict_types=1);
 namespace Equed\EquedLms\Domain\Model;
 
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
-use TYPO3\CMS\Extbase\Annotation\ORM as Extbase;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
+use TYPO3\CMS\Extbase\Annotation\ORM\Lazy;
 
 /**
- * Represents a badge earned by a participant for completing specific actions or achievements.
+ * Badge – Auszeichnung für besondere Leistungen im LMS.
  *
- * Examples:
- * - 100% theory completed
- * - Specialist in a particular topic
- * - Early submission
+ * Beispiele:
+ * - 100 % Theorielektionen abgeschlossen
+ * - Frühzeitige Abgabe eines Berichts
+ * - Spezialisierung in einem bestimmten Thema
  */
 class Badge extends AbstractEntity
 {
+    protected int $pid = 0;
+
     protected string $name = '';
 
     protected string $description = '';
 
     /**
-     * Determines if the badge is awarded automatically or manually.
-     * Options: 'manual', 'automatic'
+     * Vergabeart: 'manual' oder 'automatic'
      */
     protected string $assignmentType = 'manual';
 
-    /**
-     * @Extbase\Lazy
-     */
+    #[Lazy]
     protected ?Course $relatedCourse = null;
 
-    /**
-     * @Extbase\Lazy
-     */
+    #[Lazy]
     protected ?Lesson $relatedLesson = null;
 
     /**
      * @var ObjectStorage<FrontendUser>
-     * @Extbase\Lazy
      */
+    #[Lazy]
     protected ObjectStorage $recipients;
-
-    protected int $pid = 0;
 
     public function __construct()
     {
         $this->recipients = new ObjectStorage();
+    }
+
+    public function getPid(): int
+    {
+        return $this->pid;
+    }
+
+    public function setPid(int $pid): void
+    {
+        $this->pid = $pid;
     }
 
     public function getName(): string
@@ -102,36 +107,18 @@ class Badge extends AbstractEntity
         $this->relatedLesson = $relatedLesson;
     }
 
-    /**
-     * @return ObjectStorage<FrontendUser>
-     */
     public function getRecipients(): ObjectStorage
     {
         return $this->recipients;
     }
 
-    public function addRecipient(FrontendUser $user): void
+    public function addRecipient(FrontendUser $recipient): void
     {
-        $this->recipients->attach($user);
+        $this->recipients->attach($recipient);
     }
 
-    public function removeRecipient(FrontendUser $user): void
+    public function removeRecipient(FrontendUser $recipient): void
     {
-        $this->recipients->detach($user);
-    }
-
-    public function setRecipients(ObjectStorage $recipients): void
-    {
-        $this->recipients = $recipients;
-    }
-
-    public function getPid(): int
-    {
-        return $this->pid;
-    }
-
-    public function setPid(int $pid): void
-    {
-        $this->pid = $pid;
+        $this->recipients->detach($recipient);
     }
 }

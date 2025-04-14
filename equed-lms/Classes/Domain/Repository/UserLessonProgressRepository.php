@@ -20,13 +20,12 @@ class UserLessonProgressRepository extends Repository
      */
     public function findCompletedByUser(int $userId): array
     {
-        return $this->createQuery()
-            ->matching(
-                $this->createQuery()->logicalAnd([
-                    $this->createQuery()->equals('user', $userId),
-                    $this->createQuery()->equals('completed', true),
-                ])
-            )
+        $query = $this->createQuery();
+        return $query
+            ->matching($query->logicalAnd([
+                $query->equals('user', $userId),
+                $query->equals('completed', true),
+            ]))
             ->execute()
             ->toArray();
     }
@@ -40,13 +39,12 @@ class UserLessonProgressRepository extends Repository
      */
     public function findByUserAndLesson(int $userId, int $lessonId): ?UserLessonProgress
     {
-        return $this->createQuery()
-            ->matching(
-                $this->createQuery()->logicalAnd([
-                    $this->createQuery()->equals('user', $userId),
-                    $this->createQuery()->equals('lesson', $lessonId),
-                ])
-            )
+        $query = $this->createQuery();
+        return $query
+            ->matching($query->logicalAnd([
+                $query->equals('user', $userId),
+                $query->equals('lesson', $lessonId),
+            ]))
             ->execute()
             ->getFirst();
     }

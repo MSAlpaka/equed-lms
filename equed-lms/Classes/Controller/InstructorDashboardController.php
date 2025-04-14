@@ -1,129 +1,107 @@
 <?php
-// InstructorDashboardController.php
 
-namespace Vendor\EquedLms\Controller;
+declare(strict_types=1);
 
+namespace EquedLms\Controller;
+
+use Psr\Http\Message\ResponseInterface;
+use Psr\Log\LoggerInterface;
+use TYPO3\CMS\Core\Messaging\AbstractMessage;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
-use Vendor\EquedLms\Domain\Model\Course;
-use Vendor\EquedLms\Domain\Repository\CourseRepository;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use EquedLms\Domain\Repository\CourseInstanceRepository;
+use EquedLms\Domain\Repository\UserCourseRecordRepository;
+use EquedLms\Domain\Model\UserCourseRecord;
 
 class InstructorDashboardController extends ActionController
 {
-    /**
-     * @var CourseRepository
-     */
-    protected $courseRepository;
+    public function __construct(
+        protected readonly CourseInstanceRepository $courseInstanceRepository,
+        protected readonly UserCourseRecordRepository $userCourseRecordRepository,
+        protected readonly LoggerInterface $logger
+    ) {}
 
-    /**
-     * @param CourseRepository $courseRepository
-     */
-    public function injectCourseRepository(CourseRepository $courseRepository)
-    {
-        $this->courseRepository = $courseRepository;
-    }
-
-    /**
-     * Action to display the dashboard for the instructor
-     */
-    public function indexAction()
+    public function indexAction(): ResponseInterface
     {
         $user = $this->getAuthenticatedUser();
-        
-        // Retrieve all courses assigned to the current instructor
-        $assignedCourses = $this->courseRepository->findAssignedCoursesByInstructor($user);
+        $assignedInstances = $this->courseInstanceRepository->findByInstructor($user);
 
-        $this->view->assign('assignedCourses', $assignedCourses);
+        $this->view->assignMultiple([
+            'user' => $user,
+            'courseInstances' => $assignedInstances,
+        ]);
+
+        return $this->htmlResponse();
     }
 
-    /**
-     * Action to display the feedback form for a specific course
-     */
-    public function feedbackAction($courseId)
+    public function showParticipantsAction(int $courseInstanceId): ResponseInterface
     {
         $user = $this->getAuthenticatedUser();
-        $course = $this->courseRepository->findByUid($courseId);
+        $instance = $this->courseInstanceRepository->findByUid($courseInstanceId);
 
-        // Ensure that the course is assigned to the current user (Instructor)
-        if ($course && $course->getInstructor() === $user) {
-            $this->view->assign('course', $course);
-        } else {
+        if (!$instance || !$this->isInstructorOf($user, $instance)) {
             $this->addFlashMessage(
-                $this->translate('error_not_assigned_to_course'),
+                LocalizationUtility::translate('error_not_authorized', 'equed_lms') ?? 'Access denied.',
                 '',
-                \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR
+                AbstractMessage::ERROR
             );
-            $this->redirect('index');
-        }
-    }
-
-    /**
-     * Action to submit feedback for a specific course
-     */
-    public function submitFeedbackAction($courseId)
-    {
-        $user = $this->getAuthenticatedUser();
-        $course = $this->courseRepository->findByUid($courseId);
-
-        // Ensure that the course is assigned to the current user (Instructor)
-        if ($course && $course->getInstructor() === $user) {
-            // Submit feedback for the course
-            $feedback = $this->request->getArgument('feedback');
-            $this->courseRepository->submitFeedback($courseId, $user, $feedback);
-            $this->addFlashMessage(
-                $this->translate('feedback_submitted')
-            );
-        } else {
-            $this->addFlashMessage(
-                $this->translate('error_not_assigned_or_completed'),
-                '',
-                \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR
-            );
+            return $this->redirect('index');
         }
 
-        $this->redirect('index');
+        $records = $this->userCourseRecordRepository->findByCourseInstance($instance);
+
+        $this->view->assignMultiple([
+            'courseInstance' => $instance,
+            'records' => $records
+        ]);
+
+        return $this->htmlResponse();
     }
 
-    /**
-     * Action to mark the course as completed
-     */
-    public function markCompleteAction($courseId)
+    public function confirmCompletionAction(int $recordId): ResponseInterface
     {
         $user = $this->getAuthenticatedUser();
-        $course = $this->courseRepository->findByUid($courseId);
+        $record = $this->userCourseRecordRepository->findByUid($recordId);
 
-        if ($course && $course->getInstructor() === $user) {
-            // Mark the course as completed
-            $course->setStatus('completed');
-            $this->courseRepository->update($course);
+        if (!$record || !$this->isInstructorOf($user, $record->getCourseInstance())) {
             $this->addFlashMessage(
-                $this->translate('course_completed')
-            );
-        } else {
-            $this->addFlashMessage(
-                $this->translate('error_not_assigned_to_course'),
+                LocalizationUtility::translate('error_not_authorized', 'equed_lms') ?? 'Access denied.',
                 '',
-                \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR
+                AbstractMessage::ERROR
             );
+            return $this->redirect('index');
         }
 
-        $this->redirect('index');
+        $record->setInstructorConfirmed(true);
+        $this->userCourseRecordRepository->update($record);
+
+        $this->addFlashMessage(
+            LocalizationUtility::translate('completion_confirmed', 'equed_lms') ?? 'Course marked as complete.',
+            '',
+            AbstractMessage::OK
+        );
+
+        return $this->redirect('showParticipants', null, null, ['courseInstanceId' => $record->getCourseInstance()->getUid()]);
     }
 
-    /**
-     * Helper function to get the authenticated user
-     */
-    protected function getAuthenticatedUser()
+    private function getAuthenticatedUser(): ?\TYPO3\CMS\Extbase\Domain\Model\FrontendUser
     {
-        // Assuming we have a method to retrieve the logged-in user
-        return $this->getUser();
+        return $GLOBALS['TSFE']->fe_user->user ?? null;
     }
 
-    /**
-     * Helper function for translation
-     */
-    protected function translate($key)
+    private function isInstructorOf($user, $instance): bool
     {
-        return $this->getLocalizationService()->getLocalizedString($key);
+        if (!$user || !$instance) {
+            return false;
+        }
+
+        foreach ($instance->getInstructors() as $instructor) {
+            if ($instructor->getUid() === $user['uid']) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
-?>

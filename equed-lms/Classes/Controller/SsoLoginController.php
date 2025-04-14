@@ -1,36 +1,49 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Equed\EquedLms\Controller;
 
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Core\Http\RedirectResponse;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Log\LoggerInterface;
 
 class SsoLoginController extends ActionController
 {
     /**
-     * OAuth2 service URL
-     * (könnte auch per config eingebunden werden)
+     * OAuth2 login service URL
      */
     private const OAUTH_LOGIN_URL = 'https://auth.equed.eu/login';
 
     /**
-     * Redirect URL nach erfolgreicher Authentifizierung
+     * Callback after successful login
      */
     private const REDIRECT_URL = 'https://training.equed.eu/verify';
 
+    public function __construct(
+        protected readonly LoggerInterface $logger
+    ) {}
+
     /**
-     * Handle the SSO login process
+     * Handles SSO login and redirects to the OAuth2 service
      */
     public function loginAction(): ResponseInterface
     {
-        // Prüfen, ob User bereits eingeloggt ist
         if ($GLOBALS['TSFE']->fe_user->user) {
-            return new RedirectResponse($this->uriBuilder->uriFor('dashboard', [], 'Dashboard'));
+            $this->logger->info('SSO skipped – user already logged in.', [
+                'userId' => $GLOBALS['TSFE']->fe_user->user['uid'] ?? null
+            ]);
+
+            return new RedirectResponse(
+                $this->uriBuilder->reset()->uriFor('dashboard', [], 'Dashboard')
+            );
         }
 
-        // URL für OAuth-Login erzeugen und weiterleiten
         $authUrl = self::OAUTH_LOGIN_URL . '?redirect_uri=' . urlencode(self::REDIRECT_URL);
+
+        $this->logger->info('Redirecting to OAuth2 login.', ['targetUrl' => $authUrl]);
 
         return new RedirectResponse($authUrl);
     }

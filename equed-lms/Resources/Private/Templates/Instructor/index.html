@@ -1,0 +1,22 @@
+<f:section name="main">
+    <h1>{f:translate(key: 'assignedCourses.title')}</h1>
+
+    <f:if condition="{assignedCourses}">
+        <ul>
+            <f:for each="{assignedCourses}" as="course">
+                <li>
+                    <strong>{course.title}</strong><br>
+                    {f:translate(key: 'startDate')}: {course.startDate}<br>
+                    {f:translate(key: 'endDate')}: {course.endDate}<br>
+                    <f:link.action action="showParticipants" arguments="{courseInstanceId: course.uid}">
+                        {f:translate(key: 'viewParticipants')}
+                    </f:link.action>
+                </li>
+            </f:for>
+        </ul>
+    </f:if>
+
+    <f:else>
+        <p>{f:translate(key: 'noCoursesAssigned')}</p>
+    </f:else>
+</f:section>

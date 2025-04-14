@@ -2,82 +2,71 @@
 
 return [
     'ctrl' => [
-        'title' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:certificate',
+        'title' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:tx_equedlms_domain_model_certificate',
         'label' => 'code',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
         'cruser_id' => 'cruser_id',
-        'delete' => 'deleted',
-        'enablecolumns' => [
-            'disabled' => 'hidden',
-        ],
-        'searchFields' => 'code,note',
-        'iconfile' => 'EXT:equed_lms/Resources/Public/Icons/certificate.svg',
+        'iconfile' => 'EXT:equed_lms/Resources/Public/Icons/tx_equedlms_domain_model_certificate.svg',
     ],
     'types' => [
-        '1' => ['showitem' => 'code, user_course_record, issued_by, issued_at, is_revoked, note'],
+        '0' => [
+            'showitem' => '
+                --div--;Certificate,
+                    code, note, issued_at, is_revoked, is_verified,
+                --div--;Relations,
+                    user_course_record, issued_by
+            ',
+        ],
     ],
     'columns' => [
-        'hidden' => [
-            'exclude' => true,
-            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.hidden',
-            'config' => [
-                'type' => 'check',
-            ],
-        ],
         'code' => [
-            'exclude' => false,
-            'label' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:certificate.code',
+            'label' => 'Certificate Code',
             'config' => [
                 'type' => 'input',
-                'eval' => 'trim,required',
+                'required' => true,
+                'eval' => 'trim',
             ],
         ],
-        'user_course_record' => [
-            'exclude' => true,
-            'label' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:certificate.user_course_record',
+        'note' => [
+            'label' => 'Note',
             'config' => [
-                'type' => 'select',
+                'type' => 'text',
+                'rows' => 3,
+            ],
+        ],
+        'issued_at' => [
+            'label' => 'Issued At',
+            'config' => [
+                'type' => 'datetime',
+            ],
+        ],
+        'is_revoked' => [
+            'label' => 'Revoked',
+            'config' => ['type' => 'check'],
+        ],
+        'is_verified' => [
+            'label' => 'Verified',
+            'config' => ['type' => 'check'],
+        ],
+        'user_course_record' => [
+            'label' => 'User Course Record',
+            'config' => [
+                'type' => 'group',
+                'internal_type' => 'db',
                 'foreign_table' => 'tx_equedlms_domain_model_usercourserecord',
-                'minitems' => 1,
+                'minitems' => 0,
                 'maxitems' => 1,
             ],
         ],
         'issued_by' => [
-            'exclude' => true,
-            'label' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:certificate.issued_by',
+            'label' => 'Issued By',
             'config' => [
-                'type' => 'group',
-                'internal_type' => 'db',
-                'allowed' => 'fe_users',
-                'size' => 1,
-                'maxitems' => 1,
+                'type' => 'select',
+                'renderType' => 'selectSingle',
+                'foreign_table' => 'fe_users',
                 'minitems' => 0,
-            ],
-        ],
-        'issued_at' => [
-            'exclude' => true,
-            'label' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:certificate.issued_at',
-            'config' => [
-                'type' => 'datetime',
-                'dbType' => 'datetime',
-            ],
-        ],
-        'is_revoked' => [
-            'exclude' => true,
-            'label' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:certificate.is_revoked',
-            'config' => [
-                'type' => 'check',
-                'default' => 0,
-            ],
-        ],
-        'note' => [
-            'exclude' => true,
-            'label' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:certificate.note',
-            'config' => [
-                'type' => 'text',
-                'cols' => 40,
-                'rows' => 3,
+                'maxitems' => 1,
             ],
         ],
     ],

@@ -7,15 +7,18 @@ namespace Equed\EquedLms\Domain\Model;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
+use TYPO3\CMS\Extbase\Annotation\ORM\Lazy;
 
 /**
- * Represents an official EquEd Training Center.
+ * Offizieller Ausbildungsort (EquEd Training Center).
  *
- * Centers are assigned unique IDs and linked to instructors, courses and certifiers.
- * This model supports geo-location, rating, and status for QMS and public visibility.
+ * Wird einem Certifier zugewiesen und kann Kurse, Bewertungen und Zertifizierungen durchführen.
+ * Unterstützt Geodaten für Zuordnungen und Status-Management für QMS-Prozesse.
  */
 class Center extends AbstractEntity
 {
+    protected int $pid = 0;
+
     protected string $name = '';
 
     protected string $street = '';
@@ -32,30 +35,41 @@ class Center extends AbstractEntity
 
     protected string $centerId = '';
 
+    #[Lazy]
     protected ?FileReference $logo = null;
 
+    #[Lazy]
     protected ?FrontendUser $certifier = null;
 
     /**
-     * Current status of the training center.
-     * Options: active, suspended, under_review
+     * Status des Centers (z. B. active, suspended, under_review)
      */
     protected string $status = 'active';
 
     /**
-     * Latitude coordinate (e.g. 48.13743)
+     * Breitengrad für Geodaten (z. B. 48.13743)
      */
     protected float $latitude = 0.0;
 
     /**
-     * Longitude coordinate (e.g. 11.57549)
+     * Längengrad für Geodaten (z. B. 11.57549)
      */
     protected float $longitude = 0.0;
 
     /**
-     * Optional average rating (from feedback)
+     * Durchschnittsbewertung (aus Feedbacks berechnet)
      */
     protected float $ratingAverage = 0.0;
+
+    public function getPid(): int
+    {
+        return $this->pid;
+    }
+
+    public function setPid(int $pid): void
+    {
+        $this->pid = $pid;
+    }
 
     public function getName(): string
     {

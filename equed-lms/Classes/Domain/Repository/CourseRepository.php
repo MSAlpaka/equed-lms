@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Equed\EquedLms\Domain\Repository;
 
 use Equed\EquedLms\Domain\Model\Course;
+use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
+use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\Repository;
 
 /**
@@ -19,15 +21,13 @@ class CourseRepository extends Repository
      */
     public function findAllVisible(): array
     {
-        return $this->createQuery()
-            ->matching(
-                $this->createQuery()->logicalAnd([
-                    $this->createQuery()->equals('active', true),
-                    $this->createQuery()->equals('visible', true),
-                ])
-            )
-            ->execute()
-            ->toArray();
+        $query = $this->createQuery();
+        return $query->matching(
+            $query->logicalAnd([
+                $query->equals('active', true),
+                $query->equals('visible', true),
+            ])
+        )->execute()->toArray();
     }
 
     /**
@@ -38,60 +38,29 @@ class CourseRepository extends Repository
      */
     public function findByCenter(int $centerId): array
     {
-        return $this->createQuery()
+        $query = $this->createQuery();
+        return $query
             ->matching(
-                $this->createQuery()->equals('center', $centerId)
+                $query->equals('center', $centerId)
             )
             ->execute()
             ->toArray();
     }
 
     /**
-     * Find one course by course code
+     * Find all courses where the given user is an instructor
      *
-     * @param string $courseCode
-     * @return Course|null
-     */
-    public function findOneByCourseCode(string $courseCode): ?Course
-    {
-        return $this->createQuery()
-            ->matching(
-                $this->createQuery()->equals('courseCode', $courseCode)
-            )
-            ->setLimit(1)
-            ->execute()
-            ->getFirst();
-    }
-
-    /**
-     * Find all courses for a specific instructor
-     *
-     * @param \Equed\EquedLms\Domain\Model\User $instructor
+     * @param FrontendUser $user
      * @return Course[]
      */
-    public function findAssignedCoursesByInstructor($instructor): array
+    public function findByInstructor(FrontendUser $user): array
     {
-        return $this->createQuery()
+        $query = $this->createQuery();
+        return $query
             ->matching(
-                $this->createQuery()->equals('instructor', $instructor)
-            )
-            ->execute()
-            ->toArray();
-    }
-
-    /**
-     * Find all courses that require external validation
-     *
-     * @return Course[]
-     */
-    public function findCoursesRequiringValidation(): array
-    {
-        return $this->createQuery()
-            ->matching(
-                $this->createQuery()->equals('requiresExternalValidation', true)
+                $query->contains('instructors', $user)
             )
             ->execute()
             ->toArray();
     }
 }
-?>

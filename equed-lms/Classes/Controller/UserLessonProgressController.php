@@ -1,24 +1,22 @@
 <?php
 
-namespace Equed\EquedLms\Controller;
+declare(strict_types=1);
+
+namespace EquedLms\Controller;
 
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
-use Equed\EquedLms\Domain\Repository\UserLessonProgressRepository;
+use EquedLms\Domain\Repository\UserLessonProgressRepository;
 use TYPO3\CMS\Core\Error\Http\PageNotFoundException;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Log\LogManager;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use Psr\Log\LoggerInterface;
+use Psr\Http\Message\ResponseInterface;
 
-/**
- * Controller for handling lesson progress of users
- */
 class UserLessonProgressController extends ActionController
 {
-    protected UserLessonProgressRepository $userLessonProgressRepository;
-
-    public function __construct(UserLessonProgressRepository $userLessonProgressRepository)
-    {
-        $this->userLessonProgressRepository = $userLessonProgressRepository;
-    }
+    public function __construct(
+        protected readonly UserLessonProgressRepository $userLessonProgressRepository,
+        protected readonly LoggerInterface $logger
+    ) {}
 
     /**
      * Display progress overview for a specific user
@@ -26,7 +24,7 @@ class UserLessonProgressController extends ActionController
      * @param int $userId ID of the user whose progress is shown
      * @throws PageNotFoundException if access is denied
      */
-    public function indexAction(int $userId): void
+    public function indexAction(int $userId): ResponseInterface
     {
         if (!$this->isCurrentUser($userId)) {
             $this->logUnauthorizedAccess($userId, 'indexAction');
@@ -35,6 +33,8 @@ class UserLessonProgressController extends ActionController
 
         $progress = $this->userLessonProgressRepository->findCompletedByUser($userId);
         $this->view->assign('progress', $progress);
+
+        return $this->htmlResponse();
     }
 
     /**
@@ -44,7 +44,7 @@ class UserLessonProgressController extends ActionController
      * @param int $lessonId ID of the lesson
      * @throws PageNotFoundException if lesson progress not found or access is denied
      */
-    public function showAction(int $userId, int $lessonId): void
+    public function showAction(int $userId, int $lessonId): ResponseInterface
     {
         if (!$this->isCurrentUser($userId)) {
             $this->logUnauthorizedAccess($userId, 'showAction');
@@ -54,17 +54,19 @@ class UserLessonProgressController extends ActionController
         $lessonProgress = $this->userLessonProgressRepository->findByUserAndLesson($userId, $lessonId);
 
         if ($lessonProgress === null) {
+            $this->logger->warning('Lesson progress not found', [
+                'userId' => $userId,
+                'lessonId' => $lessonId
+            ]);
             throw new PageNotFoundException('Lesson progress not found.');
         }
 
         $this->view->assign('lessonProgress', $lessonProgress);
+        return $this->htmlResponse();
     }
 
     /**
      * Checks if the given userId belongs to the currently logged-in frontend user
-     *
-     * @param int $userId
-     * @return bool
      */
     protected function isCurrentUser(int $userId): bool
     {
@@ -74,17 +76,12 @@ class UserLessonProgressController extends ActionController
 
     /**
      * Logs an unauthorized access attempt
-     *
-     * @param int $targetUserId
-     * @param string $action
-     * @return void
      */
     protected function logUnauthorizedAccess(int $targetUserId, string $action): void
     {
-        $logger = GeneralUtility::makeInstance(LogManager::class)->getLogger(__CLASS__);
         $currentUserId = (int)($GLOBALS['TSFE']->fe_user->user['uid'] ?? 0);
 
-        $logger->warning(sprintf(
+        $this->logger->warning(sprintf(
             'Unauthorized access attempt in %s by user %d to data of user %d.',
             $action,
             $currentUserId,

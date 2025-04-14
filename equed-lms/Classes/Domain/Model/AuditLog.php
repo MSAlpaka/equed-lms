@@ -6,54 +6,43 @@ namespace Equed\EquedLms\Domain\Model;
 
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
-use TYPO3\CMS\Extbase\Annotation\ORM as Extbase;
+use TYPO3\CMS\Extbase\Annotation\ORM\Lazy;
 
 /**
- * This model logs significant user actions in the LMS for audit and QMS purposes.
+ * Zeichnet wichtige Benutzeraktionen im LMS auf – für Nachvollziehbarkeit und QMS.
  *
- * Examples:
- * - Course completion
- * - Exam attempt
- * - Certification issued
- * - QMS Incident created
+ * Beispiele:
+ * - Kursabschluss
+ * - Prüfungsversuch
+ * - Zertifikatserstellung
+ * - QMS-Fall eröffnet
  */
 class AuditLog extends AbstractEntity
 {
-    /**
-     * @var FrontendUser|null
-     * @Extbase\Lazy
-     */
+    protected int $pid = 0;
+
+    #[Lazy]
     protected ?FrontendUser $feUser = null;
 
-    /**
-     * @var string
-     */
     protected string $action = '';
 
-    /**
-     * @var int
-     */
     protected int $relatedId = 0;
 
-    /**
-     * @var string
-     */
     protected string $relatedType = '';
 
-    /**
-     * @var string
-     */
     protected string $comment = '';
 
-    /**
-     * @var \DateTimeInterface|null
-     */
-    protected ?\DateTimeInterface $timestamp = null;
+    protected ?\DateTimeImmutable $timestamp = null;
 
-    /**
-     * @var int
-     */
-    protected int $pid = 0;
+    public function getPid(): int
+    {
+        return $this->pid;
+    }
+
+    public function setPid(int $pid): void
+    {
+        $this->pid = $pid;
+    }
 
     public function getFeUser(): ?FrontendUser
     {
@@ -105,23 +94,13 @@ class AuditLog extends AbstractEntity
         $this->comment = $comment;
     }
 
-    public function getTimestamp(): ?\DateTimeInterface
+    public function getTimestamp(): ?\DateTimeImmutable
     {
         return $this->timestamp;
     }
 
-    public function setTimestamp(?\DateTimeInterface $timestamp): void
+    public function setTimestamp(?\DateTimeImmutable $timestamp): void
     {
         $this->timestamp = $timestamp;
-    }
-
-    public function getPid(): int
-    {
-        return $this->pid;
-    }
-
-    public function setPid(int $pid): void
-    {
-        $this->pid = $pid;
     }
 }

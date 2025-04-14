@@ -4,15 +4,17 @@ declare(strict_types=1);
 
 namespace Equed\EquedLms\Service;
 
-use DateTimeImmutable;
 use Mpdf\Mpdf;
 use Mpdf\Output\Destination;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Mime\Email;
 use Symfony\Component\Mailer\MailerInterface;
 use TYPO3\CMS\Core\Core\Environment;
+use TYPO3\CMS\Core\Localization\LanguageService;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use Equed\EquedLms\Domain\Model\UserCourseRecord;
+use Equed\EquedLms\Domain\Repository\UserCourseRecordRepository;
 use Equed\EquedLms\Event\CertificateIssuedEvent;
 
 class CertificateService
@@ -22,7 +24,8 @@ class CertificateService
     public function __construct(
         private readonly MailerInterface $mailer,
         private readonly LoggerInterface $logger,
-        private readonly EventDispatcherInterface $eventDispatcher
+        private readonly EventDispatcherInterface $eventDispatcher,
+        private readonly UserCourseRecordRepository $userCourseRecordRepository
     ) {
         $this->certificateDir = Environment::getPublicPath() . '/fileadmin/user_upload/certificates/';
         if (!is_dir($this->certificateDir)) {
@@ -30,85 +33,56 @@ class CertificateService
         }
     }
 
-    public function generateCertificate(int $userId, int $courseId): string
+    public function generateCertificate(UserCourseRecord $record): string
     {
-        $fileName = sprintf('certificate_%d_%d.pdf', $userId, $courseId);
+        $userId = $record->getUser()->getUid();
+        $courseId = $record->getCourseInstance()->getUid();
+
+        $code = sprintf('EQD-%06d-%06d-%s', $userId, $courseId, date('Ymd'));
+        $fileName = sprintf('%s.pdf', $code);
         $filePath = $this->certificateDir . $fileName;
 
         try {
+            // PDF erzeugen
             $mpdf = new Mpdf();
+
+            $courseTitle = $record->getCourseInstance()->getProgram()->getTitle();
+            $userName = $record->getUser()->getName() ?? 'Teilnehmende*r';
 
             $title = $this->translate('pdf.title');
             $text = str_replace(
-                ['{userId}', '{courseId}'],
-                [(string)$userId, (string)$courseId],
+                ['{user}', '{course}', '{code}'],
+                [$userName, $courseTitle, $code],
                 $this->translate('pdf.text')
             );
 
-            $html = '<h1>' . $title . '</h1><p>' . $text . '</p>';
+            $html = '<h1>' . $title . '</h1><p>' . nl2br($text) . '</p>';
             $mpdf->WriteHTML($html);
             $mpdf->Output($filePath, Destination::FILE);
 
-            $this->saveCertificateStatus($userId, $courseId, $filePath);
+            // Werte in Record speichern
+            $record->setCertificateCode($code);
+            $record->setCertificateIssuedAt(new \DateTimeImmutable());
 
-            return $filePath;
-        } catch (\Throwable $e) {
-            $this->logger->error('Certificate generation failed', [
-                'exception' => $e,
-                'userId' => $userId,
-                'courseId' => $courseId,
-            ]);
-            throw new \RuntimeException('Certificate could not be generated.');
-        }
-    }
+            // Persistieren
+            $this->userCourseRecordRepository->update($record);
 
-    public function sendCertificate(int $userId, int $courseId, string $email): bool
-    {
-        try {
-            $pdfPath = $this->generateCertificate($userId, $courseId);
-
-            $subject = str_replace('{courseId}', (string)$courseId, $this->translate('email.subject'));
-            $body = $this->translate('email.body');
-
-            $mail = (new Email())
-                ->from('certificates@equed.eu')
-                ->to($email)
-                ->subject($subject)
-                ->text($body)
-                ->attachFromPath($pdfPath, basename($pdfPath), 'application/pdf');
-
-            $this->mailer->send($mail);
-
+            // Event auslösen
             $this->eventDispatcher->dispatch(
-                new CertificateIssuedEvent($userId, $courseId, $pdfPath)
+                new CertificateIssuedEvent($record, $filePath, $code)
             );
 
-            return true;
+            return $filePath;
+
         } catch (\Throwable $e) {
-            $this->logger->error('Certificate sending failed', [
-                'exception' => $e,
-                'userId' => $userId,
-                'courseId' => $courseId,
-            ]);
-            return false;
+            $this->logger->error('Certificate generation failed: ' . $e->getMessage());
+            return '';
         }
     }
 
-    private function saveCertificateStatus(int $userId, int $courseId, string $pdfPath): void
+    private function translate(string $key, array $arguments = [], string $languageKey = null): string
     {
-        $status = [
-            'userId' => $userId,
-            'courseId' => $courseId,
-            'file' => basename($pdfPath),
-            'timestamp' => (new DateTimeImmutable())->format(DATE_ATOM),
-        ];
-
-        $statusFile = $this->certificateDir . 'status_' . $userId . '_' . $courseId . '.json';
-        file_put_contents($statusFile, json_encode($status, JSON_PRETTY_PRINT));
-    }
-
-    private function translate(string $key): string
-    {
-        return LocalizationUtility::translate($key, 'equed_lms') ?? '[LL missing] ' . $key;
+        return LocalizationUtility::translate($key, 'equed_lms', $arguments, $languageKey)
+            ?? '[[' . $key . ']]';
     }
 }

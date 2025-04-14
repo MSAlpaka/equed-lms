@@ -6,75 +6,66 @@ namespace Equed\EquedLms\Domain\Model;
 
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
+use TYPO3\CMS\Extbase\Annotation\ORM\Lazy;
 
 /**
- * Represents a single quiz or exam attempt by a user for a specific question.
- * 
- * Tracks answers, correctness, mode and reviewer feedback.
+ * Einzelner Prüfungs- oder Quizversuch eines Teilnehmenden.
+ *
+ * Enthält Antwort, Korrektheit, Versuchsnummer, Modus, Zeitstempel und optionales Feedback.
  */
 class ExamAttempt extends AbstractEntity
 {
-    /**
-     * User who submitted the answer
-     */
-    protected FrontendUser $user;
+    protected int $pid = 0;
 
-    /**
-     * The related quiz question
-     */
-    protected QuizQuestion $quizQuestion;
+    #[Lazy]
+    protected ?FrontendUser $user = null;
 
-    /**
-     * Raw answer given by the user (can be string or JSON)
-     */
+    #[Lazy]
+    protected ?QuizQuestion $quizQuestion = null;
+
     protected string $givenAnswer = '';
 
-    /**
-     * Was the answer correct?
-     */
     protected bool $correct = false;
 
-    /**
-     * When was the answer submitted?
-     */
-    protected ?\DateTime $timestamp = null;
+    protected ?\DateTimeImmutable $timestamp = null;
 
-    /**
-     * Attempt number (e.g. 1 for first attempt)
-     */
     protected int $attemptNumber = 1;
 
     /**
-     * Mode of the attempt: practice, final, retake
+     * Modus z. B. 'practice', 'final', 'retake'
      */
     protected string $mode = 'practice';
 
-    /**
-     * Optional reviewer comment
-     */
     protected string $reviewComment = '';
 
-    /**
-     * Was the attempt manually reviewed?
-     */
     protected bool $isReviewed = false;
 
-    public function getUser(): FrontendUser
+    public function getPid(): int
+    {
+        return $this->pid;
+    }
+
+    public function setPid(int $pid): void
+    {
+        $this->pid = $pid;
+    }
+
+    public function getUser(): ?FrontendUser
     {
         return $this->user;
     }
 
-    public function setUser(FrontendUser $user): void
+    public function setUser(?FrontendUser $user): void
     {
         $this->user = $user;
     }
 
-    public function getQuizQuestion(): QuizQuestion
+    public function getQuizQuestion(): ?QuizQuestion
     {
         return $this->quizQuestion;
     }
 
-    public function setQuizQuestion(QuizQuestion $quizQuestion): void
+    public function setQuizQuestion(?QuizQuestion $quizQuestion): void
     {
         $this->quizQuestion = $quizQuestion;
     }
@@ -99,12 +90,12 @@ class ExamAttempt extends AbstractEntity
         $this->correct = $correct;
     }
 
-    public function getTimestamp(): ?\DateTime
+    public function getTimestamp(): ?\DateTimeImmutable
     {
         return $this->timestamp;
     }
 
-    public function setTimestamp(?\DateTime $timestamp): void
+    public function setTimestamp(?\DateTimeImmutable $timestamp): void
     {
         $this->timestamp = $timestamp;
     }

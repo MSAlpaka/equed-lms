@@ -2,140 +2,69 @@
 
 declare(strict_types=1);
 
-namespace EquedLms\Controller\Backend;
+namespace Equed\EquedLms\Domain\Model;
 
-use EquedLms\Domain\Model\Center;
-use EquedLms\Domain\Repository\CenterRepository;
-use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
-use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
-use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
-use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
-use TYPO3\CMS\Core\Exception\AccessDeniedException;
-use Psr\Log\LoggerInterface;
+use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
+use TYPO3\CMS\Extbase\Domain\Model\FileReference;
+use TYPO3\CMS\Extbase\Annotation\ORM\Lazy;
 
-class CenterController extends ActionController
+/**
+ * Offizieller Ausbildungsort (EquEd Training Center).
+ */
+class Center extends AbstractEntity
 {
-    public function __construct(
-        protected readonly CenterRepository $centerRepository,
-        protected readonly PersistenceManager $persistenceManager,
-        protected readonly LoggerInterface $logger
-    ) {}
+    protected int $pid = 0;
 
-    /**
-     * Prüft den Zugriff: Nur Admins dürfen diese Funktionen aufrufen.
-     *
-     * @throws AccessDeniedException
-     */
-    protected function checkAccess(): void
-    {
-        $backendUser = $this->getBackendUser();
-        if (!$backendUser->isAdmin()) {
-            throw new AccessDeniedException('Zugriff verweigert: Nur Administratoren haben Zugriff auf diese Funktion.');
-        }
-    }
+    protected string $name = '';
+    protected string $street = '';
+    protected string $zip = '';
+    protected string $city = '';
+    protected string $country = '';
+    protected string $region = '';
+    protected string $website = '';
+    protected string $centerId = '';
+    protected string $status = '';
+    protected ?float $latitude = null;
+    protected ?float $longitude = null;
 
-    /**
-     * Gibt den aktuellen Backend-User zurück.
-     */
-    protected function getBackendUser(): BackendUserAuthentication
-    {
-        return $GLOBALS['BE_USER'];
-    }
+    #[Lazy]
+    protected ?FileReference $logo = null;
 
-    /**
-     * Zeigt alle Ausbildungszentren an.
-     */
-    public function indexAction(): void
-    {
-        $this->checkAccess();
+    public function getPid(): int { return $this->pid; }
 
-        $centers = $this->centerRepository->findAllCenters();
-        $this->view->assign('centers', $centers);
+    public function getName(): string { return $this->name; }
+    public function setName(string $name): void { $this->name = $name; }
 
-        $this->logger->info('Alle Ausbildungszentren angezeigt', ['count' => count($centers)]);
-    }
+    public function getStreet(): string { return $this->street; }
+    public function setStreet(string $street): void { $this->street = $street; }
 
-    /**
-     * Zeigt das Formular zur Erstellung eines neuen Ausbildungszentrums.
-     */
-    public function newAction(): void
-    {
-        $this->checkAccess();
+    public function getZip(): string { return $this->zip; }
+    public function setZip(string $zip): void { $this->zip = $zip; }
 
-        $center = new Center();
-        $this->view->assign('center', $center);
-    }
+    public function getCity(): string { return $this->city; }
+    public function setCity(string $city): void { $this->city = $city; }
 
-    /**
-     * Erstellt ein neues Ausbildungszentrum.
-     */
-    public function createAction(Center $center): void
-    {
-        $this->checkAccess();
+    public function getCountry(): string { return $this->country; }
+    public function setCountry(string $country): void { $this->country = $country; }
 
-        $this->centerRepository->add($center);
-        $this->persistenceManager->persistAll();
+    public function getRegion(): string { return $this->region; }
+    public function setRegion(string $region): void { $this->region = $region; }
 
-        $this->addFlashMessage(
-            LocalizationUtility::translate('msg.center_created', 'equed_lms') ?? 'Center erfolgreich erstellt.',
-            '',
-            \TYPO3\CMS\Core\Messaging\AbstractMessage::OK
-        );
+    public function getWebsite(): string { return $this->website; }
+    public function setWebsite(string $website): void { $this->website = $website; }
 
-        $this->logger->info('Neues Ausbildungszentrum erstellt', ['id' => $center->getUid()]);
+    public function getCenterId(): string { return $this->centerId; }
+    public function setCenterId(string $centerId): void { $this->centerId = $centerId; }
 
-        $this->redirect('index');
-    }
+    public function getStatus(): string { return $this->status; }
+    public function setStatus(string $status): void { $this->status = $status; }
 
-    /**
-     * Zeigt das Bearbeitungsformular für ein bestehendes Ausbildungszentrum.
-     */
-    public function editAction(Center $center): void
-    {
-        $this->checkAccess();
+    public function getLatitude(): ?float { return $this->latitude; }
+    public function setLatitude(?float $latitude): void { $this->latitude = $latitude; }
 
-        $this->view->assign('center', $center);
-    }
+    public function getLongitude(): ?float { return $this->longitude; }
+    public function setLongitude(?float $longitude): void { $this->longitude = $longitude; }
 
-    /**
-     * Aktualisiert ein bestehendes Ausbildungszentrum.
-     */
-    public function updateAction(Center $center): void
-    {
-        $this->checkAccess();
-
-        $this->centerRepository->update($center);
-        $this->persistenceManager->persistAll();
-
-        $this->addFlashMessage(
-            LocalizationUtility::translate('msg.center_updated', 'equed_lms') ?? 'Center erfolgreich aktualisiert.',
-            '',
-            \TYPO3\CMS\Core\Messaging\AbstractMessage::OK
-        );
-
-        $this->logger->info('Ausbildungszentrum aktualisiert', ['id' => $center->getUid()]);
-
-        $this->redirect('index');
-    }
-
-    /**
-     * Löscht ein Ausbildungszentrum.
-     */
-    public function deleteAction(Center $center): void
-    {
-        $this->checkAccess();
-
-        $this->centerRepository->remove($center);
-        $this->persistenceManager->persistAll();
-
-        $this->addFlashMessage(
-            LocalizationUtility::translate('msg.center_deleted', 'equed_lms') ?? 'Center erfolgreich gelöscht.',
-            '',
-            \TYPO3\CMS\Core\Messaging\AbstractMessage::WARNING
-        );
-
-        $this->logger->info('Ausbildungszentrum gelöscht', ['id' => $center->getUid()]);
-
-        $this->redirect('index');
-    }
+    public function getLogo(): ?FileReference { return $this->logo; }
+    public function setLogo(?FileReference $logo): void { $this->logo = $logo; }
 }

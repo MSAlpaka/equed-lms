@@ -2,17 +2,19 @@
 
 declare(strict_types=1);
 
-namespace Equed\EquedLms\Controller;
+namespace EquedLms\Controller;
 
-use Equed\EquedLms\Domain\Model\Certificate;
-use Equed\EquedLms\Domain\Model\UserCourseRecord;
-use Equed\EquedLms\Domain\Repository\CertificateRepository;
-use Equed\EquedLms\Domain\Repository\UserCourseRecordRepository;
+use EquedLms\Domain\Model\Certificate;
+use EquedLms\Domain\Model\UserCourseRecord;
+use EquedLms\Domain\Repository\CertificateRepository;
+use EquedLms\Domain\Repository\UserCourseRecordRepository;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Authentication\FrontendUserAuthentication;
 use TYPO3\CMS\Core\Exception\AccessDeniedException;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use Psr\Log\LoggerInterface;
+use Psr\Http\Message\ResponseInterface;
 use Mpdf\Mpdf;
 
 class CertificateController extends ActionController
@@ -24,11 +26,11 @@ class CertificateController extends ActionController
     ) {}
 
     /**
-     * Zeigt eine Zertifikatsvorschau an.
+     * Displays the certificate preview as a frontend card.
      *
      * @throws AccessDeniedException
      */
-    public function showCardAction(UserCourseRecord $record): void
+    public function showCardAction(UserCourseRecord $record): ResponseInterface
     {
         $this->ensureAccess($record);
 
@@ -37,17 +39,19 @@ class CertificateController extends ActionController
 
         $this->logger->info('Certificate preview shown', [
             'recordId' => $record->getUid(),
-            'userId' => $GLOBALS['TSFE']->fe_user->user['uid'] ?? null,
+            'userId' => $this->getFrontendUserId()
         ]);
 
         $this->view->assignMultiple([
             'certificate' => $certificate,
             'record' => $record,
         ]);
+
+        return $this->htmlResponse();
     }
 
     /**
-     * Erstellt ein PDF-Zertifikat und gibt es direkt aus.
+     * Generates and streams a PDF certificate file.
      *
      * @throws AccessDeniedException
      */
@@ -66,19 +70,43 @@ class CertificateController extends ActionController
 
         $fileName = 'Certificate_' . $certificate->getCode() . '.pdf';
 
-        $this->logger->info('Certificate PDF downloaded', [
+        $this->logger->info('Certificate PDF generated/downloaded', [
             'recordId' => $record->getUid(),
+            'userId' => $this->getFrontendUserId(),
             'code' => $certificate->getCode(),
-            'userId' => $GLOBALS['TSFE']->fe_user->user['uid'] ?? null,
         ]);
 
-        // PDF direkt ausgeben und Script beenden
         $mpdf->Output($fileName, \Mpdf\Output\Destination::INLINE);
-        exit; // intentional: stop script after direct output
+        exit;
     }
 
     /**
-     * Erstellt ein temporäres Platzhalter-Zertifikat.
+     * Returns the currently logged-in frontend user ID.
+     */
+    protected function getFrontendUserId(): int
+    {
+        return (int)($GLOBALS['TSFE']->fe_user->user['uid'] ?? 0);
+    }
+
+    /**
+     * Checks access to a certificate by user session.
+     *
+     * @throws AccessDeniedException
+     */
+    protected function ensureAccess(UserCourseRecord $record): void
+    {
+        $userId = $this->getFrontendUserId();
+        if ($record->getUser()?->getUid() !== $userId) {
+            $this->logger->warning('Unauthorized certificate access attempt', [
+                'recordId' => $record->getUid(),
+                'userId' => $userId
+            ]);
+            throw new AccessDeniedException('Access denied to this certificate.');
+        }
+    }
+
+    /**
+     * Creates a temporary certificate if none exists.
      */
     protected function createPlaceholderCertificate(UserCourseRecord $record): Certificate
     {
@@ -86,47 +114,15 @@ class CertificateController extends ActionController
         $certificate->setCode($record->getCertificateCode());
         $certificate->setUserCourseRecord($record);
         $certificate->setIssuedAt($record->getCompletionDate());
-        $certificate->setIssuedBy($record->getInstructor());
         return $certificate;
     }
 
     /**
-     * Zugriffsschutz: Nur Teilnehmende oder zugewiesene Instructoren dürfen das Zertifikat sehen.
-     *
-     * @throws AccessDeniedException
-     */
-    protected function ensureAccess(UserCourseRecord $record): void
-    {
-        $feUser = $this->getFrontendUser();
-        $userId = $feUser?->user['uid'] ?? null;
-
-        $isOwner = $record->getFrontendUser()?->getUid() === $userId;
-        $isInstructor = $record->getInstructor()?->getUid() === $userId;
-
-        if (!$isOwner && !$isInstructor) {
-            throw new AccessDeniedException('Kein Zugriff auf dieses Zertifikat.');
-        }
-    }
-
-    protected function getFrontendUser(): ?FrontendUserAuthentication
-    {
-        return $GLOBALS['TSFE']->fe_user ?? null;
-    }
-
-    /**
-     * Baut den HTML-Inhalt für das PDF-Zertifikat.
+     * Renders the PDF HTML content.
      */
     protected function generatePdfHtml(Certificate $certificate, UserCourseRecord $record): string
     {
-        return '
-            <html><body style="text-align:center;">
-                <h1>Certificate of Completion</h1>
-                <p>This certifies that <strong>' . htmlspecialchars($record->getFrontendUser()?->getFullName() ?? '') . '</strong></p>
-                <p>has successfully completed the course</p>
-                <h2>' . htmlspecialchars($record->getCourseInstance()?->getTitle() ?? '') . '</h2>
-                <p>Issued on: ' . $certificate->getIssuedAt()?->format('Y-m-d') . '</p>
-                <p>Certificate Code: ' . $certificate->getCode() . '</p>
-            </body></html>
-        ';
+        // Replace with actual rendering logic, e.g. using FluidStandaloneView
+        return '<h1>EquEd Certificate</h1><p>Code: ' . htmlspecialchars($certificate->getCode()) . '</p>';
     }
 }

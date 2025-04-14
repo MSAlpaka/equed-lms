@@ -7,63 +7,56 @@ namespace Equed\EquedLms\Domain\Model;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
+use TYPO3\CMS\Extbase\Annotation\ORM\Lazy;
 
 /**
- * Represents an instructor in the EquEd LMS.
- * 
- * Instructors can be assigned to centers, courses and learners. They can be verified and filtered by specialty or availability.
+ * Repräsentiert einen Instructor (Ausbilder) im EquEd-LMS.
+ *
+ * Instructoren sind mit einem FE-User verbunden und können einer Schule, einem Level,
+ * bestimmten Spezialisierungen sowie Buchbarkeitsstatus zugewiesen werden.
  */
 class Instructor extends AbstractEntity
 {
-    /**
-     * Associated frontend user
-     */
+    protected int $pid = 0;
+
+    #[Lazy]
     protected FrontendUser $user;
 
-    /**
-     * Optional profile image
-     */
+    #[Lazy]
     protected ?FileReference $image = null;
 
-    /**
-     * Freitext-Biografie oder Vorstellung
-     */
     protected string $bio = '';
 
     /**
-     * Komma-separierte Specialties (e.g. "donkey,transition")
+     * Komma-separierte Specialties, z. B. „donkey,transition“
      */
     protected string $specialties = '';
 
-    /**
-     * Ist der Instructor offiziell verifiziert?
-     */
     protected bool $verified = false;
 
     /**
-     * Instructor level (e.g. basic, senior, lead)
+     * Instructor-Level: basic, senior, lead …
      */
     protected string $level = 'basic';
 
-    /**
-     * Darf co-teaching durchführen
-     */
     protected bool $canCoTeach = false;
 
-    /**
-     * Optional: Verfügbar für neue Buchungen
-     */
     protected bool $availableForBooking = true;
 
-    /**
-     * Ausbildungszentrum, dem der Instructor zugewiesen ist
-     */
+    #[Lazy]
     protected ?Center $center = null;
 
-    /**
-     * Datum des Instructor-Status
-     */
-    protected ?\DateTime $activeSince = null;
+    protected ?\DateTimeImmutable $activeSince = null;
+
+    public function getPid(): int
+    {
+        return $this->pid;
+    }
+
+    public function setPid(int $pid): void
+    {
+        $this->pid = $pid;
+    }
 
     public function getUser(): FrontendUser
     {
@@ -125,7 +118,7 @@ class Instructor extends AbstractEntity
         $this->level = $level;
     }
 
-    public function isCanCoTeach(): bool
+    public function canCoTeach(): bool
     {
         return $this->canCoTeach;
     }
@@ -155,12 +148,12 @@ class Instructor extends AbstractEntity
         $this->center = $center;
     }
 
-    public function getActiveSince(): ?\DateTime
+    public function getActiveSince(): ?\DateTimeImmutable
     {
         return $this->activeSince;
     }
 
-    public function setActiveSince(?\DateTime $activeSince): void
+    public function setActiveSince(?\DateTimeImmutable $activeSince): void
     {
         $this->activeSince = $activeSince;
     }

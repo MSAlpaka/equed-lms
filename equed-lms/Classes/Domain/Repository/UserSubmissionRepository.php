@@ -13,36 +13,47 @@ use TYPO3\CMS\Extbase\Persistence\Repository;
 class UserSubmissionRepository extends Repository
 {
     /**
-     * Find all submissions for a given user and course
+     * Find all submissions that are pending (status = "submitted")
      *
-     * @param int $userId
-     * @param int $courseId
      * @return UserSubmission[]
      */
-    public function findByUserAndCourse(int $userId, int $courseId): array
+    public function findPending(): array
     {
-        return $this->createQuery()
+        $query = $this->createQuery();
+        return $query
             ->matching(
-                $this->createQuery()->logicalAnd([
-                    $this->createQuery()->equals('user', $userId),
-                    $this->createQuery()->equals('course', $courseId),
-                ])
+                $query->equals('status', 'submitted')
             )
             ->execute()
             ->toArray();
     }
 
     /**
-     * Find all submissions with status 'submitted'
+     * Optional: Find by UserCourseRecord ID (alternative zu findByUserAndCourse)
      *
+     * @param int $userCourseRecordId
      * @return UserSubmission[]
      */
-    public function findPending(): array
+    public function findByUserCourseRecord(int $userCourseRecordId): array
     {
-        return $this->createQuery()
-            ->matching(
-                $this->createQuery()->equals('status', 'submitted')
-            )
+        $query = $this->createQuery();
+        return $query
+            ->matching($query->equals('userCourseRecord', $userCourseRecordId))
+            ->execute()
+            ->toArray();
+    }
+
+    /**
+     * Optional: Find all submissions of a specific user
+     *
+     * @param int $userId
+     * @return UserSubmission[]
+     */
+    public function findByUser(int $userId): array
+    {
+        $query = $this->createQuery();
+        return $query
+            ->matching($query->equals('user', $userId))
             ->execute()
             ->toArray();
     }

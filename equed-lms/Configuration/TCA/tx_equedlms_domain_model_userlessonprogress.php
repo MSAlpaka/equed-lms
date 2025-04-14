@@ -2,90 +2,101 @@
 
 return [
     'ctrl' => [
-        'title' => 'User Lesson Progress',
+        'title' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:tx_equedlms_domain_model_userlessonprogress',
         'label' => 'lesson',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
         'cruser_id' => 'cruser_id',
-        'hideTable' => false,
         'iconfile' => 'EXT:equed_lms/Resources/Public/Icons/tx_equedlms_domain_model_userlessonprogress.svg',
     ],
     'types' => [
-        '0' => ['showitem' => '
-            --div--;General,
-                feUser, lesson, confirmed, quizScore, completed, progressPercent, startedAt, completedAt, lastVisitedAt, timeSpentInSeconds
-        '],
+        '0' => [
+            'showitem' => '
+                --div--;General,
+                    fe_user, lesson, confirmed, completed, quiz_score, progress_percent,
+                --div--;Time Tracking,
+                    started_at, completed_at, last_visited_at, time_spent_in_seconds
+            ',
+        ],
     ],
     'columns' => [
-        'feUser' => [
+        'fe_user' => [
             'label' => 'Frontend User',
             'config' => [
-                'type' => 'group',
-                'internal_type' => 'db',
-                'allowed' => 'fe_users',
-                'size' => 1,
+                'type' => 'select',
+                'foreign_table' => 'fe_users',
+                'renderType' => 'selectSingle',
+                'minitems' => 1,
                 'maxitems' => 1,
             ],
         ],
         'lesson' => [
             'label' => 'Lesson',
             'config' => [
-                'type' => 'group',
-                'internal_type' => 'db',
-                'allowed' => 'tx_equedlms_domain_model_lesson',
-                'size' => 1,
+                'type' => 'select',
+                'foreign_table' => 'tx_equedlms_domain_model_lesson',
+                'renderType' => 'selectSingle',
+                'minitems' => 1,
                 'maxitems' => 1,
             ],
         ],
         'confirmed' => [
-            'label' => 'Confirmed',
+            'label' => 'Confirmed by Instructor?',
             'config' => [
                 'type' => 'check',
-            ],
-        ],
-        'quizScore' => [
-            'label' => 'Quiz Score',
-            'config' => [
-                'type' => 'input',
-                'eval' => 'double2',
+                'default' => 0,
             ],
         ],
         'completed' => [
-            'label' => 'Completed',
+            'label' => 'Lesson Completed?',
             'config' => [
                 'type' => 'check',
+                'default' => 0,
             ],
         ],
-        'progressPercent' => [
-            'label' => 'Progress Percent',
+        'quiz_score' => [
+            'label' => 'Quiz Score (%)',
             'config' => [
-                'type' => 'input',
-                'eval' => 'double2',
+                'type' => 'number',
+                'default' => 0,
             ],
         ],
-        'startedAt' => [
+        'progress_percent' => [
+            'label' => 'Progress (%)',
+            'config' => [
+                'type' => 'number',
+                'default' => 0,
+            ],
+        ],
+        'started_at' => [
             'label' => 'Started At',
             'config' => [
-                'type' => 'datetime',
+                'type' => 'input',
+                'renderType' => 'inputDateTime',
+                'eval' => 'datetime',
             ],
         ],
-        'completedAt' => [
+        'completed_at' => [
             'label' => 'Completed At',
             'config' => [
-                'type' => 'datetime',
+                'type' => 'input',
+                'renderType' => 'inputDateTime',
+                'eval' => 'datetime',
             ],
         ],
-        'lastVisitedAt' => [
+        'last_visited_at' => [
             'label' => 'Last Visited At',
             'config' => [
-                'type' => 'datetime',
+                'type' => 'input',
+                'renderType' => 'inputDateTime',
+                'eval' => 'datetime',
             ],
         ],
-        'timeSpentInSeconds' => [
-            'label' => 'Time Spent (in seconds)',
+        'time_spent_in_seconds' => [
+            'label' => 'Time Spent (seconds)',
             'config' => [
-                'type' => 'input',
-                'eval' => 'int',
+                'type' => 'number',
+                'default' => 0,
             ],
         ],
     ],

@@ -10,27 +10,23 @@ use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Exception\AccessDeniedException;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use Psr\Log\LoggerInterface;
+use Psr\Http\Message\ResponseInterface;
 
 class AuditLogController extends ActionController
 {
-    protected AuditLogRepository $auditLogRepository;
-    protected LoggerInterface $logger;
-
     public function __construct(
-        AuditLogRepository $auditLogRepository,
-        LoggerInterface $logger
-    ) {
-        $this->auditLogRepository = $auditLogRepository;
-        $this->logger = $logger;
-    }
+        protected readonly AuditLogRepository $auditLogRepository,
+        protected readonly LoggerInterface $logger
+    ) {}
 
     /**
      * Lists all audit logs for a specific user.
      *
      * @throws AccessDeniedException
      */
-    public function indexAction(int $userId): void
+    public function indexAction(int $userId): ResponseInterface
     {
         $this->ensureBackendAccess();
 
@@ -38,8 +34,8 @@ class AuditLogController extends ActionController
 
         if ($auditLogs->count() === 0) {
             $this->addFlashMessage(
-                'No audit logs found for the selected user.',
-                'Notice',
+                LocalizationUtility::translate('flashMessages.noAuditLogsForUser', 'EquedLms') ?? 'No audit logs found for the selected user.',
+                '',
                 AbstractMessage::NOTICE
             );
         }
@@ -54,14 +50,16 @@ class AuditLogController extends ActionController
             'auditLogs' => $auditLogs,
             'userId' => $userId,
         ]);
+
+        return $this->htmlResponse();
     }
 
     /**
-     * Shows audit log details filtered by action type.
+     * Shows audit logs filtered by action type.
      *
      * @throws AccessDeniedException
      */
-    public function showAction(string $action): void
+    public function showAction(string $action): ResponseInterface
     {
         $this->ensureBackendAccess();
 
@@ -69,8 +67,9 @@ class AuditLogController extends ActionController
 
         if ($auditLogs->count() === 0) {
             $this->addFlashMessage(
-                sprintf('No logs found for action "%s".', htmlspecialchars($action)),
-                'Notice',
+                LocalizationUtility::translate('flashMessages.noAuditLogsForAction', 'EquedLms')
+                    ?? sprintf('No logs found for action "%s".', $action),
+                '',
                 AbstractMessage::NOTICE
             );
         }
@@ -85,6 +84,8 @@ class AuditLogController extends ActionController
             'auditLogs' => $auditLogs,
             'action' => $action,
         ]);
+
+        return $this->htmlResponse();
     }
 
     /**
@@ -96,16 +97,19 @@ class AuditLogController extends ActionController
     {
         $context = GeneralUtility::makeInstance(Context::class);
         $isAdmin = $context->getPropertyFromAspect('backend.user', 'isAdmin');
+
         if (!$isAdmin) {
-            throw new AccessDeniedException('Access denied: Admin only');
+            $this->logger->warning('Unauthorized backend access attempt.');
+            throw new AccessDeniedException('Access denied: Admin only.');
         }
     }
 
     /**
-     * Returns the current backend user's ID, if available.
+     * Returns the backend user ID.
      */
-    protected function getBackendUserId(): ?int
+    protected function getBackendUserId(): int
     {
-        return isset($GLOBALS['BE_USER']->user['uid']) ? (int)$GLOBALS['BE_USER']->user['uid'] : null;
+        $context = GeneralUtility::makeInstance(Context::class);
+        return (int)($context->getPropertyFromAspect('backend.user', 'id') ?? 0);
     }
 }

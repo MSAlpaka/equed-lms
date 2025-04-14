@@ -6,6 +6,7 @@ namespace Equed\EquedLms\Domain\Repository;
 
 use Equed\EquedLms\Domain\Model\QuizQuestion;
 use TYPO3\CMS\Extbase\Persistence\Repository;
+use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 
 /**
  * Repository for QuizQuestion entities
@@ -20,10 +21,9 @@ class QuizQuestionRepository extends Repository
      */
     public function findByLesson(int $lessonId): array
     {
-        return $this->createQuery()
-            ->matching(
-                $this->createQuery()->equals('lesson', $lessonId)
-            )
+        $query = $this->createQuery();
+        return $query
+            ->matching($query->equals('lesson', $lessonId))
             ->execute()
             ->toArray();
     }
@@ -36,13 +36,12 @@ class QuizQuestionRepository extends Repository
      */
     public function findRequiredByCourse(int $courseId): array
     {
-        return $this->createQuery()
-            ->matching(
-                $this->createQuery()->logicalAnd([
-                    $this->createQuery()->equals('course', $courseId),
-                    $this->createQuery()->equals('required', true),
-                ])
-            )
+        $query = $this->createQuery();
+        return $query
+            ->matching($query->logicalAnd([
+                $query->equals('course', $courseId),
+                $query->equals('required', true),
+            ]))
             ->execute()
             ->toArray();
     }

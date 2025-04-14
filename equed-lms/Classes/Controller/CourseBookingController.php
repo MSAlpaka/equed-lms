@@ -12,95 +12,102 @@ use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Core\Authentication\FrontendUserAuthentication;
+use TYPO3\CMS\Core\Context\Context;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use Psr\Log\LoggerInterface;
+use Psr\Http\Message\ResponseInterface;
 
 class CourseBookingController extends ActionController
 {
     public function __construct(
         protected readonly CourseRepository $courseRepository,
         protected readonly UserCourseRecordRepository $userCourseRecordRepository,
-        protected readonly PersistenceManager $persistenceManager
+        protected readonly PersistenceManager $persistenceManager,
+        protected readonly LoggerInterface $logger
     ) {}
 
     /**
-     * Zeigt alle verfügbaren Kurse an.
+     * Displays all available courses.
      */
-    public function indexAction(): void
+    public function indexAction(): ResponseInterface
     {
         $courses = $this->courseRepository->findAll();
         $this->view->assign('courses', $courses);
+        return $this->htmlResponse();
     }
 
     /**
-     * Bucht einen Kurs für den eingeloggten Benutzer.
+     * Books a course for the currently logged-in frontend user.
      */
-    public function bookAction(int $courseId): void
+    public function bookAction(int $courseId): ResponseInterface
     {
         $user = $this->getCurrentFrontendUser();
-        
+
         if (!$user) {
             $this->addFlashMessage(
-                LocalizationUtility::translate('flashMessages.loginRequired', 'EquedLms') ?? 'Bitte zuerst einloggen.',
+                LocalizationUtility::translate('flash.loginRequired', 'equed_lms') ?? 'Please log in first.',
                 '',
                 AbstractMessage::ERROR
             );
-            $this->redirect('index');
+            $this->logger->warning('Course booking denied – user not logged in');
+            return $this->redirect('index');
         }
 
         $course = $this->courseRepository->findByUid($courseId);
-        
+
         if (!$course) {
             $this->addFlashMessage(
-                LocalizationUtility::translate('flashMessages.courseNotFound', 'EquedLms') ?? 'Kurs nicht gefunden.',
+                LocalizationUtility::translate('flash.courseNotFound', 'equed_lms') ?? 'Course not found.',
                 '',
                 AbstractMessage::ERROR
             );
-            $this->redirect('index');
+            $this->logger->warning('Course booking failed – course not found', ['courseId' => $courseId]);
+            return $this->redirect('index');
         }
 
-        // Überprüfen, ob der Benutzer bereits für den Kurs gebucht ist
         $existingRecord = $this->userCourseRecordRepository->findOneByUserAndCourse($user, $course);
         if ($existingRecord) {
             $this->addFlashMessage(
-                LocalizationUtility::translate('flashMessages.courseAlreadyBooked', 'EquedLms') ?? 'Du hast diesen Kurs bereits gebucht.',
+                LocalizationUtility::translate('flash.courseAlreadyBooked', 'equed_lms') ?? 'You have already booked this course.',
                 '',
                 AbstractMessage::WARNING
             );
-            $this->redirect('index');
+            $this->logger->info('User already booked this course', ['userId' => $user['uid'], 'courseId' => $courseId]);
+            return $this->redirect('index');
         }
 
-        // Überprüfen, ob der Kurs noch buchbar ist (z. B. nicht ausgebucht)
         if ($course->getStatus() === 'closed' || $course->getCapacity() <= 0) {
             $this->addFlashMessage(
-                LocalizationUtility::translate('flashMessages.courseNotAvailable', 'EquedLms') ?? 'Der Kurs ist nicht mehr verfügbar.',
+                LocalizationUtility::translate('flash.courseUnavailable', 'equed_lms') ?? 'This course is no longer available.',
                 '',
                 AbstractMessage::WARNING
             );
-            $this->redirect('index');
+            $this->logger->info('Course not available for booking', ['courseId' => $courseId]);
+            return $this->redirect('index');
         }
 
-        // Neue Buchung anlegen
         $record = new UserCourseRecord();
         $record->setFrontendUser($user);
         $record->setCourseInstance($course);
-        $record->setStatus('pending');  // Status könnte anpassbar sein
 
         $this->userCourseRecordRepository->add($record);
         $this->persistenceManager->persistAll();
 
         $this->addFlashMessage(
-            LocalizationUtility::translate('flashMessages.courseBookingSuccess', 'EquedLms') ?? 'Kurs erfolgreich gebucht.',
+            LocalizationUtility::translate('flash.courseBooked', 'equed_lms') ?? 'You have successfully booked the course.',
             '',
             AbstractMessage::OK
         );
+        $this->logger->info('Course booked', ['userId' => $user['uid'], 'courseId' => $courseId]);
 
-        $this->redirect('index');
+        return $this->redirect('index');
     }
 
     /**
-     * Gibt den aktuellen Frontend-User zurück.
+     * Returns the currently logged-in frontend user.
      */
-    protected function getCurrentFrontendUser(): ?FrontendUserAuthentication
+    protected function getCurrentFrontendUser(): ?array
     {
-        return $GLOBALS['TSFE']->fe_user ?? null;
+        return $GLOBALS['TSFE']->fe_user->user ?? null;
     }
 }

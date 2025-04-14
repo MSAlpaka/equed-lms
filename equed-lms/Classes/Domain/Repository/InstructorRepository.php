@@ -19,10 +19,9 @@ class InstructorRepository extends Repository
      */
     public function findAllVerified(): array
     {
-        return $this->createQuery()
-            ->matching(
-                $this->createQuery()->equals('verified', true)
-            )
+        $query = $this->createQuery();
+        return $query
+            ->matching($query->equals('verified', true))
             ->execute()
             ->toArray();
     }
@@ -35,10 +34,9 @@ class InstructorRepository extends Repository
      */
     public function findBySpecialty(string $specialty): array
     {
-        return $this->createQuery()
-            ->matching(
-                $this->createQuery()->like('specialties', '%' . $specialty . '%')
-            )
+        $query = $this->createQuery();
+        return $query
+            ->matching($query->like('specialties', '%' . $specialty . '%'))
             ->execute()
             ->toArray();
     }
@@ -51,10 +49,9 @@ class InstructorRepository extends Repository
      */
     public function findOneByUserId(int $feUserId): ?Instructor
     {
-        return $this->createQuery()
-            ->matching(
-                $this->createQuery()->equals('user', $feUserId)
-            )
+        $query = $this->createQuery();
+        return $query
+            ->matching($query->equals('user', $feUserId))
             ->setLimit(1)
             ->execute()
             ->getFirst();

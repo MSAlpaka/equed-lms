@@ -2,77 +2,40 @@
 
 return [
     'ctrl' => [
-        'title' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:tx_equedlms_domain_model_usercourserecord',
+        'title' => 'User Course Record',
         'label' => 'user',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
         'cruser_id' => 'cruser_id',
-        'delete' => 'deleted',
-        'languageField' => 'sys_language_uid',
-        'transOrigPointerField' => 'l10n_parent',
-        'transOrigDiffSourceField' => 'l10n_diffsource',
-        'versioningWS' => true,
-        'searchFields' => 'user,note,exam_results,instructor_feedback',
-        'iconfile' => 'EXT:equed_lms/Resources/Public/Icons/usercourserecord.svg',
+        'iconfile' => 'EXT:equed_lms/Resources/Public/Icons/tx_equedlms_domain_model_usercourserecord.svg',
     ],
     'types' => [
-        '1' => [
+        '0' => [
             'showitem' => '
-                user, course_instance, status, progress,
-                enrollment_date, last_activity_date,
-                certificate_issued, completion_date, slug,
-                exam_results, practical_assessment, instructor_feedback, note,
-                is_retake, attempt_number,
-                marked_as_completed_by, marked_as_completed_at,
-                validated_by, validated_at
+                --div--;Participant,
+                    user, course_instance, is_retake, attempt_count,
+                --div--;Progress,
+                    status, instructor_confirmed, certifier_validated, admin_approved, started_at, completed_at,
+                --div--;Feedback,
+                    instructor_feedback, note, exam_results,
+                --div--;Certificate,
+                    certificate_code, certificate_issued_at
             ',
         ],
     ],
     'columns' => [
-        'sys_language_uid' => [
-            'exclude' => true,
-            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.language',
-            'config' => ['type' => 'language'],
-        ],
-        'l10n_parent' => [
-            'displayCond' => 'FIELD:sys_language_uid:>:0',
-            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.l18n_parent',
+        'user' => [
+            'label' => 'User',
             'config' => [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
-                'foreign_table' => 'tx_equedlms_domain_model_usercourserecord',
-                'foreign_table_where' => 'AND tx_equedlms_domain_model_usercourserecord.pid=###CURRENT_PID### AND tx_equedlms_domain_model_usercourserecord.sys_language_uid IN (-1,0)',
-                'default' => 0,
-            ],
-        ],
-        'l10n_diffsource' => ['config' => ['type' => 'passthrough']],
-
-        'slug' => [
-            'exclude' => true,
-            'label' => 'Slug',
-            'config' => [
-                'type' => 'slug',
-                'generatorOptions' => [
-                    'fields' => ['user', 'course_instance'],
-                ],
-                'fallbackCharacter' => '-',
-                'eval' => 'uniqueInSite',
-                'default' => '',
-            ],
-        ],
-
-        'user' => [
-            'label' => 'LLL:EXT:equed_lms/...:usercourserecord.user',
-            'config' => [
-                'type' => 'group',
-                'internal_type' => 'db',
-                'allowed' => 'fe_users',
+                'foreign_table' => 'fe_users',
                 'minitems' => 1,
                 'maxitems' => 1,
             ],
         ],
         'course_instance' => [
-            'label' => 'LLL:EXT:equed_lms/...:usercourserecord.course_instance',
+            'label' => 'Course Instance',
             'config' => [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
@@ -82,93 +45,64 @@ return [
             ],
         ],
         'status' => [
-            'label' => 'LLL:EXT:equed_lms/...:usercourserecord.status',
+            'label' => 'Status',
             'config' => [
                 'type' => 'select',
-                'renderType' => 'selectSingle',
                 'items' => [
-                    ['ongoing', 'ongoing'],
-                    ['completed', 'completed'],
-                    ['failed', 'failed'],
-                    ['withdrawn', 'withdrawn'],
+                    ['In Progress', 'in_progress'],
+                    ['Completed', 'completed'],
+                    ['Failed', 'failed'],
+                    ['Withdrawn', 'withdrawn'],
                 ],
-                'default' => 'ongoing',
+                'default' => 'in_progress',
             ],
         ],
-        'progress' => [
-            'label' => 'LLL:EXT:equed_lms/...:usercourserecord.progress',
-            'config' => [
-                'type' => 'number',
-                'default' => 0.0,
-            ],
-        ],
-        'certificate_issued' => [
-            'label' => 'LLL:EXT:equed_lms/...:usercourserecord.certificate_issued',
-            'config' => [
-                'type' => 'check',
-                'default' => 0,
-            ],
-        ],
-        'completion_date' => [
-            'label' => 'LLL:EXT:equed_lms/...:usercourserecord.completion_date',
+        'started_at' => [
+            'label' => 'Started At',
             'config' => ['type' => 'datetime'],
         ],
-        'enrollment_date' => [
-            'label' => 'LLL:EXT:equed_lms/...:usercourserecord.enrollment_date',
+        'completed_at' => [
+            'label' => 'Completed At',
             'config' => ['type' => 'datetime'],
         ],
-        'last_activity_date' => [
-            'label' => 'LLL:EXT:equed_lms/...:usercourserecord.last_activity_date',
-            'config' => ['type' => 'datetime'],
+        'attempt_count' => [
+            'label' => 'Attempt Count',
+            'config' => ['type' => 'number'],
         ],
-        'exam_results' => [
-            'label' => 'LLL:EXT:equed_lms/...:usercourserecord.exam_results',
-            'config' => ['type' => 'text', 'rows' => 4],
+        'is_retake' => [
+            'label' => 'Is Retake?',
+            'config' => ['type' => 'check'],
         ],
-        'practical_assessment' => [
-            'label' => 'LLL:EXT:equed_lms/...:usercourserecord.practical_assessment',
-            'config' => ['type' => 'text', 'rows' => 4],
+        'instructor_confirmed' => [
+            'label' => 'Instructor Confirmed',
+            'config' => ['type' => 'check'],
+        ],
+        'certifier_validated' => [
+            'label' => 'Certifier Validated',
+            'config' => ['type' => 'check'],
+        ],
+        'admin_approved' => [
+            'label' => 'Admin Approved',
+            'config' => ['type' => 'check'],
         ],
         'instructor_feedback' => [
-            'label' => 'LLL:EXT:equed_lms/...:usercourserecord.instructor_feedback',
+            'label' => 'Instructor Feedback',
             'config' => ['type' => 'text', 'rows' => 4],
         ],
         'note' => [
-            'label' => 'LLL:EXT:equed_lms/...:usercourserecord.note',
-            'config' => ['type' => 'text', 'rows' => 2],
+            'label' => 'Internal Note',
+            'config' => ['type' => 'text', 'rows' => 3],
         ],
-        'is_retake' => [
-            'label' => 'LLL:EXT:equed_lms/...:usercourserecord.is_retake',
-            'config' => ['type' => 'check', 'default' => 0],
+        'exam_results' => [
+            'label' => 'Exam Results',
+            'config' => ['type' => 'text', 'rows' => 4],
         ],
-        'attempt_number' => [
-            'label' => 'LLL:EXT:equed_lms/...:usercourserecord.attempt_number',
-            'config' => ['type' => 'number', 'default' => 1],
+        'certificate_code' => [
+            'label' => 'Certificate Code',
+            'config' => ['type' => 'input'],
         ],
-        'marked_as_completed_by' => [
-            'label' => 'LLL:EXT:equed_lms/...:usercourserecord.marked_as_completed_by',
-            'config' => [
-                'type' => 'group',
-                'internal_type' => 'db',
-                'allowed' => 'fe_users',
-                'maxitems' => 1,
-            ],
-        ],
-        'marked_as_completed_at' => [
-            'label' => 'LLL:EXT:equed_lms/...:usercourserecord.marked_as_completed_at',
-            'config' => ['type' => 'datetime'],
-        ],
-        'validated_by' => [
-            'label' => 'LLL:EXT:equed_lms/...:usercourserecord.validated_by',
-            'config' => [
-                'type' => 'group',
-                'internal_type' => 'db',
-                'allowed' => 'fe_users',
-                'maxitems' => 1,
-            ],
-        ],
-        'validated_at' => [
-            'label' => 'LLL:EXT:equed_lms/...:usercourserecord.validated_at',
+        'certificate_issued_at' => [
+            'label' => 'Certificate Issued At',
             'config' => ['type' => 'datetime'],
         ],
     ],

@@ -5,64 +5,62 @@ declare(strict_types=1);
 namespace Equed\EquedLms\Domain\Model;
 
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
+use TYPO3\CMS\Extbase\Annotation\ORM\Lazy;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 /**
- * Represents a single lesson within a course.
+ * Einzelne Lektion innerhalb eines Kurses.
  *
- * Lessons contain pages and optionally quiz questions and materials.
+ * Eine Lesson enthält Inhaltsseiten und optional Quizfragen oder Materialien.
  */
 class Lesson extends AbstractEntity
 {
+    protected int $pid = 0;
+
     protected string $title = '';
 
     protected string $slug = '';
 
     /**
-     * Short description of the lesson content
+     * Kurzbeschreibung des Inhalts
      */
     protected string $description = '';
 
     /**
-     * Position in course (sorting)
+     * Position innerhalb des Kurses
      */
     protected int $position = 0;
 
     /**
-     * Optional estimated duration in minutes
+     * Optionale geschätzte Dauer in Minuten
      */
     protected int $durationInMinutes = 0;
 
     /**
-     * Is this lesson mandatory to complete the course?
+     * Muss diese Lektion abgeschlossen werden, um den Kurs zu bestehen?
      */
     protected bool $isRequired = true;
 
-    /**
-     * Associated course
-     */
+    #[Lazy]
     protected ?Course $course = null;
 
     /**
-     * Content pages (text, media, downloads)
-     *
      * @var ObjectStorage<ContentPage>
      */
+    #[Lazy]
     protected ObjectStorage $pages;
 
     /**
-     * Optional quiz questions assigned to this lesson
-     *
      * @var ObjectStorage<QuizQuestion>
      */
+    #[Lazy]
     protected ObjectStorage $quizQuestions;
 
     /**
-     * Optional downloadable files (e.g. worksheets)
-     *
      * @var ObjectStorage<FileReference>
      */
+    #[Lazy]
     protected ObjectStorage $materials;
 
     public function __construct()
@@ -70,6 +68,16 @@ class Lesson extends AbstractEntity
         $this->pages = new ObjectStorage();
         $this->quizQuestions = new ObjectStorage();
         $this->materials = new ObjectStorage();
+    }
+
+    public function getPid(): int
+    {
+        return $this->pid;
+    }
+
+    public function setPid(int $pid): void
+    {
+        $this->pid = $pid;
     }
 
     public function getTitle(): string
@@ -142,9 +150,6 @@ class Lesson extends AbstractEntity
         $this->course = $course;
     }
 
-    /**
-     * @return ObjectStorage<ContentPage>
-     */
     public function getPages(): ObjectStorage
     {
         return $this->pages;
@@ -160,39 +165,33 @@ class Lesson extends AbstractEntity
         $this->pages->detach($page);
     }
 
-    /**
-     * @return ObjectStorage<QuizQuestion>
-     */
     public function getQuizQuestions(): ObjectStorage
     {
         return $this->quizQuestions;
     }
 
-    public function addQuizQuestion(QuizQuestion $question): void
+    public function addQuizQuestion(QuizQuestion $quizQuestion): void
     {
-        $this->quizQuestions->attach($question);
+        $this->quizQuestions->attach($quizQuestion);
     }
 
-    public function removeQuizQuestion(QuizQuestion $question): void
+    public function removeQuizQuestion(QuizQuestion $quizQuestion): void
     {
-        $this->quizQuestions->detach($question);
+        $this->quizQuestions->detach($quizQuestion);
     }
 
-    /**
-     * @return ObjectStorage<FileReference>
-     */
     public function getMaterials(): ObjectStorage
     {
         return $this->materials;
     }
 
-    public function addMaterial(FileReference $file): void
+    public function addMaterial(FileReference $material): void
     {
-        $this->materials->attach($file);
+        $this->materials->attach($material);
     }
 
-    public function removeMaterial(FileReference $file): void
+    public function removeMaterial(FileReference $material): void
     {
-        $this->materials->detach($file);
+        $this->materials->detach($material);
     }
 }

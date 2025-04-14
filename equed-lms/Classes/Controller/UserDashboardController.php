@@ -5,40 +5,39 @@ declare(strict_types=1);
 namespace EquedLms\Controller;
 
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
-use TYPO3\CMS\Extbase\Annotation\Inject;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use EquedLms\Domain\Repository\UserRepository;
 use EquedLms\Domain\Repository\UserCourseRecordRepository;
 use EquedLms\Domain\Repository\CertificateRepository;
-use TYPO3\CMS\Core\Context\Context;
-use TYPO3\CMS\Core\Exception\AccessDeniedException;
+use EquedLms\Domain\Model\FrontendUser;
+use Psr\Log\LoggerInterface;
+use Psr\Http\Message\ResponseInterface;
 
 class UserDashboardController extends ActionController
 {
-    #[Inject]
-    protected UserRepository $userRepository;
-
-    #[Inject]
-    protected UserCourseRecordRepository $userCourseRecordRepository;
-
-    #[Inject]
-    protected CertificateRepository $certificateRepository;
+    public function __construct(
+        protected readonly UserRepository $userRepository,
+        protected readonly UserCourseRecordRepository $userCourseRecordRepository,
+        protected readonly CertificateRepository $certificateRepository,
+        protected readonly LoggerInterface $logger
+    ) {}
 
     /**
-     * Zeigt das Dashboard für den aktuellen Benutzer an.
+     * Displays the dashboard for the currently logged-in frontend user.
      */
-    public function indexAction(): void
+    public function indexAction(): ResponseInterface
     {
         $user = $this->getCurrentFrontendUser();
-        
+
         if (!$user) {
             $this->addFlashMessage(
-                $this->translate('error.userNotFound'),
+                LocalizationUtility::translate('error.userNotFound', 'equed_lms') ?? 'User not found.',
                 '',
                 AbstractMessage::ERROR
             );
-            $this->forward('error');
-            return;
+            $this->logger->warning('Dashboard access denied – no user logged in.');
+            return $this->redirect('error');
         }
 
         $courseRecords = $this->userCourseRecordRepository->findByUser($user);
@@ -49,40 +48,29 @@ class UserDashboardController extends ActionController
             'userCourseRecords' => $courseRecords,
             'certificates' => $certificates,
         ]);
+
+        $this->logger->info('User dashboard loaded', ['userId' => $user->getUid()]);
+        return $this->htmlResponse();
     }
 
     /**
-     * Fehlerbehandlungsansicht
+     * Displays a general error message.
      */
-    public function errorAction(): void
+    public function errorAction(): ResponseInterface
     {
-        $this->view->assign('message', $this->translate('error.general'));
+        $this->view->assign(
+            'message',
+            LocalizationUtility::translate('error.general', 'equed_lms') ?? 'An unknown error occurred.'
+        );
+        return $this->htmlResponse();
     }
 
     /**
-     * Übersetzungs-Helper für die Sprachdateien
+     * Returns the current logged-in frontend user.
      */
-    protected function translate(string $key, array $arguments = []): string
-    {
-        $languageService = $this->getLanguageService();
-        $label = 'LLL:EXT:equed_lms/Resources/Private/Language/locallang.xlf:' . $key;
-        return $languageService->sL($label) ?? $key;
-    }
-
-    /**
-     * Holt den aktuellen eingeloggten Benutzer
-     */
-    protected function getCurrentFrontendUser(): ?\EquedLms\Domain\Model\FrontendUser
+    protected function getCurrentFrontendUser(): ?FrontendUser
     {
         $userId = (int)($GLOBALS['TSFE']->fe_user->user['uid'] ?? 0);
         return $userId > 0 ? $this->userRepository->findByUid($userId) : null;
-    }
-
-    /**
-     * Holt den LanguageService für Übersetzungen
-     */
-    protected function getLanguageService()
-    {
-        return $GLOBALS['TSFE']->getLanguageService();
     }
 }

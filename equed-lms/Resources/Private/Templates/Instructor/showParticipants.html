@@ -1,0 +1,21 @@
+<f:section name="main">
+    <h1>{f:translate(key: 'participantsForCourse', arguments: '{courseInstance.title}')}</h1>
+
+    <f:if condition="{records}">
+        <ul>
+            <f:for each="{records}" as="record">
+                <li>
+                    <strong>{record.user.name}</strong><br>
+                    {f:translate(key: 'status')}: {record.status}<br>
+                    <f:link.action action="confirmCompletion" arguments="{recordId: record.uid}">
+                        {f:translate(key: 'markAsCompleted')}
+                    </f:link.action>
+                </li>
+            </f:for>
+        </ul>
+    </f:if>
+
+    <f:else>
+        <p>{f:translate(key: 'noParticipantsYet')}</p>
+    </f:else>
+</f:section>

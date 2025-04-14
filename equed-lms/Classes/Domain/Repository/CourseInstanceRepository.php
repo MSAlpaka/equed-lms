@@ -2,13 +2,14 @@
 
 declare(strict_types=1);
 
-namespace EquedLms\Domain\Repository;
+namespace Equed\EquedLms\Domain\Repository;
 
 use DateTimeImmutable;
-use EquedLms\Domain\Model\CourseInstance;
-use EquedLms\Domain\Model\CourseProgram;
-use TYPO3\CMS\Extbase\Persistence\Repository;
+use Equed\EquedLms\Domain\Model\CourseInstance;
+use Equed\EquedLms\Domain\Model\CourseProgram;
+use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
+use TYPO3\CMS\Extbase\Persistence\Repository;
 
 /**
  * Repository for CourseInstance entities
@@ -16,6 +17,8 @@ use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 class CourseInstanceRepository extends Repository
 {
     /**
+     * Default ordering: sort by startDate ascending
+     *
      * @var array<string, int>
      */
     protected $defaultOrderings = [
@@ -43,67 +46,19 @@ class CourseInstanceRepository extends Repository
     }
 
     /**
-     * Find all instances at a specific center
+     * Find all CourseInstances where the given FrontendUser is assigned as instructor
      *
-     * @param int $centerUid
+     * @param FrontendUser $user
      * @return CourseInstance[]
      */
-    public function findByCenter(int $centerUid): array
+    public function findByInstructor(FrontendUser $user): array
     {
-        return $this->createQuery()
+        $query = $this->createQuery();
+        return $query
             ->matching(
-                $this->createQuery()->equals('center', $centerUid)
+                $query->contains('instructors', $user)
             )
             ->execute()
             ->toArray();
-    }
-
-    /**
-     * Find all upcoming course instances starting today or later
-     *
-     * @return CourseInstance[]
-     */
-    public function findUpcoming(): array
-    {
-        return $this->createQuery()
-            ->matching(
-                $this->createQuery()->greaterThanOrEqual('startDate', new DateTimeImmutable('today'))
-            )
-            ->execute()
-            ->toArray();
-    }
-
-    /**
-     * Find all course instances assigned to a specific instructor
-     *
-     * @param int $userUid
-     * @return CourseInstance[]
-     */
-    public function findByInstructor(int $userUid): array
-    {
-        return $this->createQuery()
-            ->matching(
-                $this->createQuery()->contains('instructors', $userUid)
-            )
-            ->execute()
-            ->toArray();
-    }
-
-    /**
-     * Find all fully booked course instances
-     *
-     * @return array
-     */
-    public function findFullyBooked(): array
-    {
-        return $this->createQuery()
-            ->statement(
-                'SELECT * FROM tx_equedlms_domain_model_courseinstance ci
-                 WHERE max_participants > 0 AND (
-                     SELECT COUNT(*) FROM tx_equedlms_domain_model_usercourserecord ucr
-                     WHERE ucr.course_instance = ci.uid
-                 ) >= ci.max_participants'
-            )
-            ->execute(true);
     }
 }

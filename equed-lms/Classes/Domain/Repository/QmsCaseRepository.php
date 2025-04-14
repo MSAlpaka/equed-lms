@@ -30,7 +30,7 @@ class QmsCaseRepository extends Repository
      */
     public function add(QmsCase $qmsCase): void
     {
-        $this->addObject($qmsCase);
+        parent::add($qmsCase);
     }
 
     /**
@@ -40,6 +40,6 @@ class QmsCaseRepository extends Repository
      */
     public function remove(QmsCase $qmsCase): void
     {
-        $this->removeObject($qmsCase);
+        parent::remove($qmsCase);
     }
 }

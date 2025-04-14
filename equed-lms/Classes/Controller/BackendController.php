@@ -9,26 +9,23 @@ use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Exception\AccessDeniedException;
 use EquedLms\Domain\Repository\CourseInstanceRepository;
 use EquedLms\Domain\Repository\FrontendUserRepository;
+use Psr\Log\LoggerInterface;
+use Psr\Http\Message\ResponseInterface;
 
 class BackendController extends ActionController
 {
-    protected CourseInstanceRepository $courseInstanceRepository;
-    protected FrontendUserRepository $frontendUserRepository;
-
     public function __construct(
-        CourseInstanceRepository $courseInstanceRepository,
-        FrontendUserRepository $frontendUserRepository
-    ) {
-        $this->courseInstanceRepository = $courseInstanceRepository;
-        $this->frontendUserRepository = $frontendUserRepository;
-    }
+        protected readonly CourseInstanceRepository $courseInstanceRepository,
+        protected readonly FrontendUserRepository $frontendUserRepository,
+        protected readonly LoggerInterface $logger
+    ) {}
 
     /**
-     * Admin-Dashboard: Übersicht über Kurse, aktive Nutzende etc.
+     * Displays the backend dashboard with course/user statistics.
      *
      * @throws AccessDeniedException
      */
-    public function indexAction(): void
+    public function indexAction(): ResponseInterface
     {
         $this->checkAccess();
 
@@ -41,27 +38,33 @@ class BackendController extends ActionController
         $this->view->assignMultiple([
             'dashboardData' => $dashboardData,
         ]);
+
+        $this->logger->info('Backend dashboard accessed');
+        return $this->htmlResponse();
     }
 
     /**
-     * Verwaltungsansicht: Platzhalter für spätere Adminfunktionen.
+     * Displays placeholder admin management section.
      *
      * @throws AccessDeniedException
      */
-    public function manageAction(): void
+    public function manageAction(): ResponseInterface
     {
         $this->checkAccess();
 
         $this->view->assignMultiple([
             'managementData' => [
-                'pendingValidations' => [], // hier kann später dynamisch ergänzt werden
+                'pendingValidations' => [],
                 'openReports' => [],
             ],
         ]);
+
+        $this->logger->info('Backend management view accessed');
+        return $this->htmlResponse();
     }
 
     /**
-     * Zugriffsschutz: Nur Haupt-Admin darf auf Backend-Module zugreifen.
+     * Ensures only backend admin users have access.
      *
      * @throws AccessDeniedException
      */
@@ -71,7 +74,11 @@ class BackendController extends ActionController
         $backendUser = $GLOBALS['BE_USER'] ?? null;
 
         if (!$backendUser instanceof BackendUserAuthentication || !$backendUser->isAdmin()) {
-            throw new AccessDeniedException('Access denied: Only the main admin may access this section.', 1670000051);
+            $this->logger->warning('Backend access denied for non-admin user');
+            throw new AccessDeniedException(
+                'Access denied: Only the main admin may access this section.',
+                1670000051
+            );
         }
     }
 }

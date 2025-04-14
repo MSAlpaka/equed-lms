@@ -4,89 +4,91 @@ declare(strict_types=1);
 
 namespace EquedLms\Controller;
 
+use EquedLms\Domain\Model\Incident;
+use EquedLms\Domain\Model\FrontendUser;
 use EquedLms\Domain\Repository\IncidentRepository;
+use EquedLms\Domain\Repository\FrontendUserRepository;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Exception\AccessDeniedException;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Context\Context;
+use TYPO3\CMS\Core\Exception\AccessDeniedException;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use Psr\Log\LoggerInterface;
+use Psr\Http\Message\ResponseInterface;
 
 class ServiceCenterController extends ActionController
 {
-    protected IncidentRepository $incidentRepository;
-
-    public function __construct(IncidentRepository $incidentRepository)
-    {
-        $this->incidentRepository = $incidentRepository;
-    }
+    public function __construct(
+        protected readonly IncidentRepository $incidentRepository,
+        protected readonly FrontendUserRepository $userRepository,
+        protected readonly LoggerInterface $logger
+    ) {}
 
     /**
-     * Service Center Dashboard: Zeigt alle offenen Vorfälle an
+     * Service Center Dashboard: shows all open incidents.
      */
-    public function indexAction(): void
+    public function indexAction(): ResponseInterface
     {
         $incidents = $this->incidentRepository->findAllOpenIncidents();
         $this->view->assign('incidents', $incidents);
+
+        $this->logger->info('Service center loaded incidents', ['count' => count($incidents)]);
+        return $this->htmlResponse();
     }
 
     /**
-     * Bearbeitung von Vorfällen, die von Benutzern gemeldet wurden
+     * Handles the selected incident.
+     *
+     * @throws AccessDeniedException
      */
-    public function handleIncidentAction(int $incidentId): void
+    public function handleIncidentAction(int $incidentId): ResponseInterface
     {
         $incident = $this->incidentRepository->findByUid($incidentId);
 
         if (!$incident) {
             $this->addFlashMessage(
-                $this->translate('incident.notFound'),
-                $this->translate('error'),
+                LocalizationUtility::translate('incident.notFound', 'equed_lms') ?? 'Incident not found.',
+                '',
                 AbstractMessage::ERROR
             );
-            $this->redirect('index');
-            return;
+            $this->logger->warning('Incident not found', ['incidentId' => $incidentId]);
+            return $this->redirect('index');
         }
 
-        // Hier könnte eine Benutzerberechtigungsprüfung erfolgen, falls notwendig
         $this->checkPermissions($incident);
 
         $this->view->assign('incident', $incident);
+        return $this->htmlResponse();
     }
 
     /**
-     * Berechtigungsprüfung für den Service Center Nutzer
+     * Checks if the current user may edit the given incident.
+     *
+     * @throws AccessDeniedException
      */
-    protected function checkPermissions($incident): void
+    protected function checkPermissions(Incident $incident): void
     {
         $user = $this->getCurrentUser();
 
         if (!$user || !$user->hasPermissionToEditIncident($incident)) {
-            throw new AccessDeniedException($this->translate('accessDenied.incident'));
+            $this->logger->warning('Access denied on incident edit.', [
+                'userId' => $user?->getUid(),
+                'incidentId' => $incident->getUid()
+            ]);
+            throw new AccessDeniedException(
+                LocalizationUtility::translate('accessDenied.incident', 'equed_lms') ?? 'Access denied.'
+            );
         }
     }
 
     /**
-     * Holt den aktuellen eingeloggten Benutzer
+     * Returns the currently logged in frontend user object.
      */
-    protected function getCurrentUser(): ?\EquedLms\Domain\Model\FrontendUser
+    protected function getCurrentUser(): ?FrontendUser
     {
-        $userId = (int)($GLOBALS['TSFE']->fe_user->user['uid'] ?? 0);
+        $context = GeneralUtility::makeInstance(Context::class);
+        $userId = (int)($context->getPropertyFromAspect('frontend.user', 'id') ?? 0);
         return $userId > 0 ? $this->userRepository->findByUid($userId) : null;
-    }
-
-    /**
-     * Übersetzungs-Helper für die Sprachdateien
-     */
-    protected function translate(string $key, array $arguments = []): string
-    {
-        $languageService = $this->getLanguageService();
-        $label = 'LLL:EXT:equed_lms/Resources/Private/Language/locallang.xlf:' . $key;
-        return $languageService->sL($label) ?? $key;
-    }
-
-    /**
-     * Holt den LanguageService für Übersetzungen
-     */
-    protected function getLanguageService()
-    {
-        return $GLOBALS['TSFE']->getLanguageService();
     }
 }

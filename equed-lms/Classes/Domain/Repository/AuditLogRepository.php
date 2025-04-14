@@ -1,10 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Equed\EquedLms\Domain\Repository;
 
-use TYPO3\CMS\Extbase\Persistence\Repository;
-use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use Equed\EquedLms\Domain\Model\AuditLog;
+use TYPO3\CMS\Extbase\Persistence\Repository;
 
 /**
  * Repository for AuditLog entities
@@ -21,9 +22,7 @@ class AuditLogRepository extends Repository
     {
         $query = $this->createQuery();
         return $query
-            ->matching(
-                $query->equals('feUser', $userId)
-            )
+            ->matching($query->equals('feUser', $userId))
             ->execute()
             ->toArray();
     }
@@ -38,15 +37,13 @@ class AuditLogRepository extends Repository
     {
         $query = $this->createQuery();
         return $query
-            ->matching(
-                $query->equals('action', $action)
-            )
+            ->matching($query->equals('action', $action))
             ->execute()
             ->toArray();
     }
 
     /**
-     * Find all audit logs for a specific related entity (ID and type)
+     * Find all audit logs for a specific related entity (e.g., course, submission)
      *
      * @param int $relatedId
      * @param string $relatedType
@@ -56,12 +53,10 @@ class AuditLogRepository extends Repository
     {
         $query = $this->createQuery();
         return $query
-            ->matching(
-                $query->logicalAnd([
-                    $query->equals('relatedId', $relatedId),
-                    $query->equals('relatedType', $relatedType),
-                ])
-            )
+            ->matching($query->logicalAnd([
+                $query->equals('relatedId', $relatedId),
+                $query->equals('relatedType', $relatedType),
+            ]))
             ->execute()
             ->toArray();
     }

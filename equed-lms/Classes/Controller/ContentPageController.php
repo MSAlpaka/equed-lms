@@ -13,6 +13,7 @@ use TYPO3\CMS\Core\Exception\AccessDeniedException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use Psr\Log\LoggerInterface;
+use Psr\Http\Message\ResponseInterface;
 
 class ContentPageController extends ActionController
 {
@@ -22,102 +23,93 @@ class ContentPageController extends ActionController
     ) {}
 
     /**
-     * Zeigt eine Liste aller ContentPages.
-     *
-     * @throws AccessDeniedException
+     * Displays a list of all content pages.
      */
-    public function listAction(): void
+    public function listAction(): ResponseInterface
     {
         $this->ensureAccess();
+
         $items = $this->contentPageRepository->findAll();
         $this->view->assign('contentPages', $items);
+
+        return $this->htmlResponse();
     }
 
     /**
-     * Zeigt eine einzelne ContentPage.
-     *
-     * @throws AccessDeniedException
+     * Displays a single content page.
      */
-    public function showAction(ContentPage $contentPage): void
+    public function showAction(ContentPage $contentPage): ResponseInterface
     {
         $this->ensureAccess();
         $this->view->assign('contentPage', $contentPage);
+        return $this->htmlResponse();
     }
 
     /**
-     * Erstellt eine neue ContentPage.
-     *
-     * @throws AccessDeniedException
+     * Creates a new content page.
      */
-    public function createAction(ContentPage $contentPage): void
+    public function createAction(ContentPage $contentPage): ResponseInterface
     {
         $this->ensureAccess();
 
         $this->contentPageRepository->add($contentPage);
-        $this->addFlashMessage('Inhaltsseite erfolgreich erstellt.', '', AbstractMessage::OK);
+        $this->addFlashMessage(
+            LocalizationUtility::translate('contentPage.created', 'equed_lms') ?? 'Content page created successfully.',
+            '',
+            AbstractMessage::OK
+        );
 
-        $this->logger->info('ContentPage created', [
-            'title' => $contentPage->getTitle(),
-        ]);
-
-        $this->redirect('list');
+        $this->logger->info('ContentPage created', ['title' => $contentPage->getTitle()]);
+        return $this->redirect('list');
     }
 
     /**
-     * Aktualisiert eine bestehende ContentPage.
-     *
-     * @throws AccessDeniedException
+     * Updates an existing content page.
      */
-    public function updateAction(ContentPage $contentPage): void
+    public function updateAction(ContentPage $contentPage): ResponseInterface
     {
         $this->ensureAccess();
 
         $this->contentPageRepository->update($contentPage);
-        $this->addFlashMessage('Inhaltsseite erfolgreich aktualisiert.', '', AbstractMessage::OK);
+        $this->addFlashMessage(
+            LocalizationUtility::translate('contentPage.updated', 'equed_lms') ?? 'Content page updated successfully.',
+            '',
+            AbstractMessage::OK
+        );
 
-        $this->logger->info('ContentPage updated', [
-            'id' => $contentPage->getUid(),
-        ]);
-
-        $this->redirect('list');
+        $this->logger->info('ContentPage updated', ['id' => $contentPage->getUid()]);
+        return $this->redirect('list');
     }
 
     /**
-     * Löscht eine ContentPage.
-     *
-     * @throws AccessDeniedException
+     * Deletes a content page.
      */
-    public function deleteAction(ContentPage $contentPage): void
+    public function deleteAction(ContentPage $contentPage): ResponseInterface
     {
         $this->ensureAccess();
 
         $this->contentPageRepository->remove($contentPage);
-        $this->addFlashMessage('Inhaltsseite gelöscht.', '', AbstractMessage::WARNING);
+        $this->addFlashMessage(
+            LocalizationUtility::translate('contentPage.deleted', 'equed_lms') ?? 'Content page deleted.',
+            '',
+            AbstractMessage::WARNING
+        );
 
-        $this->logger->warning('ContentPage deleted', [
-            'id' => $contentPage->getUid(),
-        ]);
-
-        $this->redirect('list');
+        $this->logger->warning('ContentPage deleted', ['id' => $contentPage->getUid()]);
+        return $this->redirect('list');
     }
 
     /**
-     * Zugriffsschutz: Nur eingeloggte Admins dürfen Änderungen vornehmen.
-     *
-     * @throws AccessDeniedException
+     * Only allow access for specific FE groups or roles.
      */
     protected function ensureAccess(): void
     {
-        $user = $this->getFrontendUser();
-        $groups = $user?->groupData['uid'] ?? [];
+        $user = $GLOBALS['TSFE']->fe_user ?? null;
+        $groupIds = $user?->groupData['uid'] ?? [];
 
-        if (!is_array($groups) || !in_array('ADMIN_GROUP_UID', $groups, true)) {
-            throw new AccessDeniedException('Kein Zugriff auf Content-Seiten.');
+        if (!is_array($groupIds) || !in_array(123, $groupIds, true)) {
+            $this->logger->warning('Access denied in ContentPageController');
+            throw new AccessDeniedException('Access denied.');
         }
-    }
-
-    protected function getFrontendUser(): ?FrontendUserAuthentication
-    {
-        return $GLOBALS['TSFE']->fe_user ?? null;
     }
 }

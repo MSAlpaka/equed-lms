@@ -2,19 +2,23 @@
 
 return [
     'ctrl' => [
-        'title' => 'Content Page',
+        'title' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:tx_equedlms_domain_model_contentpage',
         'label' => 'title',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
         'cruser_id' => 'cruser_id',
-        'hideTable' => false,
+        'sortby' => 'position',
         'iconfile' => 'EXT:equed_lms/Resources/Public/Icons/tx_equedlms_domain_model_contentpage.svg',
     ],
     'types' => [
-        '0' => ['showitem' => '
-            --div--;General,
-                title, text, position, lesson, isRequired, quizQuestion, media, downloads
-        '],
+        '0' => [
+            'showitem' => '
+                --div--;General,
+                    title, text, position, is_required,
+                --div--;Relations,
+                    lesson, quiz_question, media, downloads
+            ',
+        ],
     ],
     'columns' => [
         'title' => [
@@ -28,14 +32,20 @@ return [
             'label' => 'Text',
             'config' => [
                 'type' => 'text',
-                'rows' => 5,
+                'rows' => 8,
+                'enableRichtext' => true,
             ],
         ],
         'position' => [
             'label' => 'Position',
             'config' => [
-                'type' => 'input',
-                'eval' => 'int',
+                'type' => 'number',
+            ],
+        ],
+        'is_required' => [
+            'label' => 'Required for Completion',
+            'config' => [
+                'type' => 'check',
             ],
         ],
         'lesson' => [
@@ -43,53 +53,33 @@ return [
             'config' => [
                 'type' => 'group',
                 'internal_type' => 'db',
-                'allowed' => 'tx_equedlms_domain_model_lesson',
-                'size' => 1,
+                'foreign_table' => 'tx_equedlms_domain_model_lesson',
+                'minitems' => 0,
                 'maxitems' => 1,
             ],
         ],
-        'isRequired' => [
-            'label' => 'Is Required',
-            'config' => [
-                'type' => 'check',
-            ],
-        ],
-        'quizQuestion' => [
+        'quiz_question' => [
             'label' => 'Quiz Question',
             'config' => [
                 'type' => 'group',
                 'internal_type' => 'db',
-                'allowed' => 'tx_equedlms_domain_model_quizquestion',
-                'size' => 1,
+                'foreign_table' => 'tx_equedlms_domain_model_quizquestion',
+                'minitems' => 0,
                 'maxitems' => 1,
             ],
         ],
         'media' => [
             'label' => 'Media',
             'config' => [
-                'type' => 'inline',
-                'foreign_table' => 'sys_file',
-                'foreign_field' => 'uid',
+                'type' => 'file',
                 'maxitems' => 10,
-                'appearance' => [
-                    'useSortable' => true,
-                    'showPossible' => true,
-                    'showAll' => true,
-                ],
             ],
         ],
         'downloads' => [
             'label' => 'Downloads',
             'config' => [
-                'type' => 'inline',
-                'foreign_table' => 'sys_file',
-                'foreign_field' => 'uid',
+                'type' => 'file',
                 'maxitems' => 10,
-                'appearance' => [
-                    'useSortable' => true,
-                    'showPossible' => true,
-                    'showAll' => true,
-                ],
             ],
         ],
     ],

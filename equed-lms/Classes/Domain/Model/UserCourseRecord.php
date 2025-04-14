@@ -5,84 +5,45 @@ declare(strict_types=1);
 namespace Equed\EquedLms\Domain\Model;
 
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
-use TYPO3\CMS\Extbase\Annotation\ORM\Cascade;
 use TYPO3\CMS\Extbase\Annotation\ORM\Lazy;
 use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
 
 /**
- * UserCourseRecord
+ * Verknüpfung eines Teilnehmenden mit einer konkreten Kursdurchführung.
+ * Enthält Fortschritts-, Bewertungs- und Zertifizierungsdaten.
  */
 class UserCourseRecord extends AbstractEntity
 {
-    /**
-     * @var int
-     */
     protected int $pid = 0;
 
-    /**
-     * @var CourseInstance
-     * @Lazy
-     */
+    #[Lazy]
     protected CourseInstance $courseInstance;
 
-    /**
-     * @var FrontendUser
-     * @Lazy
-     */
+    #[Lazy]
     protected FrontendUser $user;
 
-    /**
-     * @var FrontendUser|null
-     * @Lazy
-     */
+    #[Lazy]
     protected ?FrontendUser $instructor = null;
 
-    /**
-     * @var \DateTime|null
-     */
-    protected ?\DateTime $startedAt = null;
+    protected ?\DateTimeImmutable $startedAt = null;
 
-    /**
-     * @var \DateTime|null
-     */
-    protected ?\DateTime $completedAt = null;
+    protected ?\DateTimeImmutable $completedAt = null;
 
-    /**
-     * @var bool
-     */
     protected bool $instructorConfirmed = false;
 
-    /**
-     * @var bool
-     */
     protected bool $certifierValidated = false;
 
-    /**
-     * @var bool
-     */
     protected bool $adminApproved = false;
 
-    /**
-     * @var string
-     */
     protected string $certificateCode = '';
 
-    /**
-     * @var \DateTime|null
-     */
-    protected ?\DateTime $certificateIssuedAt = null;
+    protected ?\DateTimeImmutable $certificateIssuedAt = null;
 
-    /**
-     * @var string
-     */
     protected string $status = 'in_progress';
 
-    /**
-     * @var string
-     */
     protected string $metaJson = '';
 
-    // --- Getter & Setter ---
+    // Getter & Setter
 
     public function getPid(): int
     {
@@ -124,22 +85,27 @@ class UserCourseRecord extends AbstractEntity
         $this->instructor = $instructor;
     }
 
-    public function getStartedAt(): ?\DateTime
+    public function hasInstructor(): bool
+    {
+        return $this->instructor !== null;
+    }
+
+    public function getStartedAt(): ?\DateTimeImmutable
     {
         return $this->startedAt;
     }
 
-    public function setStartedAt(?\DateTime $startedAt): void
+    public function setStartedAt(?\DateTimeImmutable $startedAt): void
     {
         $this->startedAt = $startedAt;
     }
 
-    public function getCompletedAt(): ?\DateTime
+    public function getCompletedAt(): ?\DateTimeImmutable
     {
         return $this->completedAt;
     }
 
-    public function setCompletedAt(?\DateTime $completedAt): void
+    public function setCompletedAt(?\DateTimeImmutable $completedAt): void
     {
         $this->completedAt = $completedAt;
     }
@@ -149,9 +115,9 @@ class UserCourseRecord extends AbstractEntity
         return $this->instructorConfirmed;
     }
 
-    public function setInstructorConfirmed(bool $confirmed): void
+    public function setInstructorConfirmed(bool $instructorConfirmed): void
     {
-        $this->instructorConfirmed = $confirmed;
+        $this->instructorConfirmed = $instructorConfirmed;
     }
 
     public function isCertifierValidated(): bool
@@ -159,9 +125,9 @@ class UserCourseRecord extends AbstractEntity
         return $this->certifierValidated;
     }
 
-    public function setCertifierValidated(bool $validated): void
+    public function setCertifierValidated(bool $certifierValidated): void
     {
-        $this->certifierValidated = $validated;
+        $this->certifierValidated = $certifierValidated;
     }
 
     public function isAdminApproved(): bool
@@ -169,9 +135,9 @@ class UserCourseRecord extends AbstractEntity
         return $this->adminApproved;
     }
 
-    public function setAdminApproved(bool $approved): void
+    public function setAdminApproved(bool $adminApproved): void
     {
-        $this->adminApproved = $approved;
+        $this->adminApproved = $adminApproved;
     }
 
     public function getCertificateCode(): string
@@ -179,19 +145,19 @@ class UserCourseRecord extends AbstractEntity
         return $this->certificateCode;
     }
 
-    public function setCertificateCode(string $code): void
+    public function setCertificateCode(string $certificateCode): void
     {
-        $this->certificateCode = $code;
+        $this->certificateCode = $certificateCode;
     }
 
-    public function getCertificateIssuedAt(): ?\DateTime
+    public function getCertificateIssuedAt(): ?\DateTimeImmutable
     {
         return $this->certificateIssuedAt;
     }
 
-    public function setCertificateIssuedAt(?\DateTime $issuedAt): void
+    public function setCertificateIssuedAt(?\DateTimeImmutable $certificateIssuedAt): void
     {
-        $this->certificateIssuedAt = $issuedAt;
+        $this->certificateIssuedAt = $certificateIssuedAt;
     }
 
     public function getStatus(): string
@@ -209,8 +175,8 @@ class UserCourseRecord extends AbstractEntity
         return $this->metaJson;
     }
 
-    public function setMetaJson(string $meta): void
+    public function setMetaJson(string $metaJson): void
     {
-        $this->metaJson = $meta;
+        $this->metaJson = $metaJson;
     }
 }
