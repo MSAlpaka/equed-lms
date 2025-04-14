@@ -1,4 +1,5 @@
 <?php
+// ext_emconf patched manually for Composer
 
 $EM_CONF[$_EXTKEY] = [
     'title' => 'EquEd LMS',
