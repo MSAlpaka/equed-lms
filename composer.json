@@ -28,7 +28,7 @@
       "symfony/translation": "^6.4",
       "league/flysystem": "^3.0",
       "phpoffice/phpspreadsheet": "^1.29",
-      "doctrine/dbal": "^3.7",
+      "doctrine/dbal": "^4.2.1",
       "ext-json": "*",
       "stripe/stripe-php": "^11.0",
       "openai-php/client": "^0.7",
