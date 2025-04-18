@@ -3,7 +3,6 @@
     "description": "EquEdEU LMS - LMS for Equine Education Europe",
     "type": "typo3-cms-extension",
     "license": "GPL-2.0-or-later",
-    "version": "1.0.0",
     "authors": [
       {
         "name": "Equine Education Europe",
