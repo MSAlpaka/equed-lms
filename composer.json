@@ -21,15 +21,15 @@
       "typo3/cms-rte-ckeditor": "^13.4",
       "typo3/cms-form": "^13.4",
       "typo3/cms-recordlist": "^13.4",
-      "symfony/http-client": "^6.4",               // Für API-Calls (z. B. GPT, Dropshipping)
-      "guzzlehttp/guzzle": "^7.8",                 // Alternative für HTTP-Requests
-      "ramsey/uuid": "^4.7",                       // Für eindeutige Zertifikats-IDs, Tracking
-      "symfony/serializer": "^6.4",                // Für API/JSON-Handling
-      "symfony/validator": "^6.4",                 // Für Validierungslogik
-      "symfony/translation": "^6.4",               // Für eigene Übersetzungsprozesse
-      "league/flysystem": "^3.0",                  // Für File-Handling, z. B. Uploads
-      "phpoffice/phpspreadsheet": "^1.29",         // Für Exporte/Importe, z. B. Prüfberichte oder QMS-Auswertung
-      "doctrine/dbal": "^3.7",                     // Für komplexere Abfragen und Migrationslogik
+      "symfony/http-client": "^6.4",
+      "guzzlehttp/guzzle": "^7.8",
+      "ramsey/uuid": "^4.7",
+      "symfony/serializer": "^6.4",
+      "symfony/validator": "^6.4",
+      "symfony/translation": "^6.4",
+      "league/flysystem": "^3.0",
+      "phpoffice/phpspreadsheet": "^1.29",
+      "doctrine/dbal": "^3.7",
       "ext-json": "*",
       "stripe/stripe-php": "^11.0",
       "openai-php/client": "^0.7",
