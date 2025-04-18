@@ -1,0 +1,1 @@
+<?php namespace Equed\EquedLms\Domain\Repository; class CourseInstanceRepository {}
