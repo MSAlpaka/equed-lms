@@ -1,56 +1,98 @@
 <?php
 
-declare(strict_types=1);
-
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
-use TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider;
-use TYPO3\CMS\Core\Information\Typo3Version;
-use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
-use Equed\EquedLms\Controller\Api\LessonApiController;
-use Equed\EquedLms\Command\GenerateCertificateCodeCommand;
-use Equed\EquedLms\Command\NotifyCertifierCommand;
-
 defined('TYPO3') or die();
 
-// Icon-Registrierung (sofern nicht in Icons.php ausgelagert)
-ExtensionManagementUtility::registerIcon(
-    'equed-lms-module',
-    SvgIconProvider::class,
-    ['source' => 'EXT:equed_lms/Resources/Public/Icons/Extension.svg']
-);
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
 
-// Plugin-Registrierung (optional, z. B. wenn du z. B. ein Login-Modul hast)
+$extensionKey = 'equed_lms';
+
+//
+// -------------------------------------------------------------
+// 1. Plugin-Registrierung (für Extbase-basierte Komponenten)
+// -------------------------------------------------------------
+// Wird verwendet für z. B. Backend-Dashboards oder Extbase-basierte Ajax-Actions
+//
 ExtensionUtility::configurePlugin(
     'Equed.EquedLms',
-    'Main',
+    'Dashboard',
     [
-        \Equed\EquedLms\Controller\Frontend\DashboardController::class => 'index, myCourses, myCertificates',
+        \Equed\EquedLms\Controller\DashboardController::class => 'index,statistics,feedback,certification'
     ],
-    [],
+    []
 );
 
-// REST-API-Routen (PSR-basiert – Services.yaml notwendig)
-$GLOBALS['TYPO3_CONF_VARS']['FE']['eID_include']['lesson_progress'] = LessonApiController::class . '::handleEid';
+//
+// -------------------------------------------------------------
+// 2. Event-Listener (Zertifikate, QMS, Benachrichtigung, Instructor-Flows)
+// -------------------------------------------------------------
+// Sämtliche Event-getriebene Prozesse
+//
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['eventListeners'] += [
+    \Equed\EquedLms\Event\CourseCompletedEvent::class => [
+        \Equed\EquedLms\EventListener\CertificateGenerationListener::class
+    ],
+    \Equed\EquedLms\Event\QmsCaseOpenedEvent::class => [
+        \Equed\EquedLms\EventListener\QmsNotificationListener::class
+    ],
+    \Equed\EquedLms\Event\SubmissionUploadedEvent::class => [
+        \Equed\EquedLms\EventListener\InstructorNotificationListener::class
+    ],
+];
 
-// Signal-Slot-Verknüpfungen (z. B. nach Kursabschluss)
-$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['equed_lms']['courseCompleted'][] =
-    \Equed\EquedLms\EventHandler\CourseCompletionHandler::class . '::handle';
+//
+// -------------------------------------------------------------
+// 3. Caching-Strategien für API, Fortschritt, Kursstruktur
+// -------------------------------------------------------------
+// Bereitet schnelle API-Antworten & SPA-Datenlieferung vor
+//
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'] += [
+    'equed_lms_cache' => [
+        'frontend' => \TYPO3\CMS\Core\Cache\Frontend\VariableFrontend::class,
+        'backend' => \TYPO3\CMS\Core\Cache\Backend\Typo3DatabaseBackend::class,
+        'groups' => ['system']
+    ],
+    'equed_lms_coursestructure' => [
+        'frontend' => \TYPO3\CMS\Core\Cache\Frontend\VariableFrontend::class,
+        'backend' => \TYPO3\CMS\Core\Cache\Backend\Typo3DatabaseBackend::class,
+        'groups' => ['pages', 'system']
+    ]
+];
 
-// CLI-Befehle (z. B. Zertifikats-Code generieren, Benachrichtigung versenden)
-$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['extbase']['commandControllers'][] =
-    GenerateCertificateCodeCommand::class;
+//
+// -------------------------------------------------------------
+// 4. REST-API / eID-Controller-Registrierung (z. B. für App, SPA, SSO)
+// -------------------------------------------------------------
+// eID-Aufrufe ohne Session für Fortschritt, Zertifikate etc.
+//
+$GLOBALS['TYPO3_CONF_VARS']['FE']['eID_include'] += [
+    'lessonProgress' => \Equed\EquedLms\Controller\Api\LessonProgressController::class . '::handleRequest',
+    'instructorDashboard' => \Equed\EquedLms\Controller\Api\InstructorDashboardController::class . '::handleRequest',
+    'certificateDownload' => \Equed\EquedLms\Controller\Api\CertificateController::class . '::handleDownload'
+];
 
-$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['extbase']['commandControllers'][] =
-    NotifyCertifierCommand::class;
+//
+// -------------------------------------------------------------
+// 5. Scheduler-Tasks (z. B. automatische Erinnerungen für Re-Zertifizierung)
+// -------------------------------------------------------------
+// Aufgaben, die zeitgesteuert im Hintergrund laufen
+//
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks'][\Equed\EquedLms\Task\CertificateRenewalReminderTask::class] = [
+    'extension' => $extensionKey,
+    'title' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang.xlf:scheduler.certRenewal.title',
+    'description' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang.xlf:scheduler.certRenewal.description'
+];
 
-// (Optional) zusätzliche Initialisierung: z. B. für SSO, GPT oder Sondermodule
-// Beispiel: Registriere GPT-Auswertung nach Submission
-$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['equed_lms']['submissionAnalyzed'][] =
-    \Equed\EquedLms\Service\GptAnalysisService::class . '::handle';
+//
+// -------------------------------------------------------------
+// 6. (Optional) Middleware für API-Authentication / DSGVO / SSO
+// -------------------------------------------------------------
+// Vorbereitet für spätere SSO-Implementierung (z. B. FE-User Sync)
+//
+/*
+$GLOBALS['TYPO3_CONF_VARS']['FE']['middleware']['equed/authentication'] = [
+    'target' => \Equed\EquedLms\Middleware\ApiAuthenticationMiddleware::class,
+    'after' => ['typo3/cms-frontend/authentication']
+];
+*/
 
-// PSR-14 EventListener (wenn du PSR statt SignalSlot nutzt, empfohlen!)
-$GLOBALS['TYPO3_CONF_VARS']['EVENT_DISPATCHER']['listeners'][\Equed\EquedLms\Event\CourseCompletedEvent::class][] =
-    [\Equed\EquedLms\EventHandler\CourseCompletionHandler::class, 'onCourseCompleted'];
-
-$GLOBALS['TYPO3_CONF_VARS']['EVENT_DISPATCHER']['listeners'][\Equed\EquedLms\Event\SubmissionUploadedEvent::class][] =
-    [\Equed\EquedLms\Service\GptAnalysisService::class, 'onSubmissionUploaded'];
