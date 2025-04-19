@@ -1,78 +1,103 @@
 <?php
 
-declare(strict_types=1);
+defined('TYPO3') or die();
 
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
-use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
+use TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Imaging\IconRegistry;
 
-// Inhaltselement (optional – wenn z. B. ein Einstiegspunkt im Content benötigt wird)
-ExtensionManagementUtility::addPlugin(
-    [
-        'LLL:EXT:equed_lms/Resources/Private/Language/locallang_db.xlf:tt_content.equed_lms_title',
-        'equed_lms',
-    ],
-    'CType',
-    'equed_lms'
-);
+$extensionKey = 'equed_lms';
 
-// Optional: Custom CType Konfiguration (wenn im tt_content benötigt)
-$GLOBALS['TCA']['tt_content']['types']['equed_lms'] = [
-    'showitem' => '
-        --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,
-            header, bodytext,
-        --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,
-            hidden, starttime, endtime
-    ',
+// -------------------------------
+// Register all CType content elements
+// -------------------------------
+
+$pluginTypes = [
+    'equedlms_course' => 'plugin.course.title',
+    'equedlms_lesson' => 'plugin.lesson.title',
+    'equedlms_courseoverview' => 'plugin.courseoverview.title',
+    'equedlms_coursebooking' => 'plugin.coursebooking.title',
+    'equedlms_certificates' => 'plugin.certificates.title',
+    'equedlms_userdashboard' => 'plugin.userdashboard.title',
+    'equedlms_qmsincidentform' => 'plugin.qmsincidentform.title'
 ];
 
-// Backend-Module (für Admin, ServiceCenter, QMS, Zertifikate etc.)
-if (TYPO3_MODE === 'BE') {
-    // Admin-Modul für Zertifizierungs- und QMS-Verwaltung
-    ExtensionUtility::registerModule(
-        'Equed.EquedLms',
-        'system', // Main area (web/system/user)
-        'adminpanel',
-        '',
+foreach ($pluginTypes as $cType => $labelKey) {
+    ExtensionManagementUtility::addPlugin(
         [
-            \Equed\EquedLms\Controller\Admin\CertifierController::class => 'index, validateCertificate, showCase',
-            \Equed\EquedLms\Controller\Admin\QmsController::class => 'listCases, reviewCase, closeCase',
+            'LLL:EXT:' . $extensionKey . '/Resources/Private/Language/locallang_db.xlf:' . $labelKey,
+            $cType,
+            'content-' . $cType
         ],
-        [
-            'access' => 'admin',
-            'icon'   => 'EXT:equed_lms/Resources/Public/Icons/Extension.svg',
-            'labels' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_adminpanel.xlf',
-        ]
+        'CType'
     );
 
-    // Instructor-Modul für Prüfungen, Feedback, Bewertungen
-    ExtensionUtility::registerModule(
-        'Equed.EquedLms',
-        'user',
-        'instructorpanel',
-        '',
-        [
-            \Equed\EquedLms\Controller\Instructor\DashboardController::class => 'index, showStudent, uploadReport, commentSubmission',
-        ],
-        [
-            'access' => 'user,group',
-            'icon'   => 'EXT:equed_lms/Resources/Public/Icons/Instructor.svg',
-            'labels' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_instructorpanel.xlf',
-        ]
-    );
+    $GLOBALS['TCA']['tt_content']['types'][$cType] = [
+        'showitem' => '--palette--;;general, --palette--;;headers, bodytext, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden',
+    ];
 
-    // ServiceCenter-Modul (Zuweisungen, Sonderfälle, Incidents)
-    ExtensionUtility::registerModule(
-        'Equed.EquedLms',
-        'system',
+    $GLOBALS['TCA']['tt_content']['ctrl']['typeicon_classes'][$cType] = 'content-' . $cType;
+}
+
+// -------------------------------
+// Icon Registration for Content Types
+// -------------------------------
+
+$iconRegistry = GeneralUtility::makeInstance(IconRegistry::class);
+
+foreach (array_keys($pluginTypes) as $cType) {
+    $iconRegistry->registerIcon(
+        'content-' . $cType,
+        SvgIconProvider::class,
+        ['source' => 'EXT:' . $extensionKey . '/Resources/Public/Icons/' . $cType . '.svg']
+    );
+}
+
+// -------------------------------
+// Icon Registration for FE User Roles (Instructor, Certifier, ServiceCenter)
+// -------------------------------
+
+$userRoles = [
+    'user-instructor' => 'user-instructor.svg',
+    'user-certifier' => 'user-certifier.svg',
+    'user-servicecenter' => 'user-servicecenter.svg'
+];
+
+foreach ($userRoles as $identifier => $file) {
+    $iconRegistry->registerIcon(
+        $identifier,
+        SvgIconProvider::class,
+        ['source' => 'EXT:' . $extensionKey . '/Resources/Public/Icons/' . $file]
+    );
+}
+
+// -------------------------------
+// Optional Backend Module: ServiceCenter
+// -------------------------------
+
+if (TYPO3_MODE === 'BE' && class_exists(\Equed\EquedLms\Controller\ServiceCenterController::class)) {
+
+    ExtensionManagementUtility::registerModule(
+        'Equed.' . ucfirst($extensionKey),
+        'tools', // main module key
         'servicecenter',
         '',
         [
-            \Equed\EquedLms\Controller\ServiceCenter\ServiceController::class => 'index, assignExaminer, listPending, notifyInstructor',
+            \Equed\EquedLms\Controller\ServiceCenterController::class => 'index,manageQmsCases,assignExaminers,overview,courseFeedback'
         ],
         [
             'access' => 'admin',
-            'icon'   => 'EXT:equed_lms/Resources/Public/Icons/ServiceCenter.svg',
-            'labels' => 'LLL:EXT:equed_lms/Resources/Private/Language/locallang_servicecenter.xlf',
+            'icon' => 'EXT:' . $extensionKey . '/Resources/Public/Icons/module-servicecenter.svg',
+            'labels' => 'LLL:EXT:' . $extensionKey . '/Resources/Private/Language/locallang_servicecenter.xlf',
         ]
     );
+
+    // Optional: Register module icon
+    $iconRegistry->registerIcon(
+        'module-servicecenter',
+        SvgIconProvider::class,
+        ['source' => 'EXT:' . $extensionKey . '/Resources/Public/Icons/module-servicecenter.svg']
+    );
 }
+
