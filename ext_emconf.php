@@ -2,24 +2,38 @@
 
 $EM_CONF[$_EXTKEY] = [
     'title' => 'EquEd LMS',
-    'description' => 'Modulare Lernplattform für digitale Hufbearbeitung und verwandte Qualifikationen – inklusive Prüfungslogik, Zertifizierungen, Instructor-Dashboards und QMS.',
+    'description' => 'Learning Management System for Equine Education Europe – including courses, lessons, certification, instructor workflows, QMS, and full SPA/App compatibility.',
     'category' => 'plugin',
-    'author' => 'EquEd Development Team',
+    'author' => 'Equine Education Europe',
     'author_email' => 'dev@equed.eu',
-    'author_company' => 'EquEdEU / Equine Education Europe Ltd.',
     'state' => 'stable',
+    'clearCacheOnLoad' => true,
     'version' => '1.0.0',
     'constraints' => [
         'depends' => [
-            'typo3' => '13.4.0-13.4.99',
+            'typo3' => '13.4.0-13.9.99',
+            'extbase' => '',
+            'fluid' => '',
+            'scheduler' => '',
+            'filemetadata' => ''
         ],
         'conflicts' => [],
-        'suggests' => [],
+        'suggests' => []
     ],
     'autoload' => [
         'psr-4' => [
-            'Equed\\EquedLms\\' => 'Classes/',
-        ],
+            'Equed\\EquedLms\\' => 'Classes/'
+        ]
     ],
-    'composer' => true
+    'autoload-dev' => [
+        'psr-4' => [
+            'Equed\\EquedLms\\Tests\\' => 'Tests/'
+        ]
+    ],
+    'uploadfolder' => 1,
+    'createDirs' => 'uploads/tx_equedlms/submissions/,uploads/tx_equedlms/materials/',
+    'modify_tables' => 'fe_users',
+    'additionalFields' => 'README.md,LICENSE.md',
+    'icon' => 'EXT:equed_lms/Resources/Public/Icons/Extension.svg'
 ];
+
